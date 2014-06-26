@@ -1,0 +1,24 @@
+..\bin\avrdude -p atmega48 -c usbasp -P com5 -U lfuse:w:0xE2:m
+
+To read fuses
+..\bin\avrdude -p atmega48 -c usbasp -P com5 -U lfuse:r:-:h -U hfuse:r:-:h
+
+-----------------------
+Ext. Crystal Osc.; Frequency 8.0-    MHz; Start-up time PWRDWN/RESET: 16K CK/14 CK + 4.1 ms; [CKSEL=1111 SUT=10]   
+Clock output on PORTB0; [CKOUT=0]
+Serial program downloading (SPI) enabled; [SPIEN=0]
+-U lfuse:w:0xAF:m -U hfuse:w:0xDF:m 
+..\bin\avrdude -p atmega48 -c usbasp -P com5 -U lfuse:w:0xAF:m -U hfuse:w:0xDF:m
+
+-----------------------
+Ext. Clock; Start-up time PWRDWN/RESET: 6 CK/14 CK + 4.1 ms; [CKSEL=0000 SUT=01]
+Serial program downloading (SPI) enabled; [SPIEN=0]
+-U lfuse:w:0xD0:m -U hfuse:w:0xDF:m
+..\bin\avrdude -p atmega48 -c usbasp -P com5 -U lfuse:w:0xD0:m -U hfuse:w:0xDF:m
+
+
+To read EEPROM
+..\bin\avrdude -p atmega48 -c usbasp -P com5 -U eeprom:r:-:h
+
+To write EEPROM
+..\bin\avrdude -p atmega48 -c usbasp -P com5 -U eeprom:w:zero.i:i
