@@ -1,7 +1,6 @@
 #include "central_logic.h"
 #include "common.h"
 #include "driver.h"
-#include "mpcomm.h"
 #include "rotation_logic.h"
 #include "save_logic.h"
 #include "utils.h"
@@ -134,8 +133,8 @@ void notify_sides_changed(void)
         if (state_ptr->colors_changed)
         {
             DISABLE_GLOBAL_INTERRUPTS;
-            // Send new colors to side controller
-            send_side_colors(sn, state_ptr->colors);
+            // Send new colors to side
+            send_side_colors(sn, state_ptr->colors); // TODO
 
             ENABLE_GLOBAL_INTERRUPTS;
             // Clear colors_changed
@@ -149,10 +148,5 @@ void notify_sides_changed(void)
  */
 static void send_side_colors(uint8_t side_num, uint8_t *colors)
 {
-    static uint8_t colors_packed[SIDE_STATE_DATA_LEN];
-
-    pack_colors(colors, colors_packed);
-
-    send_multi_byte_command(GET_MCU_ADDRESS_FROM_SIDE_NUM(side_num), USART_DISPLAY_COLORS, colors_packed, SIDE_STATE_DATA_LEN);
 }
 

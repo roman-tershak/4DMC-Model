@@ -86,10 +86,6 @@
 #define SI_PIN PINC
 #define SI_MASK (SI1_MASK | SI2_MASK | SI3_MASK | SI4_MASK | SI5_MASK | SI6_MASK)
 
-/* USART Multi-Processor communication flags */
-#define USART_ADDRESS_BYTE  0x1
-#define USART_DATA_BYTE  0x0
-
 #ifdef __cplusplus
  extern "C" {
 #endif
@@ -98,8 +94,8 @@
 void init_ports(void);
 void init_timer1(void);
 void USART_init(uint16_t ubrr);
-void USART_transmit(uint8_t flag, uint8_t data);
-uint8_t USART_receive(uint32_t timeout);
+void USART_transmit(uint8_t data);
+uint8_t USART_receive(void);
 
 #ifdef __cplusplus
 }

@@ -26,9 +26,6 @@ void init_central_logic(void)
     }
 }
 
-/*
- * | 1 | 0 || 3 | 2 || 5 | 4 |
- */
 void load_sides_states(void)
 {
     uint8_t i, j, bank_num;
@@ -37,21 +34,15 @@ void load_sides_states(void)
 
     record_num = read_safetable_record_num();
 
-    bank_num = get_bank_num_for_sides(record_num);
-    for (i = 0; i < SIDE_CB; i++)
+    bank_num = get_bank_num_storage(record_num);
+    for (i = 0; i < SIDE_COUNT; i++)
     {
-        send_one_byte_command(GET_MCU_ADDRESS_FROM_SIDE_NUM(i), USART_INIT_LOAD, bank_num);
-
         for (j = 0; j < SIDE_STATE_DATA_LEN; j++)
         {
-            colors_packed[j] = USART_receive(100000 /*TODO*/);
+            colors_packed[j] = 0; // TODO
         }
         unpack_colors(colors_packed, sides_states[i].colors);
     }
-
-    read_side_state(colors_packed, get_bank_num_for_hidden_side(record_num));
-    unpack_colors(colors_packed, sides_states[SIDE_CB].colors);
-
 }
 
 

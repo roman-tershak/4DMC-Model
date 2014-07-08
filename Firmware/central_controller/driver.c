@@ -144,7 +144,6 @@ ISR (TIMER1_OVF_vect)
     }
     else
     {
-      //USART_transmit(0, '!');
         // Here we are waiting for the previously pressed switches to be released
         set_switch_pin(ct);
         // Read switches state for the entire side and check if they are released

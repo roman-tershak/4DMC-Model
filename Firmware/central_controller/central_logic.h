@@ -23,16 +23,6 @@
 #define ROTATING                _BV(2)
 #define WAITING_FOR_SAVING      _BV(3)
 
-/* Inter-MCU communication commands */
-#define USART_INIT_LOAD         0x01
-#define USART_DISPLAY_COLORS    0x02
-#define USART_STORE_STATE       0x03
-#define USART_STORE_CONFIRM     0x04
-#define USART_STATE_STORED      0x0F    // output command sent as a confirmation that state has been stored
-
-// Use in inter-MCU communication and storages
-#define SIDE_STATE_DATA_LEN  14
-
 
 #ifdef __cplusplus
  extern "C" {
