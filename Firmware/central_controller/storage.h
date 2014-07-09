@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 // Used in the storage
-#define SIDE_STATE_DATA_LEN  14
+#define STATE_DATA_STORAGE_LEN  81
 
 
 #ifdef __cplusplus
