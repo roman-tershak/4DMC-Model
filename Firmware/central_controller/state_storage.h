@@ -3,8 +3,7 @@
 
 #include <avr/eeprom.h>
 #include "safetable.h"
-
-#define EEPROM_SIZE                   1024
+#include "storage.h"
 
 #define STATE_STORAGE_START_ADDRESS   (SAFETABLE_LEN)
 #define STATE_STORAGE_LEN             (EEPROM_SIZE - SAFETABLE_LEN)

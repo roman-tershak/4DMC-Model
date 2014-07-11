@@ -7,6 +7,8 @@
 
 
 #define CANNOT_BE_SAVED (ROTATING)
+#define PACK    1
+#define UNPACK  0
 
 
 /* Auxiliary functions */
@@ -40,19 +42,15 @@ void save_state(void)
     uint8_t i;
     uint32_t record_num;
 
-    static uint8_t back_side_copy_packed[SIDE_CUBES_COUNT];
-    
     // Prevent saving in parallel
     is_saving_states = TRUE;
+    
     // Get the current bank from the safetale
     record_num = read_safetable_record_num();
     record_num++;
     
-    // TODO Make a copy of the hidden side
-    // TODO pack_colors(sides_states[SIDE_CB].colors, back_side_copy_packed);
-    // TODO Store state of the side from the copy
-    // TODO store_side_state(back_side_copy_packed, get_bank_num_for_hidden_side(record_num));
-    
+    // Make a copy of the cube state
+    pack_unpack_colors(PACK);
 
     // 'Release' sides that were waiting for saving
     for (i = 0; i < SIDE_COUNT; i++)
@@ -64,6 +62,9 @@ void save_state(void)
     // Enable interrupts, because storing takes long time
     ENABLE_GLOBAL_INTERRUPTS;
 
+    // Store state of the cube from the copy
+    store_side_state(colors_packed_buff, get_bank_num_storage(record_num));
+    
     // Make a record about successful storing into the safetable
     store_safetable_record_num(record_num);
 
@@ -80,12 +81,14 @@ static void pack_unpack_colors(uint8_t what)
     for (i = 0; i < SIDE_COUNT; i++)
     {
         colors = sides_states[i].colors;
+        buff_bit_index = (uint16_t) i * SIDE_CUBES_COUNT * 3;
+
         for (j = 0; j < SIDE_CUBES_COUNT; j++)
         {
             //   0          1           2          3           4           5
             // |xxx,xxx,xx|x,xxx,xxx,x|xx,xxx,xxx|,xxx,xxx,xx|x,xxx,xxx,x|xx,...
             //   0   1   2    3   4   5    6   7    8   9  10   11  12   13   
-            buff_bit_index = ((uint16_t) i * SIDE_CUBES_COUNT + j) * 3;
+            buff_bit_index += j * 3;
 
             buff_byte_index = buff_bit_index / 8;
             byte_bit_index = buff_bit_index % 8;
@@ -93,10 +96,11 @@ static void pack_unpack_colors(uint8_t what)
             // 'data' will contain this and the subsequent bytes
             data = 0;
             data |= colors_packed_buff[buff_byte_index];
-            data |= (uint16_t) colors_packed_buff[buff_byte_index + 1] << 8;
+            data |= ((uint16_t) colors_packed_buff[buff_byte_index + 1]) << 8;
 
             if (what)
             {
+                // Write/pack block
                 // Clear the place
                 data &= ~((uint16_t) 0x7 << byte_bit_index);
                 // Put the color from j'th cell into the place
@@ -108,6 +112,7 @@ static void pack_unpack_colors(uint8_t what)
             }
             else
             {
+                // read/unpack section
                 colors[j] = (uint8_t) ((data & ((uint16_t) 0x7 << byte_bit_index)) >> byte_bit_index);
             }
         }

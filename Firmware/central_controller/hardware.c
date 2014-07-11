@@ -2,6 +2,7 @@
 
 void init_ports(void)
 {
+	// Initializing switches pins
     dir_out(SPA);
     dir_out(SPB);
     dir_out(SPC);
@@ -16,10 +17,34 @@ void init_ports(void)
     dir_in(SI5);
     dir_in(SI6);
 
+    // Software RESET pin
+    dir_in(SRS);
+
+    // Initializing side color control pins
+    // TODO RX dir_out(SCA);
+    // TODO TX dir_out(SCB);
+    dir_out(SCC);
+    dir_out(SCD);
+    dir_out(SCE);
+    dir_out(SCF);
+    dir_out(SCG);
+    // TODO SRS dir_out(SCH);
+
+    // TODO For debug purposes, should be removed later
     dir_in(RX);
     dir_out(TX);
 
-    // Reset all pins to 1
+    // Reset all side color control pins to 1
+    // TODO RX set_pin(SCA);
+    // TODO TX set_pin(SCB);
+    set_pin(SCC);
+    set_pin(SCD);
+    set_pin(SCE);
+    set_pin(SCF);
+    set_pin(SCG);
+    // TODO SRS set_pin(SCH);
+
+    // Reset all swicthes pins to 1
     set_pin(SPA);
     set_pin(SPB);
     set_pin(SPC);
@@ -71,6 +96,7 @@ void USART_transmit(uint8_t data)
     set_bit(UCSR0B, RXEN0);
 }
 
+// TODO For debug purposes only
 uint8_t USART_receive()
 {
     while (!(UCSR0A & _BV(RXC0)));

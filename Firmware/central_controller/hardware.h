@@ -25,6 +25,7 @@
 #define dir_in(type) (type ## _DDR &= ~type ## _MASK)
 
 /* Pin Definitions */
+// TODO For debug purposes, should be removed later
 #define RX_PORT PORTD
 #define RX_DDR DDRD
 #define RX_MASK _BV(PORTD0)
@@ -34,57 +35,101 @@
 #define TX_MASK _BV(PORTD1)
 
 
-#define SPA_PORT PORTD
-#define SPA_DDR DDRD
-#define SPA_MASK _BV(PORTD2)
+// Software Reset input pin
+// TODO use PORTC6 (RESET) ?
+#define SRS_PORT PIND
+#define SRS_DDR DDRD
+#define SRS_MASK _BV(PORTD7)
 
-#define SPB_PORT PORTD
-#define SPB_DDR DDRD
-#define SPB_MASK _BV(PORTD3)
 
-#define SPC_PORT PORTD
-#define SPC_DDR DDRD
-#define SPC_MASK _BV(PORTD4)
+// Switches output ports. They enable a side switches scan in the switches matrix
+#define SPA_PORT PORTB
+#define SPA_DDR DDRB
+#define SPA_MASK _BV(PORTB0)
 
-#define SPD_PORT PORTD
-#define SPD_DDR DDRD
-#define SPD_MASK _BV(PORTD5)
+#define SPB_PORT PORTB
+#define SPB_DDR DDRB
+#define SPB_MASK _BV(PORTB1)
 
-#define SPE_PORT PORTD
-#define SPE_DDR DDRD
-#define SPE_MASK _BV(PORTD6)
+#define SPC_PORT PORTB
+#define SPC_DDR DDRB
+#define SPC_MASK _BV(PORTB2)
 
-#define SPF_PORT PORTD
-#define SPF_DDR DDRD
-#define SPF_MASK _BV(PORTD7)
+#define SPD_PORT PORTB
+#define SPD_DDR DDRB
+#define SPD_MASK _BV(PORTB3)
 
+#define SPE_PORT PORTB
+#define SPE_DDR DDRB
+#define SPE_MASK _BV(PORTB4)
+
+#define SPF_PORT PORTB
+#define SPF_DDR DDRB
+#define SPF_MASK _BV(PORTB5)
+
+
+// Switches input ports. They read a side switches states in the switches matrix
+#define SI0_PIN PINC
+#define SI0_DDR DDRC
+#define SI0_MASK _BV(PORTC0)
 
 #define SI1_PIN PINC
 #define SI1_DDR DDRC
-#define SI1_MASK _BV(PORTC0)
+#define SI1_MASK _BV(PORTC1)
 
 #define SI2_PIN PINC
 #define SI2_DDR DDRC
-#define SI2_MASK _BV(PORTC1)
+#define SI2_MASK _BV(PORTC2)
 
 #define SI3_PIN PINC
 #define SI3_DDR DDRC
-#define SI3_MASK _BV(PORTC2)
+#define SI3_MASK _BV(PORTC3)
 
 #define SI4_PIN PINC
 #define SI4_DDR DDRC
-#define SI4_MASK _BV(PORTC3)
+#define SI4_MASK _BV(PORTC4)
 
 #define SI5_PIN PINC
 #define SI5_DDR DDRC
-#define SI5_MASK _BV(PORTC4)
-
-#define SI6_PIN PINC
-#define SI6_DDR DDRC
-#define SI6_MASK _BV(PORTC5)
+#define SI5_MASK _BV(PORTC5)
 
 #define SI_PIN PINC
-#define SI_MASK (SI1_MASK | SI2_MASK | SI3_MASK | SI4_MASK | SI5_MASK | SI6_MASK)
+#define SI_MASK (SI0_MASK | SI1_MASK | SI2_MASK | SI3_MASK | SI4_MASK | SI5_MASK)
+
+
+// Side color control outputs. They send control sequences of bytes to side LED's
+#define SCA_PORT PORTD
+#define SCA_DDR DDRD
+#define SCA_MASK _BV(PORTD0)
+
+#define SCB_PORT PORTD
+#define SCB_DDR DDRD
+#define SCB_MASK _BV(PORTD1)
+
+#define SCC_PORT PORTD
+#define SCC_DDR DDRD
+#define SCC_MASK _BV(PORTD2)
+
+#define SCD_PORT PORTD
+#define SCD_DDR DDRD
+#define SCD_MASK _BV(PORTD3)
+
+#define SCE_PORT PORTD
+#define SCE_DDR DDRD
+#define SCE_MASK _BV(PORTD4)
+
+#define SCF_PORT PORTD
+#define SCF_DDR DDRD
+#define SCF_MASK _BV(PORTD5)
+
+#define SCG_PORT PORTD
+#define SCG_DDR DDRD
+#define SCG_MASK _BV(PORTD6)
+
+#define SCH_PORT PORTD
+#define SCH_DDR DDRD
+#define SCH_MASK _BV(PORTD7)
+
 
 #ifdef __cplusplus
  extern "C" {

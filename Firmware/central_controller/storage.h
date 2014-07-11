@@ -3,8 +3,10 @@
 
 #include <stdio.h>
 
+#define EEPROM_SIZE                   1024
+
 // Used in the storage
-#define STATE_DATA_STORAGE_LEN  81
+#define STATE_DATA_STORAGE_LEN        81
 
 
 #ifdef __cplusplus
