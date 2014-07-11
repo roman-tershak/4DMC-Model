@@ -10,12 +10,12 @@ void init_ports(void)
     dir_out(SPE);
     dir_out(SPF);
 
+    dir_in(SI0);
     dir_in(SI1);
     dir_in(SI2);
     dir_in(SI3);
     dir_in(SI4);
     dir_in(SI5);
-    dir_in(SI6);
 
     // Software RESET pin
     dir_in(SRS);

@@ -12,10 +12,7 @@
 
 
 /* Auxiliary functions */
-static void unpack_colors(uint8_t *colors_packed, uint8_t *colors);
-
-static void pack_colors(uint8_t *colors, uint8_t *colors_packed);
-
+static void pack_unpack_colors(uint8_t what);
 
 extern volatile Side_State sides_states[SIDE_COUNT];
 

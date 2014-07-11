@@ -1,12 +1,10 @@
 #include "neopixel.h"
+#include "hardware.h"
 
 /* The code below was taken from 
  * http://wp.josh.com/2014/05/13/ws2812-neopixels-are-not-so-finicky-once-you-get-to-know-them/
  * and adopted to the needs of the program and further simplified
  */
-
-
-#define PIXELS_NUM  27  // Number of pixels in the string
 
 // These are the timing constraints taken from the WS2812B datasheet 
 #define T1H  800    // Width of a 1 bit in ns
@@ -29,10 +27,33 @@
 
 #define DELAY_CYCLES(n)  (((n) > 0) ? __builtin_avr_delay_cycles(n) : __builtin_avr_delay_cycles(0))  // Make sure we never have a delay less than zero
 
+static const uint8_t COLOR_MATRIX[/*NUM_OF_COLORS*/16][3] = 
+{
+    {30,  0,  0},   // red
+    { 0, 25,  0},   // green
+    { 0,  0, 25},   // blue
+    {50, 50,  0},   // yellow
+    //{ 0, 20, 10},   // light blue
+    {0, 15, 5},
+    {30,  0, 25},   // pink
+    {50,  7,  2},   // orange ...
+    {50, 50, 50},   // white
+    {10,  0,  0},   // semi-red
+    { 0, 20,  0},   // semi-green
+    { 0,  0,  8},   // semi-blue
+    {20, 20,  0},   // semi-yellow
+    { 0,  7,  4},   // semi-light blue
+    {10,  0,  8},   // semi-pink
+    {20,  2,  1},   // semi-orange ...
+    {20, 20, 20}    // semi-white
+};
+
 
 // Actually send a bit to the string. We turn off optimizations to make sure the compile does
 // not reorder things and make it so the delay happens in the wrong place.
 static void send_bit(port8_addr_t port_addr, port_pin_t pin, uint8_t bit_val) __attribute__ ((optimize(0)));
+
+static void send_bit(port8_addr_t port_addr, port_pin_t pin, uint8_t bit_val)
 {
     if (bit_val)
     {
@@ -58,31 +79,31 @@ static void send_bit(port8_addr_t port_addr, port_pin_t pin, uint8_t bit_val) __
     }
 }  
   
-static void send_byte_fast(uint8_t byte)
+static void send_byte_fast(port8_addr_t port_addr, port_pin_t pin, uint8_t byte)
 {
     // Neopixel wants bit in highest-to-lowest order
-    send_bit(byte & 0x80);
-    send_bit(byte & 0x40);
-    send_bit(byte & 0x20);
-    send_bit(byte & 0x10);
-    send_bit(byte & 0x08);
-    send_bit(byte & 0x04);
-    send_bit(byte & 0x02);
-    send_bit(byte & 0x01);
+    send_bit(port_addr, pin, byte & 0x80);
+    send_bit(port_addr, pin, byte & 0x40);
+    send_bit(port_addr, pin, byte & 0x20);
+    send_bit(port_addr, pin, byte & 0x10);
+    send_bit(port_addr, pin, byte & 0x08);
+    send_bit(port_addr, pin, byte & 0x04);
+    send_bit(port_addr, pin, byte & 0x02);
+    send_bit(port_addr, pin, byte & 0x01);
 } 
 
-
-void send_pixel(uint8_t r, uint8_t g, uint8_t b)
+/* Public API */
+void send_pixel_color(port8_addr_t port_addr, port_pin_t pin, uint8_t color)
 {
+    uint8_t *rgb_color = COLOR_MATRIX[color];
     // Note: Follow the order of GRB to sent data and the high bit sent at first. 
-    send_byte_fast(g);
-    send_byte_fast(r);
-    send_byte_fast(b);
+    send_byte_fast(port_addr, pin, rgb_color[1]);
+    send_byte_fast(port_addr, pin, rgb_color[0]);
+    send_byte_fast(port_addr, pin, rgb_color[2]);
 }
 
-
 // Just wait long enough without sending any bots to cause the pixels to latch and display the last sent frame
-void show()
+void show(void)
 {
     DELAY_CYCLES(NS_TO_CYCLES(RES));               
 }

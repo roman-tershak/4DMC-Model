@@ -2,8 +2,8 @@
 #include "common.h"
 #include "driver.h"
 #include "rotation_logic.h"
-#include "save_logic.h"
-#include "utils.h"
+#include "storage.h"
+#include "neopixel.h"
 
 
 /* Side states checks */
@@ -148,5 +148,11 @@ void notify_sides_changed(void)
  */
 static void send_side_colors(uint8_t side_num, uint8_t *colors)
 {
+	uint8_t i;
+	for (i = 0; i < SIDE_CUBES_COUNT; i++)
+	{
+		send_pixel_color(SCC_PORT, PORTD2, colors[i]);
+	}
+	show();
 }
 
