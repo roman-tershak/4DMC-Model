@@ -17,6 +17,8 @@ uint8_t can_save(void);
 
 void save_state(void);
 
+void load_state(void);
+
 #ifdef __cplusplus
 }
 #endif 

@@ -2,7 +2,7 @@
 
 void init_ports(void)
 {
-	// Initializing switches pins
+        // Initializing switches pins
     dir_out(SPA);
     dir_out(SPB);
     dir_out(SPC);
@@ -35,14 +35,14 @@ void init_ports(void)
     dir_out(TX);
 
     // Reset all side color control pins to 1
-    // TODO RX unset_pin(SCA);
-    // TODO TX unset_pin(SCB);
-    unset_pin(SCC);
-    unset_pin(SCD);
-    unset_pin(SCE);
-    unset_pin(SCF);
-    unset_pin(SCG);
-    // TODO SRS temp unset_pin(SCH);
+    // TODO RX res_pin(SCA);
+    // TODO TX res_pin(SCB);
+    res_pin(SCC);
+    res_pin(SCD);
+    res_pin(SCE);
+    res_pin(SCF);
+    res_pin(SCG);
+    // TODO SRS temp res_pin(SCH);
 
     // Reset all swicthes pins to 1
     set_pin(SPA);
@@ -62,6 +62,22 @@ void init_timer1(void)
     TIMSK1 = _BV(TOIE1); // enable timer1 over-flow interrupt
     sei(); // enable global interrupts
 }
+
+port_pin_t get_side_led_pin(uint8_t side_num)
+{
+    switch (side_num)
+    {
+        case SIDE_XL: return SCA_PIN;
+        case SIDE_XR: return SCB_PIN;
+        case SIDE_YL: return SCC_PIN;
+        case SIDE_YR: return SCD_PIN;
+        case SIDE_ZL: return SCE_PIN;
+        case SIDE_ZR: return SCF_PIN;
+        case SIDE_CF: return SCG_PIN;
+        case SIDE_CB: return SCH_PIN;
+    }
+}
+
 
 // TODO for debug purposes only
 void USART_init(uint16_t ubrr)

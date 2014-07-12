@@ -1,7 +1,6 @@
 #include "hardware.h"
 #include "driver.h"
 #include "central_logic.h"
-#include "init_logic.h"
 
 int main (void)
 {

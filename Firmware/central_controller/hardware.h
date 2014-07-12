@@ -101,43 +101,80 @@
 #define SCA_PORT PORTD
 #define SCA_DDR DDRD
 #define SCA_MASK _BV(PORTD0)
+#define SCA_PIN PORTD0
 
 #define SCB_PORT PORTD
 #define SCB_DDR DDRD
 #define SCB_MASK _BV(PORTD1)
+#define SCB_PIN PORTD1
 
 #define SCC_PORT PORTD
 #define SCC_DDR DDRD
 #define SCC_MASK _BV(PORTD2)
+#define SCC_PIN PORTD2
 
 #define SCD_PORT PORTD
 #define SCD_DDR DDRD
 #define SCD_MASK _BV(PORTD3)
+#define SCD_PIN PORTD3
 
 #define SCE_PORT PORTD
 #define SCE_DDR DDRD
 #define SCE_MASK _BV(PORTD4)
+#define SCE_PIN PORTD4
 
 #define SCF_PORT PORTD
 #define SCF_DDR DDRD
 #define SCF_MASK _BV(PORTD5)
+#define SCF_PIN PORTD5
 
 #define SCG_PORT PORTD
 #define SCG_DDR DDRD
 #define SCG_MASK _BV(PORTD6)
+#define SCG_PIN PORTD6
 
 #define SCH_PORT PORTD
 #define SCH_DDR DDRD
 #define SCH_MASK _BV(PORTD7)
+#define SCH_PIN PORTD7
+
+#define SC_PORT PORTD
+#define SC_DDR DDRD
+#define SC_MASK (SCA_MASK | SCB_MASK | SCC_MASK | SCD_MASK | SCE_MASK | SCF_MASK | SCG_MASK | SCH_MASK)
+
+/* Enable/disable interrupts */
+#define ENABLE_GLOBAL_INTERRUPTS()  sei()
+#define DISABLE_GLOBAL_INTERRUPTS()  cli()
+
+
+/* Cube geometry */
+#define SIDE_LED_COUNT  27
+
+#define SIDE_XL  0
+#define SIDE_XR  1
+#define SIDE_YL  2
+#define SIDE_YR  3
+#define SIDE_ZL  4
+#define SIDE_ZR  5
+#define SIDE_CF  6
+#define SIDE_CB  7
+
+#define SIDE_COUNT        8
+#define SIDE_CUBES_COUNT  (SIDE_LED_COUNT)
 
 
 #ifdef __cplusplus
  extern "C" {
 #endif
 
+typedef uint8_t port_pin_t;
+
 /* Hardware Functions */
 void init_ports(void);
 void init_timer1(void);
+port_pin_t get_side_led_pin(uint8_t side_num);
+
+// TODO For debug purposes
 void USART_init(uint16_t ubrr);
 void USART_transmit(uint8_t data);
 uint8_t USART_receive(void);

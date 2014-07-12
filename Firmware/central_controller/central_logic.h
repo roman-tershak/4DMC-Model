@@ -3,19 +3,8 @@
 
 #include <stdio.h>
 #include <avr/io.h>
+#include "hardware.h"
 
-/* Cube geometry */
-#define SIDE_XL  0
-#define SIDE_XR  1
-#define SIDE_YL  2
-#define SIDE_YR  3
-#define SIDE_ZL  4
-#define SIDE_ZR  5
-#define SIDE_CF  6
-#define SIDE_CB  7
-
-#define SIDE_COUNT        8
-#define SIDE_CUBES_COUNT  27
 
 /* Side states */
 #define SIDE_IDLE               _BV(0)
@@ -36,6 +25,12 @@ typedef struct
     uint8_t colors[SIDE_CUBES_COUNT];
     uint8_t colors_changed;
 } Side_State;
+
+void init_central_logic(void);
+
+void load_sides_states(void);
+
+void reset_sides_states(void);
 
 uint8_t start_rotation(uint8_t sw_side_num, uint8_t direction);
 

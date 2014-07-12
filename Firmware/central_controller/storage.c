@@ -57,7 +57,7 @@ void save_state(void)
     }
 
     // Enable interrupts, because storing takes long time
-    ENABLE_GLOBAL_INTERRUPTS;
+    ENABLE_GLOBAL_INTERRUPTS();
 
     // Store state of the cube from the copy
     store_side_state(colors_packed_buff, get_bank_num_storage(record_num));
@@ -67,6 +67,26 @@ void save_state(void)
 
     // Unset 'is_saving' indicator
     is_saving_states = FALSE;
+}
+
+void load_state(void)
+{
+    uint8_t i;
+    uint32_t record_num;
+
+    DISABLE_GLOBAL_INTERRUPTS();
+    
+    record_num = read_safetable_record_num();
+
+    read_side_state(colors_packed_buff, get_bank_num_storage(record_num));
+    pack_unpack_colors(UNPACK);
+    
+    for (i = 0; i < SIDE_COUNT; i++)
+    {
+        sides_states[i].colors_changed = TRUE;
+    }
+
+    ENABLE_GLOBAL_INTERRUPTS();
 }
 
 static void pack_unpack_colors(uint8_t what)

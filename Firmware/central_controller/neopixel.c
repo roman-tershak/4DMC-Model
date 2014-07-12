@@ -1,5 +1,4 @@
-#include "neopixel.h"
-#include "hardware.h"
+    #include "neopixel.h"
 
 /* The code below was taken from 
  * http://wp.josh.com/2014/05/13/ws2812-neopixels-are-not-so-finicky-once-you-get-to-know-them/
@@ -16,15 +15,8 @@
 #define RES 6000    // Width of the low gap between bits to cause a frame to latch
 
 // Here are some convience defines for using nanoseconds specs to generate actual CPU delays
-
-#define NS_PER_SEC (1000000000L)          // TODO Note that this has to be SIGNED since we want to be able to check for negative values of derivatives
-
-#define CYCLES_PER_SEC   (F_CPU)
-
-#define NS_PER_CYCLE     (NS_PER_SEC / CYCLES_PER_SEC)
-
+#define NS_PER_CYCLE     (1000000000L / F_CPU)
 #define NS_TO_CYCLES(n)  ((n) / NS_PER_CYCLE)
-
 #define DELAY_CYCLES(n)  (((n) > 0) ? __builtin_avr_delay_cycles(n) : __builtin_avr_delay_cycles(0))  // Make sure we never have a delay less than zero
 
 static const uint8_t COLOR_MATRIX[/*NUM_OF_COLORS*/16][3] = 
@@ -51,52 +43,79 @@ static const uint8_t COLOR_MATRIX[/*NUM_OF_COLORS*/16][3] =
 
 // Actually send a bit to the string. We turn off optimizations to make sure the compile does
 // not reorder things and make it so the delay happens in the wrong place.
-static void send_byte_fast(port8_addr_t port_addr, port_pin_t pin, uint8_t byte_val) __attribute__ ((optimize(0)));
+static void send_byte(port_pin_t pin, uint8_t byte_val) __attribute__ ((optimize(0)));
 
-static void send_byte_fast(port8_addr_t port_addr, port_pin_t pin, uint8_t byte_val)
+static void send_byte(port_pin_t pin, uint8_t byte_val)
 {
     uint8_t i;
 
     // Neopixel wants bit in highest-to-lowest order
-    for (i = 0x80; i > 0; i>>=1)
+    for (i = 0x80; i > 0; i >>= 1)
     {
         if (byte_val & i)
         {
-            set_bit(*port_addr, pin);
-
+            set_bit(SC_PORT, pin);
             DELAY_CYCLES(NS_TO_CYCLES(T1H) - 2);       // 1-bit width less  overhead  for the actual bit setting
             // Note that this delay could be longer and everything would still work
-            unset_bit(*port_addr, pin);
-
-            DELAY_CYCLES(NS_TO_CYCLES(T1L) - 2);       // TODO 1-bit gap less the overhead
+            unset_bit(SC_PORT, pin);
+            DELAY_CYCLES(NS_TO_CYCLES(T1L) - 4);       // TODO 1-bit gap less the overhead
         }
         else
         {
-            set_bit(*port_addr, pin);
-
+            set_bit(SC_PORT, pin);
             DELAY_CYCLES(NS_TO_CYCLES(T0H) - 2);       // 0-bit width less overhead 
             // **************************************************************************
             // This line is really the only tight goldilocks timing in the whole program!
             // **************************************************************************
-            unset_bit(*port_addr, pin);
-
-            DELAY_CYCLES(NS_TO_CYCLES(T0L) - 2);       // TODO 0-bit gap less overhead
+            unset_bit(SC_PORT, pin);
+            DELAY_CYCLES(NS_TO_CYCLES(T0L) - 4);       // TODO 0-bit gap less overhead
         }
     }
 }
 
-/* Public API */
-void send_pixel_color(port8_addr_t port_addr, port_pin_t pin, uint8_t color)
+// Unset pin (just in case) and wait long enough without sending any bots 
+// to cause the pixels to latch and display the last sent frame
+static void show(port_pin_t pin)
 {
-    uint8_t *rgb_color = COLOR_MATRIX[color];
-    // Note: Follow the order of GRB to sent data and the high bit sent at first. 
-    send_byte_fast(port_addr, pin, rgb_color[1]);
-    send_byte_fast(port_addr, pin, rgb_color[0]);
-    send_byte_fast(port_addr, pin, rgb_color[2]);
+    unset_bit(SC_PORT, pin);
+    DELAY_CYCLES(NS_TO_CYCLES(RES));               
 }
 
-// Just wait long enough without sending any bots to cause the pixels to latch and display the last sent frame
-void show(void)
+void light_side_color(uint8_t side_num, uint8_t* colors)
 {
-    DELAY_CYCLES(NS_TO_CYCLES(RES));               
+    uint8_t i;
+    uint8_t *rgb_color;
+    port_pin_t pin = get_side_led_pin(side_num);
+
+    DISABLE_GLOBAL_INTERRUPTS();
+
+    for (i = 0; i < SIDE_LED_COUNT; i++)
+    {
+        rgb_color = COLOR_MATRIX[colors[i]];
+        // Note: Follow the order of GRB to sent data and the high bit sent at first. 
+        send_byte(pin, rgb_color[1]);
+        send_byte(pin, rgb_color[0]);
+        send_byte(pin, rgb_color[2]);
+    }
+    show(pin);
+
+    ENABLE_GLOBAL_INTERRUPTS();
+}
+
+void clear_side_color(uint8_t side_num)
+{
+    uint8_t i;
+    port_pin_t pin = get_side_led_pin(side_num);
+
+    DISABLE_GLOBAL_INTERRUPTS();
+
+    for (i = 0; i < SIDE_LED_COUNT; i++)
+    {
+        send_byte(pin, 0);
+        send_byte(pin, 0);
+        send_byte(pin, 0);
+    }
+    show(pin);
+
+    ENABLE_GLOBAL_INTERRUPTS();
 }

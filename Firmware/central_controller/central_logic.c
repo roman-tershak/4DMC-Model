@@ -30,6 +30,33 @@ static const uint8_t DEPENDENCY_MATRIX[] =
 volatile Side_State sides_states[SIDE_COUNT];
 
 
+void init_central_logic(void)
+{
+    uint8_t i;
+    Side_State *side_state_ptr;
+    
+    for (i = 0; i < SIDE_COUNT; i++)
+    {
+        side_state_ptr = &(sides_states[i]);
+        
+        side_state_ptr->status = SIDE_IDLE;
+        side_state_ptr->cycle_ct = 0;
+        side_state_ptr->rotation_func_ptr = NULL;
+        side_state_ptr->colors_changed = FALSE;
+    }
+}
+
+void load_sides_states(void)
+{
+    load_state();
+    notify_sides_changed();
+}
+
+void reset_sides_states(void)
+{
+    // TODO
+}
+
 uint8_t start_rotation(uint8_t sw_side_num, uint8_t direction)
 {
     Side_State *state_ptr;
@@ -132,27 +159,13 @@ void notify_sides_changed(void)
 
         if (state_ptr->colors_changed)
         {
-            DISABLE_GLOBAL_INTERRUPTS;
             // Send new colors to side
-            send_side_colors(sn, state_ptr->colors); // TODO
+            light_side_color(sn, state_ptr->colors);
 
-            ENABLE_GLOBAL_INTERRUPTS;
             // Clear colors_changed
             state_ptr->colors_changed = FALSE;
         }
     }
 }
 
-/*
- * | 1 | 0 || 3 | 2 || 5 | 4 |
- */
-static void send_side_colors(uint8_t side_num, uint8_t *colors)
-{
-	uint8_t i;
-	for (i = 0; i < SIDE_CUBES_COUNT; i++)
-	{
-		send_pixel_color(SCC_PORT, PORTD2, colors[i]);
-	}
-	show();
-}
 

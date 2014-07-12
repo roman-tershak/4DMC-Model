@@ -17,9 +17,6 @@
 
 #define SW_SIDE_NUM 6
 
-#define ENABLE_GLOBAL_INTERRUPTS  sei()
-#define DISABLE_GLOBAL_INTERRUPTS  cli()
-
 #ifdef __cplusplus
  extern "C" {
 #endif 

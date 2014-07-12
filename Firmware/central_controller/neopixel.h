@@ -2,19 +2,16 @@
 #define H_NEOPIXEL
 
 #include <avr/io.h>
-#include <stdio.h>
+#include "hardware.h"
 
 #ifdef __cplusplus
  extern "C" {
 #endif
 
-typedef volatile uint8_t* port8_addr_t;
-typedef uint8_t port_pin_t;
-
 /* Hardware NeoPixel LED Functions */
-void send_pixel_color(port8_addr_t port_addr, port_pin_t pin, uint8_t color);
+void light_side_color(uint8_t side_num, uint8_t *colors);
 
-void show(void);
+void clear_side_color(uint8_t side_num);
 
 #ifdef __cplusplus
 }
