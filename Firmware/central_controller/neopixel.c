@@ -57,6 +57,7 @@ static void send_byte_fast(port8_addr_t port_addr, port_pin_t pin, uint8_t byte_
 {
     uint8_t i;
 
+    // Neopixel wants bit in highest-to-lowest order
     for (i = 0x80; i > 0; i>>=1)
     {
         if (byte_val & i)
@@ -82,20 +83,7 @@ static void send_byte_fast(port8_addr_t port_addr, port_pin_t pin, uint8_t byte_
             DELAY_CYCLES(NS_TO_CYCLES(T0L) - 2);       // TODO 0-bit gap less overhead
         }
     }
-}  
-  
-static void send_byte_fast(port8_addr_t port_addr, port_pin_t pin, uint8_t byte)
-{
-    // Neopixel wants bit in highest-to-lowest order
-    send_bit(port_addr, pin, byte & 0x80);
-    send_bit(port_addr, pin, byte & 0x40);
-    send_bit(port_addr, pin, byte & 0x20);
-    send_bit(port_addr, pin, byte & 0x10);
-    send_bit(port_addr, pin, byte & 0x08);
-    send_bit(port_addr, pin, byte & 0x04);
-    send_bit(port_addr, pin, byte & 0x02);
-    send_bit(port_addr, pin, byte & 0x01);
-} 
+}
 
 /* Public API */
 void send_pixel_color(port8_addr_t port_addr, port_pin_t pin, uint8_t color)
