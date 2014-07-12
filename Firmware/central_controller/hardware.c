@@ -28,21 +28,21 @@ void init_ports(void)
     dir_out(SCE);
     dir_out(SCF);
     dir_out(SCG);
-    // TODO SRS dir_out(SCH);
+    // TODO dir_out(SCH);
 
     // TODO For debug purposes, should be removed later
     dir_in(RX);
     dir_out(TX);
 
     // Reset all side color control pins to 1
-    // TODO RX set_pin(SCA);
-    // TODO TX set_pin(SCB);
-    set_pin(SCC);
-    set_pin(SCD);
-    set_pin(SCE);
-    set_pin(SCF);
-    set_pin(SCG);
-    // TODO SRS set_pin(SCH);
+    // TODO RX unset_pin(SCA);
+    // TODO TX unset_pin(SCB);
+    unset_pin(SCC);
+    unset_pin(SCD);
+    unset_pin(SCE);
+    unset_pin(SCF);
+    unset_pin(SCG);
+    // TODO SRS temp unset_pin(SCH);
 
     // Reset all swicthes pins to 1
     set_pin(SPA);
