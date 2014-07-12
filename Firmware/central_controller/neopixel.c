@@ -51,31 +51,36 @@ static const uint8_t COLOR_MATRIX[/*NUM_OF_COLORS*/16][3] =
 
 // Actually send a bit to the string. We turn off optimizations to make sure the compile does
 // not reorder things and make it so the delay happens in the wrong place.
-static void send_bit(port8_addr_t port_addr, port_pin_t pin, uint8_t bit_val) __attribute__ ((optimize(0)));
+static void send_byte_fast(port8_addr_t port_addr, port_pin_t pin, uint8_t byte_val) __attribute__ ((optimize(0)));
 
-static void send_bit(port8_addr_t port_addr, port_pin_t pin, uint8_t bit_val)
+static void send_byte_fast(port8_addr_t port_addr, port_pin_t pin, uint8_t byte_val)
 {
-    if (bit_val)
+    uint8_t i;
+
+    for (i = 0x80; i > 0; i>>=1)
     {
-        set_bit(*port_addr, pin);
+        if (byte_val & i)
+        {
+            set_bit(*port_addr, pin);
 
-        DELAY_CYCLES(NS_TO_CYCLES(T1H) - 2);       // 1-bit width less  overhead  for the actual bit setting
-        // Note that this delay could be longer and everything would still work
-        unset_bit(*port_addr, pin);
+            DELAY_CYCLES(NS_TO_CYCLES(T1H) - 2);       // 1-bit width less  overhead  for the actual bit setting
+            // Note that this delay could be longer and everything would still work
+            unset_bit(*port_addr, pin);
 
-        DELAY_CYCLES(NS_TO_CYCLES(T1L) - 2);       // TODO 1-bit gap less the overhead
-    }
-    else
-    {
-        set_bit(*port_addr, pin);
+            DELAY_CYCLES(NS_TO_CYCLES(T1L) - 2);       // TODO 1-bit gap less the overhead
+        }
+        else
+        {
+            set_bit(*port_addr, pin);
 
-        DELAY_CYCLES(NS_TO_CYCLES(T0H) - 2);       // 0-bit width less overhead 
-        // **************************************************************************
-        // This line is really the only tight goldilocks timing in the whole program!
-        // **************************************************************************
-        unset_bit(*port_addr, pin);
+            DELAY_CYCLES(NS_TO_CYCLES(T0H) - 2);       // 0-bit width less overhead 
+            // **************************************************************************
+            // This line is really the only tight goldilocks timing in the whole program!
+            // **************************************************************************
+            unset_bit(*port_addr, pin);
 
-        DELAY_CYCLES(NS_TO_CYCLES(T0L) - 2);       // TODO 0-bit gap less overhead
+            DELAY_CYCLES(NS_TO_CYCLES(T0L) - 2);       // TODO 0-bit gap less overhead
+        }
     }
 }  
   
