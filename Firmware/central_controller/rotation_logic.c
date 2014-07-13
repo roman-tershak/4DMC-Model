@@ -1214,6 +1214,6 @@ void rotation_cycle(uint8_t side_num, Side_State *state_ptr)
         state_ptr->status = WAITING_FOR_SAVING;
  
     // state_ptr->colors_changed are set by rotation function
-    notify_sides_changed();
+    sides_colors_changed();
 }
 

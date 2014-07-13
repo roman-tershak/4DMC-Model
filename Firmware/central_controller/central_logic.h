@@ -36,7 +36,7 @@ uint8_t start_rotation(uint8_t sw_side_num, uint8_t direction);
 
 void handle_cycle(void);
 
-void notify_sides_changed(void);
+void sides_colors_changed(void);
 
 #ifdef __cplusplus
 }

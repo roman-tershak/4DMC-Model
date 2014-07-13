@@ -49,7 +49,7 @@ void init_central_logic(void)
 void load_sides_states(void)
 {
     load_state();
-    notify_sides_changed();
+    sides_colors_changed();
 }
 
 void reset_sides_states(void)
@@ -148,7 +148,7 @@ static uint8_t can_side_rotate(uint8_t side_num, Side_State *state_ptr)
     return TRUE;
 }
 
-void notify_sides_changed(void)
+void sides_colors_changed(void)
 {
     uint8_t sn;
     Side_State *state_ptr;
