@@ -1,4 +1,5 @@
 #include "driver.h"
+#include "hardware.h"
 #include "common.h"
 #include "rotation_logic.h"
 
@@ -6,6 +7,8 @@ static uint8_t get_rotation_dir(uint8_t switches);
 
 static uint8_t read_switches_debounced();
 static uint8_t read_switches();
+static uint8_t read_srs_debounced();
+static uint8_t read_srs_pin();
 
 static void set_switch_pin(uint8_t pin);
 static void reset_switches_pins(void);
@@ -21,7 +24,7 @@ static void reset_switches_pins(void);
  *                       *      ->Z (SW_ZR)
  *                     (SW_YL)
  */
-static const uint8_t SWITCH_ROTATION_MATRIX[64] = 
+static const uint8_t SWITCH_TO_ROTATION_MATRIX[64] = 
 {
     /* 0x00                                                */   (MOVE_NONE),
     /* 0x01                                          SW_XL */   (ROTATION_Y | DIR_CCW),
@@ -90,8 +93,8 @@ static const uint8_t SWITCH_ROTATION_MATRIX[64] =
 };
 
 
-volatile Switches_Side_State switches_side_states[SW_SIDE_NUM] = {0};
-
+static volatile Switches_Side_State switches_side_states[SW_SIDE_NUM] = {0};
+static volatile uint8_t srs_waiting_for_release = FALSE;
 
 void init_driver(void)
 {
@@ -114,6 +117,22 @@ ISR (TIMER1_OVF_vect)
 
     TCNT1 = (0xFFFF - ISR_TIMEOUT); // set the timeout
 
+    // Handling Software Reset switch
+    if (srs_waiting_for_release == FALSE)
+    {
+    	if (read_srs_debounced())
+    	{
+    		srs_waiting_for_release = TRUE;
+    		reset_sides_states();
+    	}
+    }
+    else
+    {
+    	if (!read_srs_debounced())
+    		srs_waiting_for_release = FALSE;
+    }
+
+    // Handling Rotation side swicthes
     sw_side_state_ptr = &(switches_side_states[ct]);
 
     if (sw_side_state_ptr->waiting_for_release == FALSE)
@@ -165,7 +184,7 @@ ISR (TIMER1_OVF_vect)
 
 static uint8_t get_rotation_dir(uint8_t switches)
 {
-    return SWITCH_ROTATION_MATRIX[switches];
+    return SWITCH_TO_ROTATION_MATRIX[switches];
 }
 
 static uint8_t read_switches_debounced()
@@ -189,7 +208,22 @@ static uint8_t read_switches_debounced()
 static uint8_t read_switches()
 {
     // TODO This depends on port pins layout - may need to change
-    return ~read_pins(SI) & 0x3F;
+    return ~read_pins(SI) & SI_MASK;
+}
+
+static uint8_t read_srs_debounced()
+{
+    if (read_srs_pin())
+    {
+        _delay_ms(DEBOUNCE_DELAY_2);
+        return read_srs_pin();
+    }
+    return 0;
+}
+
+static uint8_t read_srs_pin()
+{
+    return ~read_pin(SRS) & SRS_MASK;
 }
 
 static void set_switch_pin(uint8_t pin)

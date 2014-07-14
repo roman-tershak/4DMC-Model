@@ -13,6 +13,7 @@
 
 /* Auxiliary functions */
 static void pack_unpack_colors(uint8_t what);
+static uint8_t check_side_states(void);
 
 extern volatile Side_State sides_states[SIDE_COUNT];
 
@@ -60,7 +61,7 @@ void save_state(void)
     ENABLE_GLOBAL_INTERRUPTS();
 
     // Store state of the cube from the copy
-    store_side_state(colors_packed_buff, get_bank_num_storage(record_num));
+    store_side_states(colors_packed_buff, get_bank_num_storage(record_num));
     
     // Make a record about successful storing into the safetable
     store_safetable_record_num(record_num);
@@ -69,7 +70,7 @@ void save_state(void)
     is_saving_states = FALSE;
 }
 
-void load_state(void)
+uint8_t load_state(void)
 {
     uint8_t i;
     uint32_t record_num;
@@ -78,15 +79,27 @@ void load_state(void)
     
     record_num = read_safetable_record_num();
 
-    read_side_state(colors_packed_buff, get_bank_num_storage(record_num));
-    pack_unpack_colors(UNPACK);
+    for (i = SIDES_BANK_COUNT; i > 0 && record_num > 0; i--)
+    {
+        read_side_states(colors_packed_buff, get_bank_num_storage(record_num));
+        pack_unpack_colors(UNPACK);
+
+        if (check_side_states())
+            break;
+        else
+            record_num--;
+    }
+    if (i == 0 || record_num == 0)
+        return FALSE;
     
     for (i = 0; i < SIDE_COUNT; i++)
     {
         sides_states[i].colors_changed = TRUE;
     }
-
+    
     ENABLE_GLOBAL_INTERRUPTS();
+
+    return TRUE;
 }
 
 static void pack_unpack_colors(uint8_t what)
@@ -136,3 +149,22 @@ static void pack_unpack_colors(uint8_t what)
     }
 }
 
+static uint8_t check_side_states(void)
+{
+    uint8_t i, j;
+    uint8_t color_counts[MAIN_COLOR_COUNT] = {0};
+
+    for (i = 0; i < SIDE_COUNT; i++)
+    {
+        for (j = 0; j < SIDE_CUBES_COUNT; j++)
+        {
+            color_counts[sides_states[i].colors[j]]++;
+        }
+    }
+    for (i = 0; i < MAIN_COLOR_COUNT; i++)
+    {
+        if (color_counts[i] != SIDE_CUBES_COUNT)
+            return FALSE;
+    }
+    return TRUE;
+}

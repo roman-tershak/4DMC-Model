@@ -1,4 +1,5 @@
 #include "hardware.h"
+#include "common.h"
 
 void init_ports(void)
 {

@@ -37,7 +37,7 @@
 
 // Software Reset input pin
 // TODO use PORTC6 (RESET) ?
-#define SRS_PORT PIND
+#define SRS_PIN PIND
 #define SRS_DDR DDRD
 #define SRS_MASK _BV(PORTD7)
 
@@ -145,22 +145,6 @@
 /* Enable/disable interrupts */
 #define ENABLE_GLOBAL_INTERRUPTS()  sei()
 #define DISABLE_GLOBAL_INTERRUPTS()  cli()
-
-
-/* Cube geometry */
-#define SIDE_LED_COUNT  27
-
-#define SIDE_XL  0
-#define SIDE_XR  1
-#define SIDE_YL  2
-#define SIDE_YR  3
-#define SIDE_ZL  4
-#define SIDE_ZR  5
-#define SIDE_CF  6
-#define SIDE_CB  7
-
-#define SIDE_COUNT        8
-#define SIDE_CUBES_COUNT  (SIDE_LED_COUNT)
 
 
 #ifdef __cplusplus

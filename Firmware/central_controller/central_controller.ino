@@ -13,7 +13,7 @@ int main (void)
     
     init_timer1();
     
-    for (;;) {}
+    for (;;);
     
     return 0;
 }

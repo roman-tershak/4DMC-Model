@@ -4,7 +4,12 @@
 #include <stdio.h>
 #include <avr/io.h>
 #include "hardware.h"
+#include "common.h"
 
+
+/* Colors */
+#define MAIN_COLOR_COUNT        8
+#define ALL_COLOR_COUNT         16
 
 /* Side states */
 #define SIDE_IDLE               _BV(0)

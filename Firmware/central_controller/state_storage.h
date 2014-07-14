@@ -15,9 +15,9 @@
  extern "C" {
 #endif 
 
-void read_side_state(uint8_t *side_state_dst, uint8_t bank_num);
+void read_side_states(uint8_t *side_state_dst, uint8_t bank_num);
 
-void store_side_state(uint8_t *side_state_src, uint8_t bank_num);
+void store_side_states(uint8_t *side_state_src, uint8_t bank_num);
 
 uint8_t get_bank_num_storage(uint32_t record_num);
 
