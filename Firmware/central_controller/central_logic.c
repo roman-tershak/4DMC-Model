@@ -57,8 +57,8 @@ void load_sides_states(void)
 
 void reset_sides_states(void)
 {
-	reset_sides_colors();
-	sides_colors_changed();
+    reset_sides_colors();
+    sides_colors_changed();
 }
 
 static void reset_sides_colors(void)
@@ -73,25 +73,25 @@ static void reset_sides_colors(void)
 
     	for (c = 0; c < SIDE_CUBES_COUNT; c++)
     	{
-    		colors[c] = color;
+            colors[c] = color;
     	}
     }
 }
 
 static uint8_t get_initial_color_for_side(uint8_t side_num)
 {
-	switch (side_num)
-	{
-		case SIDE_XL: return 0;
-		case SIDE_XR: return 1;
-		case SIDE_YL: return 2;
-		case SIDE_YR: return 3;
-		case SIDE_ZL: return 4;
-		case SIDE_ZR: return 5;
-		case SIDE_CF: return 6;
-		case SIDE_CB: return 7;
-		default: return 8;
-	}
+    switch (side_num)
+    {
+        case SIDE_XL: return 0;
+        case SIDE_XR: return 1;
+        case SIDE_YL: return 2;
+        case SIDE_YR: return 3;
+        case SIDE_ZL: return 4;
+        case SIDE_ZR: return 5;
+        case SIDE_CF: return 6;
+        case SIDE_CB: return 7;
+        default: return 8;
+    }
 }
 
 uint8_t start_rotation(uint8_t sw_side_num, uint8_t direction)
