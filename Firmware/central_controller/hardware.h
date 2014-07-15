@@ -15,6 +15,9 @@
 #define set_bit(REG, BIT) ((REG) |= _BV(BIT))
 #define unset_bit(REG, BIT) ((REG) &= ~_BV(BIT))
 
+#define set_bit_mask(REG, BIT_MASK) ((REG) |= (BIT_MASK))
+#define unset_bit_mask(REG, BIT_MASK) ((REG) &= ~(BIT_MASK))
+
 #define set_pin(type) (type ## _PORT |= type ## _MASK)
 #define res_pin(type) (type ## _PORT &= ~type ## _MASK)
 
