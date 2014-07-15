@@ -23,4 +23,8 @@
 #define SIDE_COUNT        8
 #define SIDE_CUBES_COUNT  (SIDE_LED_COUNT)
 
+/* Colors */
+#define MAIN_COLOR_COUNT        8
+#define ALL_COLOR_COUNT         16
+
 #endif

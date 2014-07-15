@@ -12,7 +12,9 @@
 
 
 static uint8_t can_side_rotate(uint8_t side_num, Side_State *state_ptr);
+
 static void reset_sides_colors(void);
+static void reset_sides_states(void);
 static uint8_t get_initial_color_for_side(uint8_t side_num);
 
 
@@ -50,14 +52,16 @@ void init_central_logic(void)
 void load_sides_states(void)
 {
     if (!load_state())
-    	reset_sides_colors();
+        reset_sides_colors();
 
+    reset_sides_states();
     sides_colors_changed();
 }
 
-void reset_sides_states(void)
+void reset_cube(void)
 {
     reset_sides_colors();
+    reset_sides_states();
     sides_colors_changed();
 }
 
@@ -68,20 +72,35 @@ static void reset_sides_colors(void)
 
     for (sn = 0; sn < SIDE_COUNT; sn++)
     {
-    	color = get_initial_color_for_side(sn);
-    	colors = sides_states[sn].colors;
+        color = get_initial_color_for_side(sn);
 
-    	for (c = 0; c < SIDE_CUBES_COUNT; c++)
-    	{
+        colors = sides_states[sn].colors;
+        for (c = 0; c < SIDE_CUBES_COUNT; c++)
+        {
             colors[c] = color;
-    	}
+        }
     }
+}
+
+static void reset_sides_states(void)
+{
+    uint8_t i;
+    Side_State *side_state_ptr;
+
+    for (i = 0; i < SIDE_COUNT; i++)
+    {
+        side_state_ptr = &(sides_states[i]);
+        
+        side_state_ptr->colors_changed = TRUE;
+        side_state_ptr->status = SIDE_IDLE;
+    }
+    
 }
 
 static uint8_t get_initial_color_for_side(uint8_t side_num)
 {
     switch (side_num)
-    {
+    { // TODO
         case SIDE_XL: return 0;
         case SIDE_XR: return 1;
         case SIDE_YL: return 2;
@@ -160,6 +179,11 @@ void handle_cycle(void)
             }
         }
     }
+}
+
+void rotation_done(Side_State *side_state_ptr)
+{
+    side_state_ptr->status = WAITING_FOR_SAVING;
 }
 
 static uint8_t can_side_rotate(uint8_t side_num, Side_State *state_ptr)

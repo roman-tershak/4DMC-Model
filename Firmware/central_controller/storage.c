@@ -89,17 +89,12 @@ uint8_t load_state(void)
         else
             record_num--;
     }
-    if (i == 0 || record_num == 0)
-        return FALSE;
-    
-    for (i = 0; i < SIDE_COUNT; i++)
-    {
-        sides_states[i].colors_changed = TRUE;
-    }
-    
     ENABLE_GLOBAL_INTERRUPTS();
 
-    return TRUE;
+    if (i == 0 || record_num == 0)
+        return FALSE;
+    else 
+        return TRUE;
 }
 
 static void pack_unpack_colors(uint8_t what)

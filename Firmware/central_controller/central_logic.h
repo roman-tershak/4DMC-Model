@@ -7,10 +7,6 @@
 #include "common.h"
 
 
-/* Colors */
-#define MAIN_COLOR_COUNT        8
-#define ALL_COLOR_COUNT         16
-
 /* Side states */
 #define SIDE_IDLE               _BV(0)
 #define WAITING_FOR_ROTATION    _BV(1)
@@ -32,13 +28,11 @@ typedef struct
 } Side_State;
 
 void init_central_logic(void);
-
 void load_sides_states(void);
-
-void reset_sides_states(void);
+void reset_cube(void);
 
 uint8_t start_rotation(uint8_t sw_side_num, uint8_t direction);
-
+void rotation_done(Side_State *side_state_ptr);
 void handle_cycle(void);
 
 void sides_colors_changed(void);

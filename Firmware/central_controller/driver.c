@@ -123,7 +123,7 @@ ISR (TIMER1_OVF_vect)
     	if (read_srs_debounced())
     	{
     		srs_waiting_for_release = TRUE;
-    		reset_sides_states();
+    		reset_cube();
     	}
     }
     else
@@ -179,7 +179,7 @@ ISR (TIMER1_OVF_vect)
     handle_cycle();
 
     ct++; // increase the row
-    if (ct >= SW_SIDE_NUM) ct = 0; // reset
+    if (ct >= SW_SIDE_NUM) ct = 0; // reset the counter
 }
 
 static uint8_t get_rotation_dir(uint8_t switches)

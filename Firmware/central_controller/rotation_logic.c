@@ -1210,10 +1210,10 @@ void rotation_cycle(uint8_t side_num, Side_State *state_ptr)
 
     ((rotation_func_ptr_type) state_ptr->rotation_func_ptr)(side_num);
 
-    if (cycle_ct >= ROTATION_PHASE_F_CYCLES)
-        state_ptr->status = WAITING_FOR_SAVING;
- 
-    // state_ptr->colors_changed are set by rotation function
+    // state_ptr->colors_changed are set by the rotation function
     sides_colors_changed();
+
+    if (cycle_ct >= ROTATION_PHASE_F_CYCLES)
+    	rotation_done(state_ptr);
 }
 

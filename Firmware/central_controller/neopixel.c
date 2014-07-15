@@ -21,17 +21,25 @@
 #define NS_TO_CYCLES(n)  ((n) / NS_PER_CYCLE)
 #define DELAY_CYCLES(n)  (((n) > 0) ? __builtin_avr_delay_cycles(n) : __builtin_avr_delay_cycles(0))  // Make sure we never have a delay less than zero
 
-static const uint8_t COLOR_MATRIX[/*NUM_OF_COLORS*/16][3] = 
+#ifndef __builtin_avr_delay_cycles
+void __builtin_avr_delay_cycles(uint32_t __n) {
+    while(__n)
+        __n--;
+}
+#endif
+
+static const uint8_t COLOR_MATRIX[16][3] = 
 {
+    /* Main colors */
     {30,  0,  0},   // red
     { 0, 25,  0},   // green
     { 0,  0, 25},   // blue
     {50, 50,  0},   // yellow
-    //{ 0, 20, 10},   // light blue
-    {0, 15, 5},
+    { 0, 15,  5},   // light blue
     {30,  0, 25},   // pink
     {50,  7,  2},   // orange ...
     {50, 50, 50},   // white
+    /* Transitioning colors */
     {10,  0,  0},   // semi-red
     { 0, 20,  0},   // semi-green
     { 0,  0,  8},   // semi-blue
@@ -104,6 +112,7 @@ void light_side_color(uint8_t side_num, uint8_t* colors)
     ENABLE_GLOBAL_INTERRUPTS();
 }
 
+// TODO Do we need it?
 void clear_side_color(uint8_t side_num)
 {
     uint8_t i;
