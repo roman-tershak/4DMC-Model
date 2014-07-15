@@ -158,6 +158,7 @@ static uint8_t check_side_states(void)
     }
     for (i = 0; i < MAIN_COLOR_COUNT; i++)
     {
+        // Different colors should be 27 each
         if (color_counts[i] != SIDE_CUBES_COUNT)
             return FALSE;
     }

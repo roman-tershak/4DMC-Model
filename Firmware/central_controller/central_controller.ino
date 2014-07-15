@@ -5,10 +5,9 @@
 int main (void)
 {
     init_ports();
-    
     init_driver();
+
     init_central_logic();
-    
     load_sides_states();
     
     init_timer1();
