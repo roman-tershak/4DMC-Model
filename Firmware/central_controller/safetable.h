@@ -2,11 +2,10 @@
 #define H_SAFETABLE
 
 #include <avr/eeprom.h>
+#include "storage.h"
 
-#define SAFETABLE_START_ADDRESS  0x0
 #define SAFETABLE_RECORD_LEN     4
-#define SAFETABLE_RECORD_COUNT   12
-#define SAFETABLE_LEN            (SAFETABLE_RECORD_LEN * SAFETABLE_RECORD_COUNT)
+#define SAFETABLE_RECORD_COUNT   (SAFETABLE_LEN / SAFETABLE_RECORD_LEN)
 
 #ifdef __cplusplus
  extern "C" {

@@ -3,10 +3,8 @@
 #include "common.h"
 #include "safetable.h"
 #include "state_storage.h"
-#include "driver.h"
 
 
-#define CANNOT_BE_SAVED (ROTATING)
 #define PACK    1
 #define UNPACK  0
 
@@ -21,18 +19,9 @@ static volatile uint8_t is_saving_states = FALSE;
 static uint8_t colors_packed_buff[STATE_DATA_STORAGE_LEN];
 
 
-uint8_t can_save(void)
+uint8_t is_saving(void)
 {
-    uint8_t i;
-    if (is_saving_states)
-        return FALSE;
-
-    for (i = 0; i < SIDE_COUNT; i++)
-    {
-        if (sides_states[i].status & CANNOT_BE_SAVED)
-            return FALSE;
-    }
-    return TRUE;
+    return is_saving_states;
 }
 
 void save_state(void)

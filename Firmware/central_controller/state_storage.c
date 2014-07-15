@@ -1,4 +1,5 @@
 #include "state_storage.h"
+#include "storage.h"
 
 void read_side_states(uint8_t *side_state_dst, uint8_t bank_num)
 {

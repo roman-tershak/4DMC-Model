@@ -2,14 +2,6 @@
 #define H_STATE_STORAGE
 
 #include <avr/eeprom.h>
-#include "safetable.h"
-#include "storage.h"
-
-#define STATE_STORAGE_START_ADDRESS   (SAFETABLE_LEN)
-#define STATE_STORAGE_LEN             (EEPROM_SIZE - SAFETABLE_LEN)
-#define STATE_BANK_LEN                81
-#define SIDES_BANK_COUNT              (STATE_STORAGE_LEN / STATE_BANK_LEN)
-
 
 #ifdef __cplusplus
  extern "C" {

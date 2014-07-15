@@ -1,4 +1,5 @@
 #include "safetable.h"
+#include "storage.h"
 
 uint32_t read_safetable_record_num(void)
 {

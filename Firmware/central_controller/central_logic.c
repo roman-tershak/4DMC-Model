@@ -9,9 +9,11 @@
 /* Side states checks */
 #define IS_SIDE_ROTATING_OR_WAITING    (WAITING_FOR_ROTATION | ROTATING | WAITING_FOR_SAVING)
 #define CAN_START_ROTATION  (SIDE_IDLE | WAITING_FOR_SAVING)
+#define CANNOT_BE_SAVED (ROTATING)
 
 
 static uint8_t can_side_rotate(uint8_t side_num, Side_State *state_ptr);
+static uint8_t can_save(void);
 
 static void reset_sides_colors(void);
 static void reset_sides_states(void);
@@ -100,16 +102,16 @@ static void reset_sides_states(void)
 static uint8_t get_initial_color_for_side(uint8_t side_num)
 {
     switch (side_num)
-    { // TODO
-        case SIDE_XL: return 0;
-        case SIDE_XR: return 1;
-        case SIDE_YL: return 2;
-        case SIDE_YR: return 3;
-        case SIDE_ZL: return 4;
-        case SIDE_ZR: return 5;
-        case SIDE_CF: return 6;
-        case SIDE_CB: return 7;
-        default: return 8;
+    {
+        case SIDE_XL: return RED;
+        case SIDE_XR: return GREEN;
+        case SIDE_YL: return BLUE;
+        case SIDE_YR: return YELLOW;
+        case SIDE_ZL: return LIGHT_BLUE;
+        case SIDE_ZR: return PINK;
+        case SIDE_CF: return ORANGE;
+        case SIDE_CB: return WHITE;
+        default: return RED;
     }
 }
 
@@ -205,6 +207,21 @@ static uint8_t can_side_rotate(uint8_t side_num, Side_State *state_ptr)
                 state_ptr->cycle_ct < sides_states[sn].cycle_ct)
                 return FALSE; // ...at least one other side is waiting for rotation and has higher cycle_ct
         }
+    }
+    return TRUE;
+}
+
+static uint8_t can_save(void)
+{
+	uint8_t i;
+
+	if (is_saving())
+		return FALSE;
+
+    for (i = 0; i < SIDE_COUNT; i++)
+    {
+        if (sides_states[i].status & CANNOT_BE_SAVED)
+            return FALSE;
     }
     return TRUE;
 }
