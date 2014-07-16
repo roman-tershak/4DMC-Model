@@ -47,7 +47,6 @@ void init_central_logic(void)
         side_state_ptr->status = SIDE_IDLE;
         side_state_ptr->cycle_ct = 0;
         side_state_ptr->rotation_func_ptr = NULL;
-        side_state_ptr->colors_changed = FALSE;
     }
 }
 
@@ -93,8 +92,9 @@ static void reset_sides_states(void)
     {
         side_state_ptr = &(sides_states[i]);
         
-        side_state_ptr->colors_changed = TRUE;
         side_state_ptr->status = SIDE_IDLE;
+        side_state_ptr->cycle_ct = 0;
+        side_state_ptr->rotation_func_ptr = NULL;
     }
     
 }
@@ -213,10 +213,10 @@ static uint8_t can_side_rotate(uint8_t side_num, Side_State *state_ptr)
 
 static uint8_t can_save(void)
 {
-	uint8_t i;
+    uint8_t i;
 
-	if (is_saving())
-		return FALSE;
+    if (is_saving())
+        return FALSE;
 
     for (i = 0; i < SIDE_COUNT; i++)
     {
@@ -229,20 +229,11 @@ static uint8_t can_save(void)
 void sides_colors_changed(void)
 {
     uint8_t sn;
-    Side_State *state_ptr;
 
     for (sn = 0; sn < SIDE_CB; sn++)
     {
-        state_ptr = &(sides_states[sn]);
-
-        if (state_ptr->colors_changed)
-        {
-            // Send new colors to side
-            light_side_color(sn, state_ptr->colors);
-
-            // Clear colors_changed
-            state_ptr->colors_changed = FALSE;
-        }
+        // Send new colors to side
+        light_side_color(sn, sides_states[sn].colors);
     }
 }
 

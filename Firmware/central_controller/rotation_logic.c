@@ -224,8 +224,6 @@ static void rotate_1_side(Side_State *sp, uint8_t *indexes, Deem_Action deem_act
     rotate_1_side_level(sp, indexes, deem_action);
     rotate_1_side_level(sp, (indexes + 8), deem_action);
     rotate_1_side_level(sp, (indexes + 16), deem_action);
-
-    sp->colors_changed = TRUE;
 }
 
 
@@ -302,8 +300,6 @@ static void rotate_adjacent_layer_x_ccw(uint8_t side_num)
     dc[ 8]=lc[2]; lc[2]=lc[11]; lc[11]=lc[20]; lc[20]=t3;
     dc[17]=lc[5]; lc[5]=lc[14]; lc[14]=lc[23]; lc[23]=t2; 
     dc[26]=lc[8]; lc[8]=lc[17]; lc[17]=lc[26]; lc[26]=t1;
-
-    up->colors_changed = rp->colors_changed = dp->colors_changed = lp->colors_changed = TRUE;
 }
 /* 
  * 
@@ -355,8 +351,6 @@ static void rotate_adjacent_layer_x_cw(uint8_t side_num)
     dc[24]=rc[18]; rc[18]=rc[ 9]; rc[ 9]=rc[0]; rc[0]=t1;
     dc[15]=rc[21]; rc[21]=rc[12]; rc[12]=rc[3]; rc[3]=t2;
     dc[ 6]=rc[24]; rc[24]=rc[15]; rc[15]=rc[6]; rc[6]=t3;
-
-    up->colors_changed = rp->colors_changed = dp->colors_changed = lp->colors_changed = TRUE;
 }
 /* 
  * 
@@ -404,8 +398,6 @@ static void rotate_adjacent_layer_y_ccw(uint8_t side_num)
     dc[20]=lc[24]; lc[24]=lc[21]; lc[21]=lc[18]; lc[18]=t1;
     dc[11]=lc[25]; lc[25]=lc[22]; lc[22]=lc[19]; lc[19]=t2;
     dc[ 2]=lc[26]; lc[26]=lc[23]; lc[23]=lc[20]; lc[20]=t3;
-
-    up->colors_changed = rp->colors_changed = dp->colors_changed = lp->colors_changed = TRUE;
 }
 /* 
  * 
@@ -454,8 +446,6 @@ static void rotate_adjacent_layer_y_cw(uint8_t side_num)
     dc[ 8]=rc[0]; rc[0]=rc[3]; rc[3]=rc[6]; rc[6]=t3;
     dc[17]=rc[1]; rc[1]=rc[4]; rc[4]=rc[7]; rc[7]=t2;
     dc[26]=rc[2]; rc[2]=rc[5]; rc[5]=rc[8]; rc[8]=t1;
-
-    up->colors_changed = rp->colors_changed = dp->colors_changed = lp->colors_changed = TRUE;
 }
 /* 
  * 
@@ -507,8 +497,6 @@ static void rotate_adjacent_layer_z_ccw(uint8_t side_num)
     dc[20]=lc[6]; lc[6]=lc[15]; lc[15]=lc[24]; lc[24]=t3;
     dc[23]=lc[7]; lc[7]=lc[16]; lc[16]=lc[25]; lc[25]=t2; 
     dc[26]=lc[8]; lc[8]=lc[17]; lc[17]=lc[26]; lc[26]=t1;
-
-    up->colors_changed = rp->colors_changed = dp->colors_changed = lp->colors_changed = TRUE;
 }
 /* 
  * 
@@ -560,8 +548,6 @@ static void rotate_adjacent_layer_z_cw(uint8_t side_num)
     dc[18]=rc[18]; rc[18]=rc[ 9]; rc[ 9]=rc[0]; rc[0]=t1;
     dc[ 9]=rc[19]; rc[19]=rc[10]; rc[10]=rc[1]; rc[1]=t2; 
     dc[ 0]=rc[20]; rc[20]=rc[11]; rc[11]=rc[2]; rc[2]=t3;
-
-    up->colors_changed = rp->colors_changed = dp->colors_changed = lp->colors_changed = TRUE;
 }
 
 
@@ -925,8 +911,6 @@ static void rotate(uint8_t side_num, uint8_t *indexes_m, uint8_t *indexes_bf, ui
     fp = get_adjacent_front_side(side_num, rotation_axis);
     rotate_1_side_level(bp, (indexes_bf + 16), deem_action);
     rotate_1_side_level(fp, indexes_bf, deem_action);
-
-    bp->colors_changed = fp->colors_changed = TRUE;
 }
 
 
@@ -1210,7 +1194,6 @@ void rotation_cycle(uint8_t side_num, Side_State *state_ptr)
 
     ((rotation_func_ptr_type) state_ptr->rotation_func_ptr)(side_num);
 
-    // state_ptr->colors_changed are set by the rotation function
     sides_colors_changed();
 
     if (cycle_ct >= ROTATION_PHASE_F_CYCLES)

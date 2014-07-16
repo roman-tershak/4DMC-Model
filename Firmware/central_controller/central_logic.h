@@ -24,7 +24,6 @@ typedef struct
     uint8_t cycle_ct;
     void *rotation_func_ptr;
     uint8_t colors[SIDE_CUBES_COUNT];
-    uint8_t colors_changed;
 } Side_State;
 
 void init_central_logic(void);
