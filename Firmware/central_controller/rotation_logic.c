@@ -93,35 +93,35 @@ static uint8_t* get_adjacent_matrix_indexex(uint8_t side_num, uint8_t orientatio
     return ADJACENT_SIDES_MATRIX[ side_num * 3 + orientation ];
 }
 
-static Side_State* get_adjacent_up_side(uint8_t side_num, uint8_t orientation)
+static uint8_t* get_adjacent_up_side(uint8_t side_num, uint8_t orientation)
 {
     uint8_t index = get_adjacent_matrix_indexex(side_num, orientation)[0];
-    return &(sides_states[index]);
+    return sides_states[index].colors;
 }
-static Side_State* get_adjacent_right_side(uint8_t side_num, uint8_t orientation)
+static uint8_t* get_adjacent_right_side(uint8_t side_num, uint8_t orientation)
 {
     uint8_t index = get_adjacent_matrix_indexex(side_num, orientation)[1];
-    return &(sides_states[index]);
+    return sides_states[index].colors;
 }
-static Side_State* get_adjacent_down_side(uint8_t side_num, uint8_t orientation)
+static uint8_t* get_adjacent_down_side(uint8_t side_num, uint8_t orientation)
 {
     uint8_t index = get_adjacent_matrix_indexex(side_num, orientation)[2];
-    return &(sides_states[index]);
+    return sides_states[index].colors;
 }
-static Side_State* get_adjacent_left_side(uint8_t side_num, uint8_t orientation)
+static uint8_t* get_adjacent_left_side(uint8_t side_num, uint8_t orientation)
 {
     uint8_t index = get_adjacent_matrix_indexex(side_num, orientation)[3];
-    return &(sides_states[index]);
+    return sides_states[index].colors;
 }
-static Side_State* get_adjacent_back_side(uint8_t side_num, uint8_t orientation)
+static uint8_t* get_adjacent_back_side(uint8_t side_num, uint8_t orientation)
 {
     uint8_t index = get_adjacent_matrix_indexex(side_num, orientation)[4];
-    return &(sides_states[index]);
+    return sides_states[index].colors;
 }
-static Side_State* get_adjacent_front_side(uint8_t side_num, uint8_t orientation)
+static uint8_t* get_adjacent_front_side(uint8_t side_num, uint8_t orientation)
 {
     uint8_t index = get_adjacent_matrix_indexex(side_num, orientation)[5];
-    return &(sides_states[index]);
+    return sides_states[index].colors;
 }
 
 /* Indexes and functions for rotating one side or just one side layer without adjacent cubies */
@@ -182,10 +182,9 @@ static const uint8_t ROTATION_Z_CW_INDEXES[] =
     18, 21, 24, 25, 26, 23, 20, 19  // ZR
 };
 
-static void rotate_1_side_level(Side_State *sp, uint8_t *indexes, Deem_Action deem_action)
+static void rotate_1_side_level(uint8_t *cl, uint8_t *indexes, Deem_Action deem_action)
 {
     uint8_t tc, i;
-    uint8_t *cl = sp->colors;
 
     switch (deem_action)
     {
@@ -219,11 +218,11 @@ static void rotate_1_side_level(Side_State *sp, uint8_t *indexes, Deem_Action de
     }
 }
 
-static void rotate_1_side(Side_State *sp, uint8_t *indexes, Deem_Action deem_action)
+static void rotate_1_side(uint8_t *colors, uint8_t *indexes, Deem_Action deem_action)
 {
-    rotate_1_side_level(sp, indexes, deem_action);
-    rotate_1_side_level(sp, (indexes + 8), deem_action);
-    rotate_1_side_level(sp, (indexes + 16), deem_action);
+    rotate_1_side_level(colors, indexes, deem_action);
+    rotate_1_side_level(colors, (indexes + 8), deem_action);
+    rotate_1_side_level(colors, (indexes + 16), deem_action);
 }
 
 
@@ -274,16 +273,13 @@ static void rotate_1_side(Side_State *sp, uint8_t *indexes, Deem_Action deem_act
  */
 static void rotate_adjacent_layer_x_ccw(uint8_t side_num)
 {
-    Side_State *up, *rp, *dp, *lp;
     uint8_t *uc, *rc, *dc, *lc;
     uint8_t t1, t2, t3;
 
-    up = get_adjacent_up_side(side_num, AXIS_X);
-    rp = get_adjacent_right_side(side_num, AXIS_X);
-    dp = get_adjacent_down_side(side_num, AXIS_X);
-    lp = get_adjacent_left_side(side_num, AXIS_X);
-
-    uc = up->colors; rc = rp->colors; dc = dp->colors; lc = lp->colors;
+    uc = get_adjacent_up_side(side_num, AXIS_X);
+    rc = get_adjacent_right_side(side_num, AXIS_X);
+    dc = get_adjacent_down_side(side_num, AXIS_X);
+    lc = get_adjacent_left_side(side_num, AXIS_X);
 
     t1=uc[ 0]; uc[ 0]=uc[ 1]; uc[ 1]=uc[ 2]; 
     t2=uc[ 9]; uc[ 9]=uc[10]; uc[10]=uc[11]; 
@@ -325,16 +321,13 @@ static void rotate_adjacent_layer_x_ccw(uint8_t side_num)
  */
 static void rotate_adjacent_layer_x_cw(uint8_t side_num)
 {
-    Side_State *up, *rp, *dp, *lp;
     uint8_t *uc, *rc, *dc, *lc;
     uint8_t t1, t2, t3;
 
-    up = get_adjacent_up_side(side_num, AXIS_X);
-    rp = get_adjacent_right_side(side_num, AXIS_X);
-    dp = get_adjacent_down_side(side_num, AXIS_X);
-    lp = get_adjacent_left_side(side_num, AXIS_X);
-
-    uc = up->colors; rc = rp->colors; dc = dp->colors; lc = lp->colors;
+    uc = get_adjacent_up_side(side_num, AXIS_X);
+    rc = get_adjacent_right_side(side_num, AXIS_X);
+    dc = get_adjacent_down_side(side_num, AXIS_X);
+    lc = get_adjacent_left_side(side_num, AXIS_X);
 
     t1=uc[ 2]; uc[ 2]=uc[ 1]; uc[ 1]=uc[ 0];
     t2=uc[11]; uc[11]=uc[10]; uc[10]=uc[ 9];
@@ -372,16 +365,13 @@ static void rotate_adjacent_layer_x_cw(uint8_t side_num)
  */
 static void rotate_adjacent_layer_y_ccw(uint8_t side_num)
 {
-    Side_State *up, *rp, *dp, *lp;
     uint8_t *uc, *rc, *dc, *lc;
     uint8_t t1, t2, t3;
 
-    up = get_adjacent_up_side(side_num, AXIS_Y);
-    rp = get_adjacent_right_side(side_num, AXIS_Y);
-    dp = get_adjacent_down_side(side_num, AXIS_Y);
-    lp = get_adjacent_left_side(side_num, AXIS_Y);
-
-    uc = up->colors; rc = rp->colors; dc = dp->colors; lc = lp->colors;
+    uc = get_adjacent_up_side(side_num, AXIS_Y);
+    rc = get_adjacent_right_side(side_num, AXIS_Y);
+    dc = get_adjacent_down_side(side_num, AXIS_Y);
+    lc = get_adjacent_left_side(side_num, AXIS_Y);
 
     t1=uc[ 6]; uc[ 6]=uc[ 3]; uc[ 3]=uc[ 0];
     t2=uc[15]; uc[15]=uc[12]; uc[12]=uc[ 9];
@@ -420,16 +410,13 @@ static void rotate_adjacent_layer_y_ccw(uint8_t side_num)
  */
 static void rotate_adjacent_layer_y_cw(uint8_t side_num)
 {
-    Side_State *up, *rp, *dp, *lp;
     uint8_t *uc, *rc, *dc, *lc;
     uint8_t t1, t2, t3;
 
-    up = get_adjacent_up_side(side_num, AXIS_Y);
-    rp = get_adjacent_right_side(side_num, AXIS_Y);
-    dp = get_adjacent_down_side(side_num, AXIS_Y);
-    lp = get_adjacent_left_side(side_num, AXIS_Y);
-
-    uc = up->colors; rc = rp->colors; dc = dp->colors; lc = lp->colors;
+    uc = get_adjacent_up_side(side_num, AXIS_Y);
+    rc = get_adjacent_right_side(side_num, AXIS_Y);
+    dc = get_adjacent_down_side(side_num, AXIS_Y);
+    lc = get_adjacent_left_side(side_num, AXIS_Y);
 
     t1=uc[ 0]; uc[ 0]=uc[ 3]; uc[ 3]=uc[ 6];
     t2=uc[ 9]; uc[ 9]=uc[12]; uc[12]=uc[15];
@@ -471,16 +458,13 @@ static void rotate_adjacent_layer_y_cw(uint8_t side_num)
  */
 static void rotate_adjacent_layer_z_ccw(uint8_t side_num)
 {
-    Side_State *up, *rp, *dp, *lp;
     uint8_t *uc, *rc, *dc, *lc;
     uint8_t t1, t2, t3;
 
-    up = get_adjacent_up_side(side_num, AXIS_Z);
-    rp = get_adjacent_right_side(side_num, AXIS_Z);
-    dp = get_adjacent_down_side(side_num, AXIS_Z);
-    lp = get_adjacent_left_side(side_num, AXIS_Z);
-
-    uc = up->colors; rc = rp->colors; dc = dp->colors; lc = lp->colors;
+    uc = get_adjacent_up_side(side_num, AXIS_Z);
+    rc = get_adjacent_right_side(side_num, AXIS_Z);
+    dc = get_adjacent_down_side(side_num, AXIS_Z);
+    lc = get_adjacent_left_side(side_num, AXIS_Z);
 
     t1=uc[0]; uc[0]=uc[1]; uc[1]=uc[2]; 
     t2=uc[3]; uc[3]=uc[4]; uc[4]=uc[5]; 
@@ -522,16 +506,13 @@ static void rotate_adjacent_layer_z_ccw(uint8_t side_num)
  */
 static void rotate_adjacent_layer_z_cw(uint8_t side_num)
 {
-    Side_State *up, *rp, *dp, *lp;
     uint8_t *uc, *rc, *dc, *lc;
     uint8_t t1, t2, t3;
 
-    up = get_adjacent_up_side(side_num, AXIS_Z);
-    rp = get_adjacent_right_side(side_num, AXIS_Z);
-    dp = get_adjacent_down_side(side_num, AXIS_Z);
-    lp = get_adjacent_left_side(side_num, AXIS_Z);
-
-    uc = up->colors; rc = rp->colors; dc = dp->colors; lc = lp->colors;
+    uc = get_adjacent_up_side(side_num, AXIS_Z);
+    rc = get_adjacent_right_side(side_num, AXIS_Z);
+    dc = get_adjacent_down_side(side_num, AXIS_Z);
+    lc = get_adjacent_left_side(side_num, AXIS_Z);
 
     t1=uc[2]; uc[2]=uc[1]; uc[1]=uc[0]; 
     t2=uc[5]; uc[5]=uc[4]; uc[4]=uc[3]; 
@@ -856,7 +837,6 @@ static void move_middle_layer_z_l_to_r()
  */
 static void move_middle_layer_z_r_to_l()
 {
-    Side_State *bp, *fp, *op;
     uint8_t *bc, *tc, *fc, *oc;
     uint8_t t1, t2, t3;
 
@@ -897,20 +877,21 @@ static Deem_Action get_deem_action(uint8_t cycle_ct)
 
 static void rotate(uint8_t side_num, uint8_t *indexes_m, uint8_t *indexes_bf, uint8_t rotation_axis, void (*rotate_adjacent_layer_ptr)(uint8_t side_num))
 {
-    Side_State *bp, *fp, *state_ptr;
+    Side_State *state_ptr;
+    uint8_t *bc, *fc;
     Deem_Action deem_action;
 
     state_ptr = &(sides_states[side_num]);
     deem_action = get_deem_action(state_ptr->cycle_ct);
 
-    rotate_1_side(state_ptr, indexes_m, deem_action);
+    rotate_1_side(state_ptr->colors, indexes_m, deem_action);
 
     rotate_adjacent_layer_ptr(side_num);
 
-    bp = get_adjacent_back_side(side_num, rotation_axis);
-    fp = get_adjacent_front_side(side_num, rotation_axis);
-    rotate_1_side_level(bp, (indexes_bf + 16), deem_action);
-    rotate_1_side_level(fp, indexes_bf, deem_action);
+    bc = get_adjacent_back_side(side_num, rotation_axis);
+    fc = get_adjacent_front_side(side_num, rotation_axis);
+    rotate_1_side_level(bc, (indexes_bf + 16), deem_action);
+    rotate_1_side_level(fc, indexes_bf, deem_action);
 }
 
 
@@ -1001,10 +982,10 @@ static void move_persp_x_dir_l_to_r(uint8_t side_num)
 {
     Deem_Action deem_action = get_deem_action(sides_states[side_num].cycle_ct);
 
-    rotate_1_side(&(sides_states[SIDE_XR]), ROTATION_X_CW_INDEXES, deem_action);
-    rotate_1_side(&(sides_states[SIDE_ZR]), ROTATION_Z_CW_INDEXES, deem_action);
-    rotate_1_side(&(sides_states[SIDE_XL]), ROTATION_X_CW_INDEXES, deem_action);
-    rotate_1_side(&(sides_states[SIDE_ZL]), ROTATION_Z_CW_INDEXES, deem_action);
+    rotate_1_side(sides_states[SIDE_XR].colors, ROTATION_X_CW_INDEXES, deem_action);
+    rotate_1_side(sides_states[SIDE_ZR].colors, ROTATION_Z_CW_INDEXES, deem_action);
+    rotate_1_side(sides_states[SIDE_XL].colors, ROTATION_X_CW_INDEXES, deem_action);
+    rotate_1_side(sides_states[SIDE_ZL].colors, ROTATION_Z_CW_INDEXES, deem_action);
 
     move_middle_layer_x_l_to_r();
 
@@ -1015,10 +996,10 @@ static void move_persp_x_dir_r_to_l(uint8_t side_num)
 {
     Deem_Action deem_action = get_deem_action(sides_states[side_num].cycle_ct);
 
-    rotate_1_side(&(sides_states[SIDE_XR]), ROTATION_X_CCW_INDEXES, deem_action);
-    rotate_1_side(&(sides_states[SIDE_ZR]), ROTATION_Z_CCW_INDEXES, deem_action);
-    rotate_1_side(&(sides_states[SIDE_XL]), ROTATION_X_CCW_INDEXES, deem_action);
-    rotate_1_side(&(sides_states[SIDE_ZL]), ROTATION_Z_CCW_INDEXES, deem_action);
+    rotate_1_side(sides_states[SIDE_XR].colors, ROTATION_X_CCW_INDEXES, deem_action);
+    rotate_1_side(sides_states[SIDE_ZR].colors, ROTATION_Z_CCW_INDEXES, deem_action);
+    rotate_1_side(sides_states[SIDE_XL].colors, ROTATION_X_CCW_INDEXES, deem_action);
+    rotate_1_side(sides_states[SIDE_ZL].colors, ROTATION_Z_CCW_INDEXES, deem_action);
 
     move_middle_layer_x_r_to_l();
 
@@ -1029,10 +1010,10 @@ static void move_persp_y_dir_l_to_r(uint8_t side_num)
 {
     Deem_Action deem_action = get_deem_action(sides_states[side_num].cycle_ct);
 
-    rotate_1_side(&(sides_states[SIDE_ZR]), ROTATION_Y_CCW_INDEXES, deem_action);
-    rotate_1_side(&(sides_states[SIDE_YL]), ROTATION_Y_CCW_INDEXES, deem_action);
-    rotate_1_side(&(sides_states[SIDE_ZL]), ROTATION_Y_CCW_INDEXES, deem_action);
-    rotate_1_side(&(sides_states[SIDE_YR]), ROTATION_Y_CCW_INDEXES, deem_action);
+    rotate_1_side(sides_states[SIDE_ZR].colors, ROTATION_Y_CCW_INDEXES, deem_action);
+    rotate_1_side(sides_states[SIDE_YL].colors, ROTATION_Y_CCW_INDEXES, deem_action);
+    rotate_1_side(sides_states[SIDE_ZL].colors, ROTATION_Y_CCW_INDEXES, deem_action);
+    rotate_1_side(sides_states[SIDE_YR].colors, ROTATION_Y_CCW_INDEXES, deem_action);
 
     move_middle_layer_y_l_to_r();
 
@@ -1043,10 +1024,10 @@ static void move_persp_y_dir_r_to_l(uint8_t side_num)
 {
     Deem_Action deem_action = get_deem_action(sides_states[side_num].cycle_ct);
 
-    rotate_1_side(&(sides_states[SIDE_ZR]), ROTATION_Y_CW_INDEXES, deem_action);
-    rotate_1_side(&(sides_states[SIDE_YL]), ROTATION_Y_CW_INDEXES, deem_action);
-    rotate_1_side(&(sides_states[SIDE_ZL]), ROTATION_Y_CW_INDEXES, deem_action);
-    rotate_1_side(&(sides_states[SIDE_YR]), ROTATION_Y_CW_INDEXES, deem_action);
+    rotate_1_side(sides_states[SIDE_ZR].colors, ROTATION_Y_CW_INDEXES, deem_action);
+    rotate_1_side(sides_states[SIDE_YL].colors, ROTATION_Y_CW_INDEXES, deem_action);
+    rotate_1_side(sides_states[SIDE_ZL].colors, ROTATION_Y_CW_INDEXES, deem_action);
+    rotate_1_side(sides_states[SIDE_YR].colors, ROTATION_Y_CW_INDEXES, deem_action);
 
     move_middle_layer_y_r_to_l();
 
@@ -1057,10 +1038,10 @@ static void move_persp_z_dir_l_to_r(uint8_t side_num)
 {
     Deem_Action deem_action = get_deem_action(sides_states[side_num].cycle_ct);
 
-    rotate_1_side(&(sides_states[SIDE_YL]), ROTATION_X_CW_INDEXES, deem_action);
-    rotate_1_side(&(sides_states[SIDE_XR]), ROTATION_Z_CW_INDEXES, deem_action);
-    rotate_1_side(&(sides_states[SIDE_YR]), ROTATION_X_CW_INDEXES, deem_action);
-    rotate_1_side(&(sides_states[SIDE_XL]), ROTATION_Z_CW_INDEXES, deem_action);
+    rotate_1_side(sides_states[SIDE_YL].colors, ROTATION_X_CW_INDEXES, deem_action);
+    rotate_1_side(sides_states[SIDE_XR].colors, ROTATION_Z_CW_INDEXES, deem_action);
+    rotate_1_side(sides_states[SIDE_YR].colors, ROTATION_X_CW_INDEXES, deem_action);
+    rotate_1_side(sides_states[SIDE_XL].colors, ROTATION_Z_CW_INDEXES, deem_action);
 
     move_middle_layer_z_l_to_r();
 
@@ -1071,10 +1052,10 @@ static void move_persp_z_dir_r_to_l(uint8_t side_num)
 {
     Deem_Action deem_action = get_deem_action(sides_states[side_num].cycle_ct);
 
-    rotate_1_side(&(sides_states[SIDE_YL]), ROTATION_X_CCW_INDEXES, deem_action);
-    rotate_1_side(&(sides_states[SIDE_XR]), ROTATION_Z_CCW_INDEXES, deem_action);
-    rotate_1_side(&(sides_states[SIDE_YR]), ROTATION_X_CCW_INDEXES, deem_action);
-    rotate_1_side(&(sides_states[SIDE_XL]), ROTATION_Z_CCW_INDEXES, deem_action);
+    rotate_1_side(sides_states[SIDE_YL].colors, ROTATION_X_CCW_INDEXES, deem_action);
+    rotate_1_side(sides_states[SIDE_XR].colors, ROTATION_Z_CCW_INDEXES, deem_action);
+    rotate_1_side(sides_states[SIDE_YR].colors, ROTATION_X_CCW_INDEXES, deem_action);
+    rotate_1_side(sides_states[SIDE_XL].colors, ROTATION_Z_CCW_INDEXES, deem_action);
 
     move_middle_layer_z_r_to_l();
 
@@ -1185,9 +1166,14 @@ static uint8_t can_omit_rotation_cycle(uint8_t cycle_ct)
     }
 }
 
-void rotation_cycle(uint8_t side_num, Side_State *state_ptr)
+void rotation_cycle(uint8_t side_num)
 {
-    uint8_t cycle_ct = ++state_ptr->cycle_ct;
+	Side_State *state_ptr;
+	uint8_t cycle_ct;
+
+	state_ptr = &(sides_states[side_num]);
+
+    cycle_ct = ++(state_ptr->cycle_ct);
 
     if (can_omit_rotation_cycle(cycle_ct))
         return;
@@ -1197,6 +1183,6 @@ void rotation_cycle(uint8_t side_num, Side_State *state_ptr)
     sides_colors_changed();
 
     if (cycle_ct >= ROTATION_PHASE_F_CYCLES)
-    	rotation_done(state_ptr);
+        rotation_done(side_num);
 }
 

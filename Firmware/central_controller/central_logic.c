@@ -167,7 +167,7 @@ void handle_cycle(void)
             case ROTATING:
                 
                 // rotation_logic.c
-                rotation_cycle(side_num, state_ptr);
+                rotation_cycle(side_num);
                 break;
 
             case WAITING_FOR_SAVING:
@@ -183,9 +183,9 @@ void handle_cycle(void)
     }
 }
 
-void rotation_done(Side_State *side_state_ptr)
+void rotation_done(uint8_t side_num)
 {
-    side_state_ptr->status = WAITING_FOR_SAVING;
+    sides_states[side_num].status = WAITING_FOR_SAVING;
 }
 
 static uint8_t can_side_rotate(uint8_t side_num, Side_State *state_ptr)
