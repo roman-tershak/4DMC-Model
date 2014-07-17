@@ -228,12 +228,20 @@ static uint8_t can_save(void)
 
 void sides_colors_changed(void)
 {
-    uint8_t sn;
+    uint8_t sn, c, *colors;
 
     for (sn = 0; sn < SIDE_CB; sn++)
     {
         // Send new colors to side
-        light_side_color(sn, sides_states[sn].colors);
+        //light_side_color(sn, sides_states[sn].colors);
+
+    	colors = sides_states[sn].colors;
+    	USART_transmit(0xff);
+    	USART_transmit(0xff);
+    	for (c = 0; c < SIDE_CUBES_COUNT; c++)
+    	{
+    		USART_transmit(colors[c]);
+    	}
     }
 }
 
