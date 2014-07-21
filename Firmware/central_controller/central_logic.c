@@ -63,6 +63,7 @@ void reset_cube(void)
 {
     reset_sides_colors();
     reset_sides_states();
+    sides_states[0].status = WAITING_FOR_SAVING;
     sides_colors_changed();
 }
 
