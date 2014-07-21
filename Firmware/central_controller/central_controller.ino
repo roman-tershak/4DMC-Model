@@ -13,7 +13,6 @@ int main (void)
 
     init_central_logic();
     load_sides_states();
-    //reset_cube();
     
     init_timer1();
     

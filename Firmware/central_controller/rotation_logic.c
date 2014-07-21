@@ -229,47 +229,27 @@ static void rotate_1_side(uint8_t *colors, uint8_t *indexes, Deem_Action deem_ac
 /* Functions for rotating a round layer adjacent to a particular side according to a given direction  */
 
 /*
- *                     y   x
- *                      \ |
- *                       \| 
- *                  z<----
- *           x___
- *               |\
- *               | \z
- *               y                     z  X
- *                      |Z              \ |
- *        ___Y          |____Y           \|___Y
- *       |\              \
- *       | \Z             \X
- *       vX
- *                              ^Y
- *                              |
- *                              |
- *                     X         ---->X
- *                     |         \
- *                     |___Z      Z
- *                      \
- *                       \Y
- *
- * TODO Add directions to the image below
- * 
- *             ^Y
- *             | 
- *             | 6      7      8
- *             |
- *            15     16     17
- *             | 3      4      5
- *          24 |   25     26
- *            12     13     14
- *             | 0      1      2
- *          21  ---22-----23---->X
- *           / 9     10     11
- *          /
- *         /18     19     20
- *        Z 
- * 
- * 
- * 
+ *                                                                  y   x                   
+ *                                                                   \ |                    
+ *                                                                    \|                    
+ *                                                               z<----                     
+ *             ^Y                                         x___                              
+ *             |    ~3<------                                 |\                            
+ *             | 6      7      8                              | \z                          
+ *             |                                              y                     z  X    
+ *            15     16     17                                       |Z              \ |    
+ *             | 3      4      5  ^4~                  ___Y          |____Y           \|___Y
+ *          24 |   25     26     /                    |\              \                     
+ *         2^ 12     13     14  /                     | \Z             \X                   
+ *         /   | 0      1      2                      vX                                    
+ *        / 21  ---22-----23---->X                                           ^Y             
+ *           / 9     10     11                                               |              
+ *          /                                                                |              
+ *         /18     19     20                                        X         ---->X        
+ *        Z     1<------                                            |         \             
+ *                                                                  |___Z      Z            
+ *                                                                   \                      
+ *                                                                    \Y                    
  */
 static void rotate_adjacent_layer_x_ccw(uint8_t side_num)
 {
@@ -298,26 +278,27 @@ static void rotate_adjacent_layer_x_ccw(uint8_t side_num)
     dc[26]=lc[8]; lc[8]=lc[17]; lc[17]=lc[26]; lc[26]=t1;
 }
 /* 
- * 
- * 
- *                  ------->3
- *             ^Y
- *             | 
- *             | 6      7      8
- *             |
- *            15     16     17
- *             | 3      4      5       /
- *          24 |   25     26          /
- *         /  12     13     14      2V
- *        /    | 0      1      2
- *      4V  21  ---22-----23---->X
- *           / 9     10     11
- *          /
- *         /18     19     20
- *        Z 
- *              ------->1
- * 
- * 
+ *                                                                         y   x                   
+ *                                                                          \ |                    
+ *                                                                           \|                    
+ *                  ------->3                                           z<----                     
+ *             ^Y                                                x___                              
+ *             |                                                     |\                            
+ *             | 6      7      8                                     | \z                          
+ *             |                                                     y                     z  X    
+ *            15     16     17                                              |Z              \ |    
+ *             | 3      4      5       /                      ___Y          |____Y           \|___Y
+ *          24 |   25     26          /                      |\              \                     
+ *         /  12     13     14      2V                       | \Z             \X                   
+ *        /    | 0      1      2                             vX                                    
+ *      4V  21  ---22-----23---->X                                                  ^Y             
+ *           / 9     10     11                                                      |              
+ *          /                                                                       |              
+ *         /18     19     20                                               X         ---->X        
+ *        Z                                                                |         \             
+ *              ------->1                                                  |___Z      Z            
+ *                                                                          \                      
+ *                                                                           \Y                    
  */
 static void rotate_adjacent_layer_x_cw(uint8_t side_num)
 {
@@ -346,22 +327,27 @@ static void rotate_adjacent_layer_x_cw(uint8_t side_num)
     dc[ 6]=rc[24]; rc[24]=rc[15]; rc[15]=rc[6]; rc[6]=t3;
 }
 /* 
- * 
- *             ^Y
- *             | 
- *             | 6 ^~2  7      8
- *        1^   |   |
- *         |  15   | 16     17      ^3
- *         |   | 3 |    4      5    |
- *         |24 |   25     26        |
- *            12     13     14      |
- *             | 0      1      2
- *          21  ---22-----23---->X
- *           / 9 ^~4 10     11
- *          /    |
- *         /18   | 19     20
- *        Z      |
- * 
+ *                                                                          y   x                   
+ *                                                                           \ |                    
+ *                                                                            \|                    
+ *                                                                       z<----                     
+ *                                                                x___                              
+ *             ^Y                                                     |\                            
+ *             |                                                      | \z                          
+ *             | 6 ^~2  7      8                                      y                     z  X    
+ *        1^   |   |                                                         |Z              \ |    
+ *         |  15   | 16     17      ^3                         ___Y          |____Y           \|___Y
+ *         |   | 3 |    4      5    |                         |\              \                     
+ *         |24 |   25     26        |                         | \Z             \X                   
+ *            12     13     14      |                         vX                                    
+ *             | 0      1      2                                                     ^Y             
+ *          21  ---22-----23---->X                                                   |              
+ *           / 9 ^~4 10     11                                                       |              
+ *          /    |                                                          X         ---->X        
+ *         /18   | 19     20                                                |         \             
+ *        Z      |                                                          |___Z      Z            
+ *                                                                           \                      
+ *                                                                            \Y                    
  */
 static void rotate_adjacent_layer_y_ccw(uint8_t side_num)
 {
@@ -390,23 +376,27 @@ static void rotate_adjacent_layer_y_ccw(uint8_t side_num)
     dc[ 2]=lc[26]; lc[26]=lc[23]; lc[23]=lc[20]; lc[20]=t3;
 }
 /* 
- * 
- *             ^Y
- *             | 
- *             | 6 |    7      8
- *             |   |
- *         |  15   | 16     17
- *         |   | 3 V4~  4      5    |
- *         |24 |   25     26        |
- *        1V  12     13     14      |
- *             | 0      1      2    V~3
- *          21  ---22-----23---->X
- *           / 9     10     11
- *          /    |
- *         /18   | 19     20
- *        Z      |
- *               V2
- * 
+ *                                                                      y   x                   
+ *                                                                       \ |                    
+ *                                                                        \|                    
+ *                                                                   z<----                     
+ *                                                            x___                              
+ *             ^Y                                                 |\                            
+ *             |                                                  | \z                          
+ *             | 6 |    7      8                                  y                     z  X    
+ *             |   |                                                     |Z              \ |    
+ *         |  15   | 16     17                             ___Y          |____Y           \|___Y
+ *         |   | 3 V4~  4      5    |                     |\              \                     
+ *         |24 |   25     26        |                     | \Z             \X                   
+ *        1V  12     13     14      |                     vX                                    
+ *             | 0      1      2    V~3                                          ^Y             
+ *          21  ---22-----23---->X                                               |              
+ *           / 9     10     11                                                   |              
+ *          /    |                                                      X         ---->X        
+ *         /18   | 19     20                                            |         \             
+ *        Z      |                                                      |___Z      Z            
+ *               V2                                                      \                      
+ *                                                                        \Y                    
  */
 static void rotate_adjacent_layer_y_cw(uint8_t side_num)
 {
@@ -435,25 +425,27 @@ static void rotate_adjacent_layer_y_cw(uint8_t side_num)
     dc[26]=rc[2]; rc[2]=rc[5]; rc[5]=rc[8]; rc[8]=t1;
 }
 /* 
- * 
- *                   ^4~
- *                  /
- *             ^Y  /
- *             |  /
- *             | 6      7      8
- *             |   1<-------
- *            15     16     17
- *             | 3      4      5
- *          24 |   25     26
- *            12     13     14
- *             | 0      1      2
- *          21  ---22-----23---->X
- *           / 9     10     11
- *          /    ^2
- *         /18  /  19     20
- *        Z    /
- *            /
- *           ~3<-------
+ *                                                                     y   x                   
+ *                                                                      \ |                    
+ *                                                                       \|                    
+ *                   ^4~                                            z<----                     
+ *                  /                                        x___                              
+ *             ^Y  /                                             |\                            
+ *             |  /                                              | \z                          
+ *             | 6      7      8                                 y                     z  X    
+ *             |   1<-------                                            |Z              \ |    
+ *            15     16     17                            ___Y          |____Y           \|___Y
+ *             | 3      4      5                         |\              \                     
+ *          24 |   25     26                             | \Z             \X                   
+ *            12     13     14                           vX                                    
+ *             | 0      1      2                                                ^Y             
+ *          21  ---22-----23---->X                                              |              
+ *           / 9     10     11                                                  |              
+ *          /    ^2                                                    X         ---->X        
+ *         /18  /  19     20                                           |         \             
+ *        Z    /                                                       |___Z      Z            
+ *            /                                                         \                      
+ *           ~3<-------                                                  \Y                    
  * 
  */
 static void rotate_adjacent_layer_z_ccw(uint8_t side_num)
@@ -483,25 +475,27 @@ static void rotate_adjacent_layer_z_ccw(uint8_t side_num)
     dc[26]=lc[8]; lc[8]=lc[17]; lc[17]=lc[26]; lc[26]=t1;
 }
 /* 
- * 
- *                   /
- *                  /
- *             ^Y  /
- *             |  V~2
- *             | 6      7      8
- *             |   ------->1
- *            15     16     17
- *             | 3      4      5
- *          24 |   25     26
- *            12     13     14
- *             | 0      1      2
- *          21  ---22-----23---->X
- *           / 9     10     11
- *          /    /
- *         /18  /  19     20
- *        Z    /
- *            V~4
- *          ------->3
+ *                                                                      y   x                   
+ *                                                                       \ |                    
+ *                                                                        \|                    
+ *                   /                                               z<----                     
+ *                  /                                         x___                              
+ *             ^Y  /                                              |\                            
+ *             |  V~2                                             | \z                          
+ *             | 6      7      8                                  y                     z  X    
+ *             |   ------->1                                             |Z              \ |    
+ *            15     16     17                             ___Y          |____Y           \|___Y
+ *             | 3      4      5                          |\              \                     
+ *          24 |   25     26                              | \Z             \X                   
+ *            12     13     14                            vX                                    
+ *             | 0      1      2                                                 ^Y             
+ *          21  ---22-----23---->X                                               |              
+ *           / 9     10     11                                                   |              
+ *          /    /                                                      X         ---->X        
+ *         /18  /  19     20                                            |         \             
+ *        Z    /                                                        |___Z      Z            
+ *            V~4                                                        \                      
+ *          ------->3                                                     \Y                    
  * 
  */
 static void rotate_adjacent_layer_z_cw(uint8_t side_num)
@@ -1168,10 +1162,10 @@ static uint8_t can_omit_rotation_cycle(uint8_t cycle_ct)
 
 void rotation_cycle(uint8_t side_num)
 {
-	Side_State *state_ptr;
-	uint8_t cycle_ct;
+    Side_State *state_ptr;
+    uint8_t cycle_ct;
 
-	state_ptr = &(sides_states[side_num]);
+    state_ptr = &(sides_states[side_num]);
 
     cycle_ct = ++(state_ptr->cycle_ct);
 

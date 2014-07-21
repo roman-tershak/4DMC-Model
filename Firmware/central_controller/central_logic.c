@@ -8,11 +8,11 @@
 
 /* Side states checks */
 #define IS_SIDE_ROTATING_OR_WAITING    (WAITING_FOR_ROTATION | ROTATING | WAITING_FOR_SAVING)
-#define CAN_START_ROTATION  (SIDE_IDLE | WAITING_FOR_SAVING)
+#define CAN_ROTATE  (SIDE_IDLE | WAITING_FOR_SAVING)
 #define CANNOT_BE_SAVED (ROTATING)
 
 
-static uint8_t can_side_rotate(uint8_t side_num, Side_State *state_ptr);
+static uint8_t can_start_rotation(uint8_t side_num, Side_State *state_ptr);
 static uint8_t can_save(void);
 
 static void reset_sides_colors(void);
@@ -125,7 +125,7 @@ uint8_t start_rotation(uint8_t sw_side_num, uint8_t direction)
 
     state_ptr = &(sides_states[direction == MOVE_PERSP ? SIDE_CF : sw_side_num]);
 
-    if (state_ptr->status & CAN_START_ROTATION)
+    if (state_ptr->status & CAN_ROTATE)
     {
         state_ptr->cycle_ct = 0;
         state_ptr->rotation_func_ptr = get_rotation_func_ptr(sw_side_num, direction);
@@ -154,7 +154,7 @@ void handle_cycle(void)
             {
             case WAITING_FOR_ROTATION:
 
-                if (can_side_rotate(side_num, state_ptr))
+                if (can_start_rotation(side_num, state_ptr))
                 {
                     state_ptr->status = ROTATING;
                     state_ptr->cycle_ct = 0;
@@ -189,7 +189,7 @@ void rotation_done(uint8_t side_num)
     sides_states[side_num].status = WAITING_FOR_SAVING;
 }
 
-static uint8_t can_side_rotate(uint8_t side_num, Side_State *state_ptr)
+static uint8_t can_start_rotation(uint8_t side_num, Side_State *state_ptr)
 {
     uint8_t sn, dependencies;
 

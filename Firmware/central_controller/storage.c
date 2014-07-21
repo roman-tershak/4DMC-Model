@@ -130,8 +130,9 @@ static void pack_unpack_colors(uint8_t what)
                 // read/unpack section
                 colors[j] = (uint8_t) ((data & ((uint16_t) 0x7 << byte_bit_index)) >> byte_bit_index);
             }
+
             buff_bit_index += 3;
-        }
+        } 
     }
 }
 
