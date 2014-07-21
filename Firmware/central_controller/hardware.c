@@ -112,6 +112,11 @@ void USART_transmit(uint8_t data)
     /* Then enable receiver */
     set_bit(UCSR0B, RXEN0);
 }
+void USART_transmit_16(uint16_t data)
+{
+    USART_transmit((uint8_t) data);
+    USART_transmit((uint8_t) (data >> 8));
+}
 
 // TODO For debug purposes only
 uint8_t USART_receive()

@@ -63,6 +63,7 @@ void reset_cube(void)
 {
     reset_sides_colors();
     reset_sides_states();
+    sides_states[0].status = WAITING_FOR_SAVING;
     sides_colors_changed();
 }
 
@@ -230,13 +231,13 @@ void sides_colors_changed(void)
 {
     uint8_t sn, c, *colors;
 
+    	USART_transmit(0xff);
     for (sn = 0; sn < SIDE_CB; sn++)
     {
         // Send new colors to side
         //light_side_color(sn, sides_states[sn].colors);
 
     	colors = sides_states[sn].colors;
-    	USART_transmit(0xff);
     	USART_transmit(0xff);
     	for (c = 0; c < SIDE_CUBES_COUNT; c++)
     	{

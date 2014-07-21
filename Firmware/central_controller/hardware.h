@@ -164,6 +164,7 @@ port_pin_t get_side_led_pin(uint8_t side_num);
 // TODO For debug purposes
 void USART_init(uint16_t ubrr);
 void USART_transmit(uint8_t data);
+void USART_transmit_16(uint16_t data);
 uint8_t USART_receive(void);
 
 #ifdef __cplusplus

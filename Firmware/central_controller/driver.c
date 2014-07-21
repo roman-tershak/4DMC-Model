@@ -208,7 +208,8 @@ static uint8_t read_switches_debounced()
 static uint8_t read_switches()
 {
     // TODO This depends on port pins layout - may need to change
-    return ~read_pins(SI) & SI_MASK;
+    //return ~read_pins(SI) & SI_MASK;
+    return ~read_pins(SI) & 0x3;
 }
 
 static uint8_t read_srs_debounced()

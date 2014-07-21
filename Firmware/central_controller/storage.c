@@ -16,7 +16,7 @@ static uint8_t check_side_states(void);
 extern volatile Side_State sides_states[SIDE_COUNT];
 
 static volatile uint8_t is_saving_states = FALSE;
-static uint8_t colors_packed_buff[STATE_DATA_STORAGE_LEN];
+static uint8_t colors_packed_buff[STATE_DATA_STORAGE_LEN + 1];
 
 
 uint8_t is_saving(void)
@@ -46,11 +46,14 @@ void save_state(void)
             sides_states[i].status = SIDE_IDLE;
     }
 
+    USART_transmit(0xAA);
+    USART_transmit(get_bank_num_storage(record_num));
     // Enable interrupts, because storing takes long time
     ENABLE_GLOBAL_INTERRUPTS();
 
     // Store state of the cube from the copy
     store_side_states(colors_packed_buff, get_bank_num_storage(record_num));
+    USART_transmit(0xBB);
     
     // Make a record about successful storing into the safetable
     store_safetable_record_num(record_num);
@@ -102,8 +105,6 @@ static void pack_unpack_colors(uint8_t what)
             //   0          1           2          3           4           5
             // |xxx,xxx,xx|x,xxx,xxx,x|xx,xxx,xxx|,xxx,xxx,xx|x,xxx,xxx,x|xx,...
             //   0   1   2    3   4   5    6   7    8   9  10   11  12   13   
-            buff_bit_index += j * 3;
-
             buff_byte_index = buff_bit_index / 8;
             byte_bit_index = buff_bit_index % 8;
 
@@ -129,6 +130,7 @@ static void pack_unpack_colors(uint8_t what)
                 // read/unpack section
                 colors[j] = (uint8_t) ((data & ((uint16_t) 0x7 << byte_bit_index)) >> byte_bit_index);
             }
+            buff_bit_index += 3;
         }
     }
 }

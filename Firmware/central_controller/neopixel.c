@@ -21,12 +21,12 @@
 #define NS_TO_CYCLES(n)  ((n) / NS_PER_CYCLE)
 #define DELAY_CYCLES(n)  (((n) > 0) ? __builtin_avr_delay_cycles(n) : __builtin_avr_delay_cycles(0))  // Make sure we never have a delay less than zero
 
-#ifndef __builtin_avr_delay_cycles
+/*#ifndef __builtin_avr_delay_cycles
 void __builtin_avr_delay_cycles(uint32_t __n) {
     while(__n)
         __n--;
 }
-#endif
+#endif*/
 
 static const uint8_t COLOR_MATRIX[16][3] = 
 {
