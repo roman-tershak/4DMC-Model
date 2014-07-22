@@ -35,21 +35,6 @@ static const uint8_t DEPENDENCY_MATRIX[] =
 volatile Side_State sides_states[SIDE_COUNT];
 
 
-void init_central_logic(void)
-{
-    uint8_t i;
-    Side_State *side_state_ptr;
-    
-    for (i = 0; i < SIDE_COUNT; i++)
-    {
-        side_state_ptr = &(sides_states[i]);
-        
-        side_state_ptr->status = SIDE_IDLE;
-        side_state_ptr->cycle_ct = 0;
-        side_state_ptr->rotation_func_ptr = NULL;
-    }
-}
-
 void load_sides_states(void)
 {
     if (!load_state())
@@ -87,15 +72,10 @@ static void reset_sides_colors(void)
 static void reset_sides_states(void)
 {
     uint8_t i;
-    Side_State *side_state_ptr;
 
     for (i = 0; i < SIDE_COUNT; i++)
     {
-        side_state_ptr = &(sides_states[i]);
-        
-        side_state_ptr->status = SIDE_IDLE;
-        side_state_ptr->cycle_ct = 0;
-        side_state_ptr->rotation_func_ptr = NULL;
+        sides_states[i].status = SIDE_IDLE;
     }
     
 }
@@ -104,15 +84,15 @@ static uint8_t get_initial_color_for_side(uint8_t side_num)
 {
     switch (side_num)
     {
-        case SIDE_XL: return RED;
-        case SIDE_XR: return GREEN;
-        case SIDE_YL: return BLUE;
-        case SIDE_YR: return YELLOW;
-        case SIDE_ZL: return LIGHT_BLUE;
-        case SIDE_ZR: return PINK;
-        case SIDE_CF: return ORANGE;
-        case SIDE_CB: return WHITE;
-        default: return RED;
+        case SIDE_XL: return 0;
+        case SIDE_XR: return 1;
+        case SIDE_YL: return 2;
+        case SIDE_YR: return 3;
+        case SIDE_ZL: return 4;
+        case SIDE_ZR: return 5;
+        case SIDE_CF: return 6;
+        case SIDE_CB: return 7;
+        default: return 0;
     }
 }
 
@@ -230,8 +210,10 @@ static uint8_t can_save(void)
 void sides_colors_changed(void)
 {
     uint8_t sn, c, *colors;
+    uint8_t ok;
 
     	USART_transmit(0xff);
+    	ok = TRUE;
     for (sn = 0; sn < SIDE_CB; sn++)
     {
         // Send new colors to side
@@ -242,7 +224,16 @@ void sides_colors_changed(void)
     	for (c = 0; c < SIDE_CUBES_COUNT; c++)
     	{
     		USART_transmit(colors[c]);
+    		if (colors[c] != sn)
+    			ok = FALSE;
     	}
+    }
+    if (ok)
+    {
+    	USART_transmit(0xff);
+    	USART_transmit(0x0C);
+    	USART_transmit(0xA1);
+    	USART_transmit(0xff);
     }
 }
 

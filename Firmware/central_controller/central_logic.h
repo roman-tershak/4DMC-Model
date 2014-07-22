@@ -26,7 +26,6 @@ typedef struct
     uint8_t colors[SIDE_CUBES_COUNT];
 } Side_State;
 
-void init_central_logic(void);
 void load_sides_states(void);
 void reset_cube(void);
 
