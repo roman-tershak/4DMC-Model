@@ -120,16 +120,16 @@ ISR (TIMER1_OVF_vect)
     // Handling Software Reset switch
     if (srs_waiting_for_release == FALSE)
     {
-    	if (read_srs_debounced())
-    	{
-    		srs_waiting_for_release = TRUE;
-    		reset_cube();
-    	}
+        if (read_srs_debounced())
+        {
+            srs_waiting_for_release = TRUE;
+            reset_cube();
+        }
     }
     else
     {
     	if (!read_srs_debounced())
-    		srs_waiting_for_release = FALSE;
+            srs_waiting_for_release = FALSE;
     }
 
     // Handling Rotation side swicthes
@@ -208,8 +208,7 @@ static uint8_t read_switches_debounced()
 static uint8_t read_switches()
 {
     // TODO This depends on port pins layout - may need to change
-    //return ~read_pins(SI) & SI_MASK;
-    return ~read_pins(SI) & 0x3;
+    return ~read_pins(SI) & SI_MASK;
 }
 
 static uint8_t read_srs_debounced()

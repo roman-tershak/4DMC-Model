@@ -289,9 +289,9 @@ static void rotate_adjacent_layer_x_ccw(uint8_t side_num)
  *            15     16     17                                              |Z              \ |    
  *             | 3      4      5       /                      ___Y          |____Y           \|___Y
  *          24 |   25     26          /                      |\              \                     
- *         /  12     13     14      2V                       | \Z             \X                   
+ *         /  12     13     14     ~2V                       | \Z             \X                   
  *        /    | 0      1      2                             vX                                    
- *      4V  21  ---22-----23---->X                                                  ^Y             
+ *     ~4V  21  ---22-----23---->X                                                  ^Y             
  *           / 9     10     11                                                      |              
  *          /                                                                       |              
  *         /18     19     20                                               X         ---->X        
@@ -314,7 +314,7 @@ static void rotate_adjacent_layer_x_cw(uint8_t side_num)
     t2=uc[11]; uc[11]=uc[10]; uc[10]=uc[ 9];
     t3=uc[20]; uc[20]=uc[19]; uc[19]=uc[18];
 
-    uc[10]=lc[20]; lc[20]=lc[11]; lc[11]=lc[2];
+    uc[18]=lc[20]; lc[20]=lc[11]; lc[11]=lc[2];
     uc[ 9]=lc[23]; lc[23]=lc[14]; lc[14]=lc[5];
     uc[ 0]=lc[26]; lc[26]=lc[17]; lc[17]=lc[8];
     
