@@ -1,3 +1,4 @@
+#include "common.h"
 #include "hardware.h"
 #include "driver.h"
 #include "central_logic.h"
@@ -5,9 +6,12 @@
 int main (void)
 {
     init_ports();
-    // TODO For debug purposes only
+
+#ifdef USART_DEBUG
+    // For debug purposes only
     // Set baud rate to 115200, but maybe better to 76800 (25)
     USART_init(16);
+#endif
     
     init_driver();
 

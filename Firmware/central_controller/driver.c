@@ -1,7 +1,12 @@
 #include "driver.h"
 #include "hardware.h"
+#include <util/delay.h>
 #include "common.h"
 #include "rotation_logic.h"
+
+#ifdef DEBUG_COLOR_ADJUST
+#include "neopixel.h"
+#endif
 
 static uint8_t get_rotation_dir(uint8_t switches);
 
@@ -159,6 +164,9 @@ ISR (TIMER1_OVF_vect)
                 // Start waiting for switch release
                 sw_side_state_ptr->waiting_for_release = TRUE;
             }
+#ifdef DEBUG_COLOR_ADJUST
+            debug_color_adjust(sw_side_state_ptr->switches);
+#endif
         }
     }
     else

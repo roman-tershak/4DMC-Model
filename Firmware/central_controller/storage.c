@@ -3,7 +3,7 @@
 #include "common.h"
 #include "safetable.h"
 #include "state_storage.h"
-
+#include "hardware.h"
 
 #define PACK    1
 #define UNPACK  0
@@ -46,20 +46,21 @@ void save_state(void)
             sides_states[i].status = SIDE_IDLE;
     }
 
-    USART_transmit(0xAA);
-    USART_transmit(get_bank_num_storage(record_num));
+    USART_TRANSMIT_BYTE(0xAA);
+    USART_TRANSMIT_BYTE(get_bank_num_storage(record_num));
     // Enable interrupts, because storing takes long time
     ENABLE_GLOBAL_INTERRUPTS();
 
     // Store state of the cube from the copy
     store_side_states(colors_packed_buff, get_bank_num_storage(record_num));
-    USART_transmit(0xBB);
     
     // Make a record about successful storing into the safetable
     store_safetable_record_num(record_num);
 
     // Unset 'is_saving' indicator
     is_saving_states = FALSE;
+
+    USART_TRANSMIT_BYTE(0xBB);
 }
 
 uint8_t load_state(void)

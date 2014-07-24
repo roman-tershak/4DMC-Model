@@ -22,8 +22,10 @@ void init_ports(void)
     dir_in(SRS);
 
     // Initializing side color control pins
-    // TODO RX dir_out(SCA);
-    // TODO TX dir_out(SCB);
+#ifndef USART_DEBUG
+    dir_out(SCA);  // RX
+    dir_out(SCB);  // TX
+#endif
     dir_out(SCC);
     dir_out(SCD);
     dir_out(SCE);
@@ -31,13 +33,17 @@ void init_ports(void)
     dir_out(SCG);
     // TODO dir_out(SCH);
 
-    // TODO For debug purposes, should be removed later
+#ifdef USART_DEBUG
+    // For debug purposes
     dir_in(RX);
     dir_out(TX);
+#endif
 
     // Reset all side color control pins to 1
-    // TODO RX res_pin(SCA);
-    // TODO TX res_pin(SCB);
+#ifndef USART_DEBUG
+    res_pin(SCA);  // RX
+    res_pin(SCB);  // TX
+#endif
     res_pin(SCC);
     res_pin(SCD);
     res_pin(SCE);
@@ -80,7 +86,8 @@ port_pin_t get_side_led_pin(uint8_t side_num)
 }
 
 
-// TODO for debug purposes only
+#ifdef USART_DEBUG
+
 void USART_init(uint16_t ubrr)
 {
     /*Set baud rate */
@@ -94,7 +101,6 @@ void USART_init(uint16_t ubrr)
     UCSR0C = _BV(UCSZ01) | _BV(UCSZ00);
 }
 
-// TODO for debug purposes only
 void USART_transmit(uint8_t data)
 {
     /* Since RX and TX use the same wire, disable receiver */
@@ -118,7 +124,6 @@ void USART_transmit_16(uint16_t data)
     USART_transmit((uint8_t) (data >> 8));
 }
 
-// TODO For debug purposes only
 uint8_t USART_receive()
 {
     while (!(UCSR0A & _BV(RXC0)));
@@ -126,4 +131,4 @@ uint8_t USART_receive()
     return UDR0;
 }
 
-
+#endif

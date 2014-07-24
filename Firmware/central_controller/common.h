@@ -1,8 +1,6 @@
 #ifndef H_COMMON
 #define H_COMMON
 
-#include <stdio.h>
-
 #define FALSE 0x0
 #define TRUE 0x1
 
@@ -27,14 +25,7 @@
 #define MAIN_COLOR_COUNT        8
 #define ALL_COLOR_COUNT         16
 
-#define RED             0
-#define GREEN           1
-#define BLUE            2
-#define YELLOW          3
-#define LIGHT_BLUE      4
-#define PINK            5
-#define ORANGE          6
-#define WHITE           7
-
+#define DEBUG_COLOR_ADJUST
+#define USART_DEBUG
 
 #endif

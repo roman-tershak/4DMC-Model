@@ -21,12 +21,12 @@
 #define NS_TO_CYCLES(n)  ((n) / NS_PER_CYCLE)
 #define DELAY_CYCLES(n)  (((n) > 0) ? __builtin_avr_delay_cycles(n) : __builtin_avr_delay_cycles(0))  // Make sure we never have a delay less than zero
 
-/*#ifndef __builtin_avr_delay_cycles
+#ifndef __builtin_avr_delay_cycles
 void __builtin_avr_delay_cycles(uint32_t __n) {
     while(__n)
         __n--;
 }
-#endif*/
+#endif
 
 static const uint8_t COLOR_MATRIX[16][3] = 
 {
@@ -50,6 +50,65 @@ static const uint8_t COLOR_MATRIX[16][3] =
     {20, 20, 20}    // semi-white
 };
 
+#ifdef DEBUG_COLOR_ADJUST
+
+uint8_t color_matrix_adjust[9][3] =
+{
+    {30,  0,  0},
+    { 0, 25,  0},
+    { 0,  0, 25},
+    {50, 50,  0},
+    { 0, 15,  5},
+    {30,  0, 25},
+    {50,  7,  2},
+    {50, 50, 50},
+    {0,   0,  0}
+};
+
+int8_t cma_led_num = 0;
+
+uint8_t cma_led_ind = FALSE;
+uint8_t cma_plus_ind = TRUE;
+uint8_t cma_red_ind = FALSE;
+uint8_t cma_green_ind = FALSE;
+uint8_t cma_blue_ind = FALSE;
+
+void debug_color_adjust(uint8_t indicators)
+{
+    uint8_t c = 0xff;
+
+    cma_plus_ind = (indicators & _BV(0)) ? ~cma_plus_ind : cma_plus_ind;
+    cma_led_ind = (indicators & _BV(1)) ? TRUE : FALSE;
+    cma_red_ind = (indicators & _BV(2)) ? TRUE : FALSE;
+    cma_green_ind = (indicators & _BV(3)) ? TRUE : FALSE;
+    cma_blue_ind = (indicators & _BV(4)) ? TRUE : FALSE;
+
+    if (cma_red_ind) c = 0;
+    if (cma_green_ind) c = 1;
+    if (cma_blue_ind) c = 2;
+
+    if (c != 0xff)
+    {
+        if (cma_plus_ind)
+        {
+            if (color_matrix_adjust[cma_led_num][c] < 0xff) color_matrix_adjust[cma_led_num][c]++;
+        }
+        else
+        {
+            if (color_matrix_adjust[cma_led_num][c] > 0x0) color_matrix_adjust[cma_led_num][c]--;
+        }
+    }
+
+    if (cma_led_ind)
+    {
+        cma_led_num += cma_plus_ind ? 1 : -1;
+        if (cma_led_num < 0) cma_led_num = 7;
+        if (cma_led_num > 7) cma_led_num = 0;
+    }
+}
+
+#endif
+
 
 // Actually send a bit to the string. We turn off optimizations to make sure the compile does
 // not reorder things and make it so the delay happens in the wrong place.
@@ -65,7 +124,7 @@ static void send_byte(uint8_t pin_mask, uint8_t byte_val)
         if (byte_val & i)
         {
             set_bit_mask(SC_PORT, pin_mask);
-            DELAY_CYCLES(NS_TO_CYCLES(T1H) - 2);       // 1-bit width less  overhead  for the actual bit setting
+            DELAY_CYCLES(NS_TO_CYCLES(T1H) - 3);       // 1-bit width less  overhead for the actual bit setting
             // Note that this delay could be longer and everything would still work
             unset_bit_mask(SC_PORT, pin_mask);
             DELAY_CYCLES(NS_TO_CYCLES(T1L) - 4);       // TODO 1-bit gap less the overhead
@@ -73,7 +132,7 @@ static void send_byte(uint8_t pin_mask, uint8_t byte_val)
         else
         {
             set_bit_mask(SC_PORT, pin_mask);
-            DELAY_CYCLES(NS_TO_CYCLES(T0H) - 2);       // 0-bit width less overhead 
+            DELAY_CYCLES(NS_TO_CYCLES(T0H) - 3);       // 0-bit width less overhead 
             // **************************************************************************
             // This line is really the only tight goldilocks timing in the whole program!
             // **************************************************************************
@@ -101,7 +160,15 @@ void light_side_color(uint8_t side_num, uint8_t* colors)
 
     for (i = 0; i < SIDE_LED_COUNT; i++)
     {
+
+#ifdef DEBUG_COLOR_ADJUST
+        if (i < 8)
+            rgb_color = color_matrix_adjust[i];
+        else
+            rgb_color = color_matrix_adjust[8];
+#else
         rgb_color = COLOR_MATRIX[colors[i]];
+#endif
         // Note: Follow the order of GRB to sent data and the high bit sent at first. 
         send_byte(pin_mask, rgb_color[1]);
         send_byte(pin_mask, rgb_color[0]);

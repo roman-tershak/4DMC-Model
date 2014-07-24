@@ -3,11 +3,7 @@
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
-#include <avr/eeprom.h>
-#include <util/delay.h>
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include "common.h"
 
 #define ISR_TIMEOUT 5208
 
@@ -28,7 +24,8 @@
 #define dir_in(type) (type ## _DDR &= ~type ## _MASK)
 
 /* Pin Definitions */
-// TODO For debug purposes, should be removed later
+#ifdef USART_DEBUG
+// For debug purposes, should not be used in prod
 #define RX_PORT PORTD
 #define RX_DDR DDRD
 #define RX_MASK _BV(PORTD0)
@@ -36,13 +33,7 @@
 #define TX_PORT PORTD
 #define TX_DDR DDRD
 #define TX_MASK _BV(PORTD1)
-
-
-// Software Reset input pin
-// TODO use PORTC6 (RESET) ?
-#define SRS_PIN PIND
-#define SRS_DDR DDRD
-#define SRS_MASK _BV(PORTD7)
+#endif
 
 
 // Switches output ports. They enable a side switches scan in the switches matrix
@@ -98,6 +89,13 @@
 
 #define SI_PIN PINC
 #define SI_MASK (SI0_MASK | SI1_MASK | SI2_MASK | SI3_MASK | SI4_MASK | SI5_MASK)
+
+
+// Software Reset input pin
+// TODO use PORTC6 (RESET) ?
+#define SRS_PIN PIND
+#define SRS_DDR DDRD
+#define SRS_MASK _BV(PORTD7)
 
 
 // Side color control outputs. They send control sequences of bytes to side LED's
@@ -161,11 +159,24 @@ void init_ports(void);
 void init_timer1(void);
 port_pin_t get_side_led_pin(uint8_t side_num);
 
-// TODO For debug purposes
+
+#ifdef USART_DEBUG
+// For debug purposes only
+
+#define USART_TRANSMIT_BYTE(data) USART_transmit(data)
+#define USART_TRANSMIT_WORD(data) USART_transmit_16(data)
+
 void USART_init(uint16_t ubrr);
 void USART_transmit(uint8_t data);
 void USART_transmit_16(uint16_t data);
 uint8_t USART_receive(void);
+
+#else
+
+#define USART_TRANSMIT_BYTE(data)
+#define USART_TRANSMIT_WORD(data)
+
+#endif	// End of ifdef USART_DEBUG
 
 #ifdef __cplusplus
 }
