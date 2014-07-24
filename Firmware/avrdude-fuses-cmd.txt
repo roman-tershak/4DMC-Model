@@ -31,3 +31,6 @@ To write EEPROM
 
 To write EEPROM
 ..\bin\avrdude -p atmega328p -c usbasp -P com5 -U eeprom:w:zero_328p.i:i
+
+To init EEPROM
+..\bin\avrdude -p atmega328p -c usbasp -P com5 -U eeprom:w:init_328p.i:i
