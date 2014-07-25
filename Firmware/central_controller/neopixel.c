@@ -21,12 +21,12 @@
 #define NS_TO_CYCLES(n)  ((n) / NS_PER_CYCLE)
 #define DELAY_CYCLES(n)  (((n) > 0) ? __builtin_avr_delay_cycles(n) : __builtin_avr_delay_cycles(0))  // Make sure we never have a delay less than zero
 
-#ifndef __builtin_avr_delay_cycles
+/*#ifndef __builtin_avr_delay_cycles
 void __builtin_avr_delay_cycles(uint32_t __n) {
     while(__n)
         __n--;
 }
-#endif
+#endif*/
 
 static const uint8_t COLOR_MATRIX[16][3] = 
 {
@@ -37,7 +37,7 @@ static const uint8_t COLOR_MATRIX[16][3] =
     {50, 50,  0},   // yellow
     { 0, 15,  5},   // light blue
     {30,  0, 25},   // pink
-    {50,  7,  2},   // orange ...
+    {0x18,  0x0B,  2},   // orange ...
     {50, 50, 50},   // white
     /* Transitioning colors */
     {10,  0,  0},   // semi-red
@@ -62,7 +62,7 @@ uint8_t color_matrix_adjust[9][3] =
     {50, 50,  0},
     { 0, 15,  5},
     {30,  0, 25},
-    {50,  7,  2},
+    {0x18,  0x0B,  2},
     {50, 50, 50},
     {0,   0,  0}
 };
@@ -188,6 +188,28 @@ void light_side_color(uint8_t side_num, uint8_t* colors)
     show(pin_mask);
 
     ENABLE_GLOBAL_INTERRUPTS();
+
+#ifdef DEBUG_COLOR_ADJUST
+#ifdef USART_DEBUG
+/* DEBUG COLOR ADJUSTMENT CODE - START */
+    if (side_num == 0)
+    {
+        USART_transmit(0xff);
+        for (i = 0; i < 8; i++)
+        {
+            if (i < 8)
+                rgb_color = color_matrix_adjust[i];
+            else
+                rgb_color = color_matrix_adjust[8];
+            USART_transmit(rgb_color[0]);
+            USART_transmit(rgb_color[1]);
+            USART_transmit(rgb_color[2]);
+        }
+        USART_transmit(0xff);
+    }
+/* DEBUG COLOR ADJUSTMENT CODE - END */
+#endif
+#endif
 }
 
 // TODO Do we need it?

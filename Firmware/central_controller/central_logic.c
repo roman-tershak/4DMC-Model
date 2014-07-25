@@ -240,7 +240,10 @@ void sides_colors_changed(void)
         // Send new colors to side
         light_side_color(sn, sides_states[sn].colors);
 #ifdef USART_DEBUG
+#ifndef DEBUG_COLOR_ADJUST
+
         send_colors_to_usart(sn, sides_states[sn].colors);
+#endif
 #endif
     }
 }
