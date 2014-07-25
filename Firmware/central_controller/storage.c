@@ -48,6 +48,7 @@ void save_state(void)
 
     USART_TRANSMIT_BYTE(0xAA);
     USART_TRANSMIT_BYTE(get_bank_num_storage(record_num));
+
     // Enable interrupts, because storing takes long time
     ENABLE_GLOBAL_INTERRUPTS();
 

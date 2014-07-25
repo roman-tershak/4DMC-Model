@@ -50,6 +50,8 @@ static const uint8_t COLOR_MATRIX[16][3] =
     {20, 20, 20}    // semi-white
 };
 
+
+/*** THE BEGINNING OF COLOR ADJUSTMENT DEBUG LOGIC ***/
 #ifdef DEBUG_COLOR_ADJUST
 
 uint8_t color_matrix_adjust[9][3] =
@@ -65,23 +67,36 @@ uint8_t color_matrix_adjust[9][3] =
     {0,   0,  0}
 };
 
-int8_t cma_led_num = 0;
+static int8_t cma_led_num = 0;
 
-uint8_t cma_led_ind = FALSE;
-uint8_t cma_plus_ind = TRUE;
-uint8_t cma_red_ind = FALSE;
-uint8_t cma_green_ind = FALSE;
-uint8_t cma_blue_ind = FALSE;
+static uint8_t cma_led_ind;
+static uint8_t cma_red_ind;
+static uint8_t cma_green_ind;
+static uint8_t cma_blue_ind;
 
-void debug_color_adjust(uint8_t indicators)
+void debug_color_adjust(uint8_t side_num, uint8_t indicators)
 {
     uint8_t c = 0xff;
 
-    cma_plus_ind = (indicators & _BV(0)) ? ~cma_plus_ind : cma_plus_ind;
-    cma_led_ind = (indicators & _BV(1)) ? TRUE : FALSE;
-    cma_red_ind = (indicators & _BV(2)) ? TRUE : FALSE;
-    cma_green_ind = (indicators & _BV(3)) ? TRUE : FALSE;
-    cma_blue_ind = (indicators & _BV(4)) ? TRUE : FALSE;
+    cma_led_ind = (indicators & _BV(0)) ? TRUE : FALSE;
+    cma_red_ind = (indicators & _BV(1)) ? TRUE : FALSE;
+    cma_green_ind = (indicators & _BV(2)) ? TRUE : FALSE;
+    cma_blue_ind = (indicators & _BV(3)) ? TRUE : FALSE;
+
+
+    if (cma_led_ind)
+    {
+        if (side_num == 0) // decrement
+        {
+            cma_led_num--;
+            if (cma_led_num < 0) cma_led_num = 7;
+        }
+        else if (side_num == 1) // increment
+        {
+            cma_led_num++;
+            if (cma_led_num > 7) cma_led_num = 0;
+        }
+    }
 
     if (cma_red_ind) c = 0;
     if (cma_green_ind) c = 1;
@@ -89,25 +104,19 @@ void debug_color_adjust(uint8_t indicators)
 
     if (c != 0xff)
     {
-        if (cma_plus_ind)
+        if (side_num == 0) // decrement
         {
-            if (color_matrix_adjust[cma_led_num][c] < 0xff) color_matrix_adjust[cma_led_num][c]++;
+            if (color_matrix_adjust[cma_led_num][c] > 0x1) color_matrix_adjust[cma_led_num][c] -= 2;
         }
-        else
+        else if (side_num == 1) // increment
         {
-            if (color_matrix_adjust[cma_led_num][c] > 0x0) color_matrix_adjust[cma_led_num][c]--;
+            if (color_matrix_adjust[cma_led_num][c] < 0xfe) color_matrix_adjust[cma_led_num][c] += 2;
         }
-    }
-
-    if (cma_led_ind)
-    {
-        cma_led_num += cma_plus_ind ? 1 : -1;
-        if (cma_led_num < 0) cma_led_num = 7;
-        if (cma_led_num > 7) cma_led_num = 0;
     }
 }
 
 #endif
+/*** THE END OF COLOR ADJUSTMENT DEBUG LOGIC ***/
 
 
 // Actually send a bit to the string. We turn off optimizations to make sure the compile does
@@ -162,10 +171,12 @@ void light_side_color(uint8_t side_num, uint8_t* colors)
     {
 
 #ifdef DEBUG_COLOR_ADJUST
+/* DEBUG COLOR ADJUSTMENT CODE - START */
         if (i < 8)
             rgb_color = color_matrix_adjust[i];
         else
             rgb_color = color_matrix_adjust[8];
+/* DEBUG COLOR ADJUSTMENT CODE - END */
 #else
         rgb_color = COLOR_MATRIX[colors[i]];
 #endif

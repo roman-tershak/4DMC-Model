@@ -14,7 +14,7 @@ void light_side_color(uint8_t side_num, uint8_t *colors);
 void clear_side_color(uint8_t side_num);
 
 #ifdef DEBUG_COLOR_ADJUST
-void debug_color_adjust(uint8_t indicators);
+void debug_color_adjust(uint8_t side_num, uint8_t indicators);
 #endif
 
 #ifdef __cplusplus
