@@ -495,7 +495,8 @@ static void rotate_adjacent_layer_z_ccw(uint8_t side_num)
  *         /18  /  19     20                                            |         \             
  *        Z    /                                                        |___Z      Z            
  *            V~4                                                        \                      
- *          ------->3                                                     \Y                    
+ *                                                                        \Y
+ *        ------->3
  * 
  */
 static void rotate_adjacent_layer_z_cw(uint8_t side_num)
@@ -516,13 +517,13 @@ static void rotate_adjacent_layer_z_cw(uint8_t side_num)
     uc[3]=lc[25]; lc[25]=lc[16]; lc[16]=lc[7]; 
     uc[0]=lc[26]; lc[26]=lc[17]; lc[17]=lc[8];
 
-    lc[6]=dc[ 2]; dc[ 2]=dc[ 1]; dc[ 1]=dc[ 0];
-    lc[7]=dc[11]; dc[11]=dc[10]; dc[10]=dc[ 9];
-    lc[8]=dc[20]; dc[20]=dc[19]; dc[19]=dc[18];
+    lc[6]=dc[20]; dc[20]=dc[19]; dc[19]=dc[18];
+    lc[7]=dc[23]; dc[23]=dc[22]; dc[22]=dc[21];
+    lc[8]=dc[26]; dc[26]=dc[25]; dc[25]=dc[24];
 
-    dc[18]=rc[18]; rc[18]=rc[ 9]; rc[ 9]=rc[0]; rc[0]=t1;
-    dc[ 9]=rc[19]; rc[19]=rc[10]; rc[10]=rc[1]; rc[1]=t2; 
-    dc[ 0]=rc[20]; rc[20]=rc[11]; rc[11]=rc[2]; rc[2]=t3;
+    dc[24]=rc[18]; rc[18]=rc[ 9]; rc[ 9]=rc[0]; rc[0]=t1;
+    dc[21]=rc[19]; rc[19]=rc[10]; rc[10]=rc[1]; rc[1]=t2; 
+    dc[18]=rc[20]; rc[20]=rc[11]; rc[11]=rc[2]; rc[2]=t3;
 }
 
 
