@@ -27,5 +27,6 @@
 
 #define DEBUG_COLOR_ADJUST
 #define USART_DEBUG
+#define DEBUG_DONT_STORE
 
 #endif

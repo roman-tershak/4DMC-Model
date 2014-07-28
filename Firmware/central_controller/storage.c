@@ -31,11 +31,13 @@ void save_state(void)
 
     // Prevent saving in parallel
     is_saving_states = TRUE;
-    
+
+#ifndef DEBUG_DONT_STORE
     // Get the current bank from the safetale
     record_num = read_safetable_record_num();
     record_num++;
-    
+#endif
+
     // Make a copy of the cube state
     pack_unpack_colors(PACK);
 
@@ -47,16 +49,20 @@ void save_state(void)
     }
 
     USART_TRANSMIT_BYTE(0xAA);
+#ifndef DEBUG_DONT_STORE
     USART_TRANSMIT_BYTE(get_bank_num_storage(record_num));
+#endif
 
     // Enable interrupts, because storing takes long time
     ENABLE_GLOBAL_INTERRUPTS();
 
+#ifndef DEBUG_DONT_STORE
     // Store state of the cube from the copy
     store_side_states(colors_packed_buff, get_bank_num_storage(record_num));
     
     // Make a record about successful storing into the safetable
     store_safetable_record_num(record_num);
+#endif
 
     // Unset 'is_saving' indicator
     is_saving_states = FALSE;
