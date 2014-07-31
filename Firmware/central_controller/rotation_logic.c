@@ -926,7 +926,7 @@ static void rotate_x_dir_cw(uint8_t side_num)
 }
 static void rotate_y_dir_ccw(uint8_t side_num)
 {
-    rotate(side_num, ROTATION_Y_CCW_INDEXES, ROTATION_Y_CCW_INDEXES, AXIS_Y, rotate_adjacent_layer_y_ccw); // TODO ROTATION_Y_CCW_INDEXES twice
+    rotate(side_num, ROTATION_Y_CCW_INDEXES, ROTATION_Y_CCW_INDEXES, AXIS_Y, rotate_adjacent_layer_y_ccw);
 }
 static void rotate_y_dir_cw(uint8_t side_num)
 {
