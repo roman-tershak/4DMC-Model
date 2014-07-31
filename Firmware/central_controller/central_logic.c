@@ -208,12 +208,12 @@ static uint8_t can_save(void)
 }
 
 #ifdef USART_DEBUG
-static void send_colors_to_usart(uint8_t sn, uint8_t *colors)
+static uint8_t send_colors_to_usart(uint8_t sn, uint8_t *colors)
 {
     uint8_t c, ok;
 
-    USART_transmit(0xff);
     ok = TRUE;
+    USART_transmit(0xff);
 
     for (c = 0; c < SIDE_CUBES_COUNT; c++)
     {
@@ -221,13 +221,7 @@ static void send_colors_to_usart(uint8_t sn, uint8_t *colors)
         if (colors[c] != sn)
             ok = FALSE;
     }
-    if (ok)
-    {
-        USART_transmit(0xff);
-        USART_transmit(0x0C);
-        USART_transmit(0xA1);
-        USART_transmit(0xff);
-    }
+    return ok;
 }
 #endif
 
@@ -235,17 +229,38 @@ void sides_colors_changed(void)
 {
     uint8_t sn, c;
 
+#ifdef USART_DEBUG
+#ifndef DEBUG_COLOR_ADJUST
+    uint8_t ok = TRUE;
+#endif
+#endif
+
     for (sn = 0; sn < SIDE_CB; sn++)
     {
         // Send new colors to side
         light_side_color(sn, sides_states[sn].colors);
+
 #ifdef USART_DEBUG
 #ifndef DEBUG_COLOR_ADJUST
+        if (!send_colors_to_usart(sn, sides_states[sn].colors))
+            ok = FALSE;
+#endif
+#endif
 
-        send_colors_to_usart(sn, sides_states[sn].colors);
-#endif
-#endif
     }
+
+#ifdef USART_DEBUG
+#ifndef DEBUG_COLOR_ADJUST
+    if (ok)
+    {
+        USART_transmit(0xff);
+        USART_transmit(0x0C);
+        USART_transmit(0xE1);
+        USART_transmit(0xff);
+    }
+#endif
+#endif
+
 }
 
 
