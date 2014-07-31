@@ -926,7 +926,7 @@ static void rotate_x_dir_cw(uint8_t side_num)
 }
 static void rotate_y_dir_ccw(uint8_t side_num)
 {
-    rotate(side_num, ROTATION_Y_CCW_INDEXES, ROTATION_Y_CCW_INDEXES, AXIS_Y, rotate_adjacent_layer_y_ccw); // TODO ROTATION_Y_CCW_INDEXES twice
+    rotate(side_num, ROTATION_Y_CCW_INDEXES, ROTATION_Y_CCW_INDEXES, AXIS_Y, rotate_adjacent_layer_y_ccw);
 }
 static void rotate_y_dir_cw(uint8_t side_num)
 {
@@ -944,6 +944,12 @@ static void rotate_z_dir_cw(uint8_t side_num)
 /*
  *             Cube sides orientation
  * 
+ * 
+ *                   l to r ^    |
+ *                          |    |
+ *                          |    |
+ *                          |    V r to l
+ *
  *                             Z
  *                          -------
  *                             |
@@ -956,9 +962,9 @@ static void rotate_z_dir_cw(uint8_t side_num)
  *                 x___
  *                     |\
  *                     | \z
- *                     y                    z  X   (side_xr)   \
+ *                     y                    z  X   (side_xr)   \     -----> l to r
  *    (side_xl)              |Z              \ |             ---\Y
- *             ___Y          |____Y           \|___Y             \
+ *             ___Y          |____Y           \|___Y             \     <----- r to l
  *            |\              \ (side_cf)
  *            | \Z             \X
  *            vX
@@ -970,8 +976,12 @@ static void rotate_z_dir_cw(uint8_t side_num)
  *                          |___Z      Z
  *                (side_zl)  \               \|
  *                            \Y              |
- *                                            |X
- * 
+ *                                            |X  \
+ *                                                 \
+ *                                                  V l to r
+ *                                       r to l ^
+ *                                               \
+ *                                                \
  */
 static void move_persp_x_dir_l_to_r(uint8_t side_num)
 {

@@ -73,15 +73,17 @@ static uint8_t cma_led_ind;
 static uint8_t cma_red_ind;
 static uint8_t cma_green_ind;
 static uint8_t cma_blue_ind;
+static uint8_t cma_led_move_ind;
 
 void debug_color_adjust(uint8_t side_num, uint8_t indicators)
 {
-    uint8_t c = 0xff;
+    uint8_t c0, c1, c2, ln1, ln2, c = 0xff;
 
     cma_led_ind = (indicators & _BV(0)) ? TRUE : FALSE;
     cma_red_ind = (indicators & _BV(1)) ? TRUE : FALSE;
     cma_green_ind = (indicators & _BV(2)) ? TRUE : FALSE;
     cma_blue_ind = (indicators & _BV(3)) ? TRUE : FALSE;
+    cma_led_move_ind = (indicators & _BV(4)) ? TRUE : FALSE;
 
 
     if (cma_led_ind)
@@ -96,6 +98,26 @@ void debug_color_adjust(uint8_t side_num, uint8_t indicators)
             cma_led_num++;
             if (cma_led_num > 7) cma_led_num = 0;
         }
+    }
+
+    if (cma_led_move_ind)
+    {
+        ln1 = cma_led_num;
+        if (side_num == 0) // left
+            ln2 = cma_led_num > 0 ? cma_led_num - 1 : ln2 = 7;
+        else // right
+            ln2 = cma_led_num < 7 ? cma_led_num + 1 : ln2 = 0;
+
+        // Flip colors. This is needed for visual comparison
+        c0 = color_matrix_adjust[ln1][0];
+        c1 = color_matrix_adjust[ln1][1];
+        c2 = color_matrix_adjust[ln1][2];
+        color_matrix_adjust[ln1][0] = color_matrix_adjust[ln2][0];
+        color_matrix_adjust[ln1][1] = color_matrix_adjust[ln2][1];
+        color_matrix_adjust[ln1][2] = color_matrix_adjust[ln2][2];
+        color_matrix_adjust[ln2][0] = c0;
+        color_matrix_adjust[ln2][1] = c1;
+        color_matrix_adjust[ln2][2] = c2;
     }
 
     if (cma_red_ind) c = 0;
