@@ -1,17 +1,17 @@
 #include "rotation_logic.h"
 #include "common.h"
 
-#define ROTATION_PHASE_1_CYCLES     12//TODO
-#define ROTATION_PHASE_2_CYCLES     24
-#define ROTATION_PHASE_F_CYCLES     36
+#define ROTATION_PHASE_1_CYCLES      0//TODO
+#define ROTATION_PHASE_2_CYCLES      4
+#define ROTATION_PHASE_F_CYCLES      8
 
-#define DEEM(color) (0x8 | (color))
-#define UNDEEM(color) ((color) & 0x7)
+#define DIM(color) (0x8 | (color))
+#define UNDIM(color) ((color) & 0x7)
 
 typedef enum
 {
-    deem, undeem, no_change
-} Deem_Action;
+    dim, undim, no_change
+} Dim_Action;
 
 static uint8_t* get_adjacent_matrix_indexex(uint8_t side_num, uint8_t orientation);
 static void rotate_x_dir_ccw(uint8_t side_num);
@@ -182,27 +182,27 @@ static const uint8_t ROTATION_Z_CW_INDEXES[] =
     18, 21, 24, 25, 26, 23, 20, 19  // ZR
 };
 
-static void rotate_1_side_level(uint8_t *cl, uint8_t *indexes, Deem_Action deem_action)
+static void rotate_1_side_level(uint8_t *cl, uint8_t *indexes, Dim_Action dim_action)
 {
     uint8_t tc, i;
 
-    switch (deem_action)
+    switch (dim_action)
     {
-    case deem:
+    case dim:
 
         tc = cl[indexes[0]];
         for (i = 0; i < 7; i++)
         {
-            cl[indexes[i]] = DEEM(cl[indexes[i + 1]]);
+            cl[indexes[i]] = DIM(cl[indexes[i + 1]]);
         }
-        cl[indexes[7]] = DEEM(tc);
+        cl[indexes[7]] = DIM(tc);
         break;
 
-    case undeem:
+    case undim:
 
         for (i = 0; i < 8; i++)
         {
-            cl[indexes[i]] = UNDEEM(cl[indexes[i]]);
+            cl[indexes[i]] = UNDIM(cl[indexes[i]]);
         }
         break;
 
@@ -218,11 +218,11 @@ static void rotate_1_side_level(uint8_t *cl, uint8_t *indexes, Deem_Action deem_
     }
 }
 
-static void rotate_1_side(uint8_t *colors, uint8_t *indexes, Deem_Action deem_action)
+static void rotate_1_side(uint8_t *colors, uint8_t *indexes, Dim_Action dim_action)
 {
-    rotate_1_side_level(colors, indexes, deem_action);
-    rotate_1_side_level(colors, (indexes + 8), deem_action);
-    rotate_1_side_level(colors, (indexes + 16), deem_action);
+    rotate_1_side_level(colors, indexes, dim_action);
+    rotate_1_side_level(colors, (indexes + 8), dim_action);
+    rotate_1_side_level(colors, (indexes + 16), dim_action);
 }
 
 
@@ -859,12 +859,12 @@ static void move_middle_layer_z_r_to_l()
 
 /* Some auxiliary functions */
 
-static Deem_Action get_deem_action(uint8_t cycle_ct)
+static Dim_Action get_dim_action(uint8_t cycle_ct)
 {
     switch (cycle_ct)
     {
-        case ROTATION_PHASE_1_CYCLES: return deem;
-        case ROTATION_PHASE_2_CYCLES: return undeem;
+        case ROTATION_PHASE_1_CYCLES: return dim;
+        case ROTATION_PHASE_2_CYCLES: return undim;
         case ROTATION_PHASE_F_CYCLES: return no_change;
         default: return no_change;
     }
@@ -874,19 +874,19 @@ static void rotate(uint8_t side_num, uint8_t *indexes_m, uint8_t *indexes_bf, ui
 {
     Side_State *state_ptr;
     uint8_t *bc, *fc;
-    Deem_Action deem_action;
+    Dim_Action dim_action;
 
     state_ptr = &(sides_states[side_num]);
-    deem_action = get_deem_action(state_ptr->cycle_ct);
+    dim_action = get_dim_action(state_ptr->cycle_ct);
 
-    rotate_1_side(state_ptr->colors, indexes_m, deem_action);
+    rotate_1_side(state_ptr->colors, indexes_m, dim_action);
 
     rotate_adjacent_layer_ptr(side_num);
 
     bc = get_adjacent_back_side(side_num, rotation_axis);
     fc = get_adjacent_front_side(side_num, rotation_axis);
-    rotate_1_side_level(bc, (indexes_bf + 16), deem_action);
-    rotate_1_side_level(fc, indexes_bf, deem_action);
+    rotate_1_side_level(bc, (indexes_bf + 16), dim_action);
+    rotate_1_side_level(fc, indexes_bf, dim_action);
 }
 
 
@@ -985,12 +985,12 @@ static void rotate_z_dir_cw(uint8_t side_num)
  */
 static void move_persp_x_dir_l_to_r(uint8_t side_num)
 {
-    Deem_Action deem_action = get_deem_action(sides_states[side_num].cycle_ct);
+    Dim_Action dim_action = get_dim_action(sides_states[side_num].cycle_ct);
 
-    rotate_1_side(sides_states[SIDE_XR].colors, ROTATION_X_CW_INDEXES, deem_action);
-    rotate_1_side(sides_states[SIDE_ZR].colors, ROTATION_Z_CW_INDEXES, deem_action);
-    rotate_1_side(sides_states[SIDE_XL].colors, ROTATION_X_CW_INDEXES, deem_action);
-    rotate_1_side(sides_states[SIDE_ZL].colors, ROTATION_Z_CW_INDEXES, deem_action);
+    rotate_1_side(sides_states[SIDE_XR].colors, ROTATION_X_CW_INDEXES, dim_action);
+    rotate_1_side(sides_states[SIDE_ZR].colors, ROTATION_Z_CW_INDEXES, dim_action);
+    rotate_1_side(sides_states[SIDE_XL].colors, ROTATION_X_CW_INDEXES, dim_action);
+    rotate_1_side(sides_states[SIDE_ZL].colors, ROTATION_Z_CW_INDEXES, dim_action);
 
     move_middle_layer_x_l_to_r();
 
@@ -999,12 +999,12 @@ static void move_persp_x_dir_l_to_r(uint8_t side_num)
 }
 static void move_persp_x_dir_r_to_l(uint8_t side_num)
 {
-    Deem_Action deem_action = get_deem_action(sides_states[side_num].cycle_ct);
+    Dim_Action dim_action = get_dim_action(sides_states[side_num].cycle_ct);
 
-    rotate_1_side(sides_states[SIDE_XR].colors, ROTATION_X_CCW_INDEXES, deem_action);
-    rotate_1_side(sides_states[SIDE_ZR].colors, ROTATION_Z_CCW_INDEXES, deem_action);
-    rotate_1_side(sides_states[SIDE_XL].colors, ROTATION_X_CCW_INDEXES, deem_action);
-    rotate_1_side(sides_states[SIDE_ZL].colors, ROTATION_Z_CCW_INDEXES, deem_action);
+    rotate_1_side(sides_states[SIDE_XR].colors, ROTATION_X_CCW_INDEXES, dim_action);
+    rotate_1_side(sides_states[SIDE_ZR].colors, ROTATION_Z_CCW_INDEXES, dim_action);
+    rotate_1_side(sides_states[SIDE_XL].colors, ROTATION_X_CCW_INDEXES, dim_action);
+    rotate_1_side(sides_states[SIDE_ZL].colors, ROTATION_Z_CCW_INDEXES, dim_action);
 
     move_middle_layer_x_r_to_l();
 
@@ -1013,12 +1013,12 @@ static void move_persp_x_dir_r_to_l(uint8_t side_num)
 }
 static void move_persp_y_dir_l_to_r(uint8_t side_num)
 {
-    Deem_Action deem_action = get_deem_action(sides_states[side_num].cycle_ct);
+    Dim_Action dim_action = get_dim_action(sides_states[side_num].cycle_ct);
 
-    rotate_1_side(sides_states[SIDE_ZR].colors, ROTATION_Y_CCW_INDEXES, deem_action);
-    rotate_1_side(sides_states[SIDE_YL].colors, ROTATION_Y_CCW_INDEXES, deem_action);
-    rotate_1_side(sides_states[SIDE_ZL].colors, ROTATION_Y_CCW_INDEXES, deem_action);
-    rotate_1_side(sides_states[SIDE_YR].colors, ROTATION_Y_CCW_INDEXES, deem_action);
+    rotate_1_side(sides_states[SIDE_ZR].colors, ROTATION_Y_CCW_INDEXES, dim_action);
+    rotate_1_side(sides_states[SIDE_YL].colors, ROTATION_Y_CCW_INDEXES, dim_action);
+    rotate_1_side(sides_states[SIDE_ZL].colors, ROTATION_Y_CCW_INDEXES, dim_action);
+    rotate_1_side(sides_states[SIDE_YR].colors, ROTATION_Y_CCW_INDEXES, dim_action);
 
     move_middle_layer_y_l_to_r();
 
@@ -1027,12 +1027,12 @@ static void move_persp_y_dir_l_to_r(uint8_t side_num)
 }
 static void move_persp_y_dir_r_to_l(uint8_t side_num)
 {
-    Deem_Action deem_action = get_deem_action(sides_states[side_num].cycle_ct);
+    Dim_Action dim_action = get_dim_action(sides_states[side_num].cycle_ct);
 
-    rotate_1_side(sides_states[SIDE_ZR].colors, ROTATION_Y_CW_INDEXES, deem_action);
-    rotate_1_side(sides_states[SIDE_YL].colors, ROTATION_Y_CW_INDEXES, deem_action);
-    rotate_1_side(sides_states[SIDE_ZL].colors, ROTATION_Y_CW_INDEXES, deem_action);
-    rotate_1_side(sides_states[SIDE_YR].colors, ROTATION_Y_CW_INDEXES, deem_action);
+    rotate_1_side(sides_states[SIDE_ZR].colors, ROTATION_Y_CW_INDEXES, dim_action);
+    rotate_1_side(sides_states[SIDE_YL].colors, ROTATION_Y_CW_INDEXES, dim_action);
+    rotate_1_side(sides_states[SIDE_ZL].colors, ROTATION_Y_CW_INDEXES, dim_action);
+    rotate_1_side(sides_states[SIDE_YR].colors, ROTATION_Y_CW_INDEXES, dim_action);
 
     move_middle_layer_y_r_to_l();
 
@@ -1041,12 +1041,12 @@ static void move_persp_y_dir_r_to_l(uint8_t side_num)
 }
 static void move_persp_z_dir_l_to_r(uint8_t side_num)
 {
-    Deem_Action deem_action = get_deem_action(sides_states[side_num].cycle_ct);
+    Dim_Action dim_action = get_dim_action(sides_states[side_num].cycle_ct);
 
-    rotate_1_side(sides_states[SIDE_YL].colors, ROTATION_X_CW_INDEXES, deem_action);
-    rotate_1_side(sides_states[SIDE_XR].colors, ROTATION_Z_CW_INDEXES, deem_action);
-    rotate_1_side(sides_states[SIDE_YR].colors, ROTATION_X_CW_INDEXES, deem_action);
-    rotate_1_side(sides_states[SIDE_XL].colors, ROTATION_Z_CW_INDEXES, deem_action);
+    rotate_1_side(sides_states[SIDE_YL].colors, ROTATION_X_CW_INDEXES, dim_action);
+    rotate_1_side(sides_states[SIDE_XR].colors, ROTATION_Z_CW_INDEXES, dim_action);
+    rotate_1_side(sides_states[SIDE_YR].colors, ROTATION_X_CW_INDEXES, dim_action);
+    rotate_1_side(sides_states[SIDE_XL].colors, ROTATION_Z_CW_INDEXES, dim_action);
 
     move_middle_layer_z_l_to_r();
 
@@ -1055,12 +1055,12 @@ static void move_persp_z_dir_l_to_r(uint8_t side_num)
 }
 static void move_persp_z_dir_r_to_l(uint8_t side_num)
 {
-    Deem_Action deem_action = get_deem_action(sides_states[side_num].cycle_ct);
+    Dim_Action dim_action = get_dim_action(sides_states[side_num].cycle_ct);
 
-    rotate_1_side(sides_states[SIDE_YL].colors, ROTATION_X_CCW_INDEXES, deem_action);
-    rotate_1_side(sides_states[SIDE_XR].colors, ROTATION_Z_CCW_INDEXES, deem_action);
-    rotate_1_side(sides_states[SIDE_YR].colors, ROTATION_X_CCW_INDEXES, deem_action);
-    rotate_1_side(sides_states[SIDE_XL].colors, ROTATION_Z_CCW_INDEXES, deem_action);
+    rotate_1_side(sides_states[SIDE_YL].colors, ROTATION_X_CCW_INDEXES, dim_action);
+    rotate_1_side(sides_states[SIDE_XR].colors, ROTATION_Z_CCW_INDEXES, dim_action);
+    rotate_1_side(sides_states[SIDE_YR].colors, ROTATION_X_CCW_INDEXES, dim_action);
+    rotate_1_side(sides_states[SIDE_XL].colors, ROTATION_Z_CCW_INDEXES, dim_action);
 
     move_middle_layer_z_r_to_l();
 
@@ -1158,36 +1158,31 @@ rotation_func_ptr_type get_rotation_func_ptr(uint8_t side_num, uint8_t direction
 }
 
 /* The main rotation function and its counterparts */
-static uint8_t can_omit_rotation_cycle(uint8_t cycle_ct)
+static uint8_t can_do_rotation_cycle(uint8_t cycle_ct)
 {
     switch (cycle_ct)
     {
         case ROTATION_PHASE_1_CYCLES:
         case ROTATION_PHASE_2_CYCLES:
         case ROTATION_PHASE_F_CYCLES: 
-            return FALSE;
-        default: 
             return TRUE;
+        default:
+            return FALSE;
     }
 }
 
 void rotation_cycle(uint8_t side_num)
 {
-    Side_State *state_ptr;
-    uint8_t cycle_ct;
+    Side_State *state_ptr = &(sides_states[side_num]);
 
-    state_ptr = &(sides_states[side_num]);
+    if (can_do_rotation_cycle(state_ptr->cycle_ct))
+    {
+        ((rotation_func_ptr_type) state_ptr->rotation_func_ptr)(side_num);
+        sides_colors_changed();
+    }
+    state_ptr->cycle_ct++;
 
-    cycle_ct = ++(state_ptr->cycle_ct);
-
-    if (can_omit_rotation_cycle(cycle_ct))
-        return;
-
-    ((rotation_func_ptr_type) state_ptr->rotation_func_ptr)(side_num);
-
-    sides_colors_changed();
-
-    if (cycle_ct >= ROTATION_PHASE_F_CYCLES)
+    if (state_ptr->cycle_ct > ROTATION_PHASE_F_CYCLES)
         rotation_done(side_num);
 }
 

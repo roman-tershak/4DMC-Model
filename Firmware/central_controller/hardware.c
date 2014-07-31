@@ -64,7 +64,6 @@ void init_timer1(void)
 {
     // TODO select the correct mode
     TCCR1B = _BV(CS11) | _BV(CS10); // set prescaller to 64
-    // With ISR_TIMEOUT = 5208 it will give 48 timer interrupts per second
 
     TIMSK1 = _BV(TOIE1); // enable timer1 over-flow interrupt
     sei(); // enable global interrupts

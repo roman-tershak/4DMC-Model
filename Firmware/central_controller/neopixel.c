@@ -31,23 +31,23 @@ void __builtin_avr_delay_cycles(uint32_t __n) {
 static const uint8_t COLOR_MATRIX[16][3] = 
 {
     /* Main colors */
-    {30,  0,  0},   // red
-    { 0, 25,  0},   // green
-    { 0,  0, 25},   // blue
-    {50, 50,  0},   // yellow
-    { 0, 15,  5},   // light blue
-    {30,  0, 25},   // pink
-    {0x18,  0x0B,  2},   // orange ...
-    {50, 50, 50},   // white
+    { 0,  0, 24},   // blue
+    { 0, 19, 15},   // light blue
+    { 0, 21,  0},   // green
+    {28, 28,  0},   // yellow
+    {34, 13,  0},   // orange
+    {24,  0,  0},   // red
+    {24,  0, 12},   // pink
+    {24,  8, 32},   // white-pink
     /* Transitioning colors */
-    {10,  0,  0},   // semi-red
-    { 0, 20,  0},   // semi-green
-    { 0,  0,  8},   // semi-blue
-    {20, 20,  0},   // semi-yellow
-    { 0,  7,  4},   // semi-light blue
-    {10,  0,  8},   // semi-pink
-    {20,  2,  1},   // semi-orange ...
-    {20, 20, 20}    // semi-white
+    { 0,  0,  8},   // dim blue
+    { 0,  6,  5},   // dim light blue
+    { 0,  7,  0},   // dim green
+    { 9,  9,  0},   // dim yellow
+    {11,  4,  0},   // dim orange
+    { 8,  0,  0},   // dim red
+    { 8,  0,  4},   // dim pink
+    { 8,  3, 11}    // dim white-pink
 };
 
 
@@ -56,14 +56,14 @@ static const uint8_t COLOR_MATRIX[16][3] =
 
 uint8_t color_matrix_adjust[9][3] =
 {
-    {30,  0,  0},
-    { 0, 25,  0},
-    { 0,  0, 25},
-    {50, 50,  0},
-    { 0, 15,  5},
-    {30,  0, 25},
-    {0x18,  0x0B,  2},
-    {50, 50, 50},
+    { 0,  0, 24},   // blue
+    { 0, 19, 15},   // light blue
+    { 0, 21,  0},   // green
+    {28, 28,  0},   // yellow
+    {34, 13,  0},   // orange
+    {24,  0,  0},   // red
+    {24,  0, 12},   // pink
+    {24,  8, 32},   // white-pink
     {0,   0,  0}
 };
 
@@ -86,6 +86,28 @@ void debug_color_adjust(uint8_t side_num, uint8_t indicators)
     cma_led_move_ind = (indicators & _BV(4)) ? TRUE : FALSE;
 
 
+    if (cma_led_move_ind)
+    {
+        ln1 = cma_led_num;
+        if (side_num == 0) // left
+            ln2 = cma_led_num > 0 ? cma_led_num - 1 : 7;
+        else // right
+            ln2 = cma_led_num < 7 ? cma_led_num + 1 : 0;
+
+        // Flip colors. This is needed for visual comparison
+        c0 = color_matrix_adjust[ln1][0];
+        c1 = color_matrix_adjust[ln1][1];
+        c2 = color_matrix_adjust[ln1][2];
+        color_matrix_adjust[ln1][0] = color_matrix_adjust[ln2][0];
+        color_matrix_adjust[ln1][1] = color_matrix_adjust[ln2][1];
+        color_matrix_adjust[ln1][2] = color_matrix_adjust[ln2][2];
+        color_matrix_adjust[ln2][0] = c0;
+        color_matrix_adjust[ln2][1] = c1;
+        color_matrix_adjust[ln2][2] = c2;
+
+        cma_led_ind = TRUE;  // Follow the flipped color
+    }
+
     if (cma_led_ind)
     {
         if (side_num == 0) // decrement
@@ -98,26 +120,6 @@ void debug_color_adjust(uint8_t side_num, uint8_t indicators)
             cma_led_num++;
             if (cma_led_num > 7) cma_led_num = 0;
         }
-    }
-
-    if (cma_led_move_ind)
-    {
-        ln1 = cma_led_num;
-        if (side_num == 0) // left
-            ln2 = cma_led_num > 0 ? cma_led_num - 1 : ln2 = 7;
-        else // right
-            ln2 = cma_led_num < 7 ? cma_led_num + 1 : ln2 = 0;
-
-        // Flip colors. This is needed for visual comparison
-        c0 = color_matrix_adjust[ln1][0];
-        c1 = color_matrix_adjust[ln1][1];
-        c2 = color_matrix_adjust[ln1][2];
-        color_matrix_adjust[ln1][0] = color_matrix_adjust[ln2][0];
-        color_matrix_adjust[ln1][1] = color_matrix_adjust[ln2][1];
-        color_matrix_adjust[ln1][2] = color_matrix_adjust[ln2][2];
-        color_matrix_adjust[ln2][0] = c0;
-        color_matrix_adjust[ln2][1] = c1;
-        color_matrix_adjust[ln2][2] = c2;
     }
 
     if (cma_red_ind) c = 0;
@@ -196,6 +198,8 @@ void light_side_color(uint8_t side_num, uint8_t* colors)
 /* DEBUG COLOR ADJUSTMENT CODE - START */
         if (i < 8)
             rgb_color = color_matrix_adjust[i];
+        else if (i < 16)
+            rgb_color = COLOR_MATRIX[i];
         else
             rgb_color = color_matrix_adjust[8];
 /* DEBUG COLOR ADJUSTMENT CODE - END */
