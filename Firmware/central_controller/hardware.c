@@ -3,7 +3,7 @@
 
 void init_ports(void)
 {
-        // Initializing switches pins
+    // Initializing switches pins
     dir_out(SPA);
     dir_out(SPB);
     dir_out(SPC);
