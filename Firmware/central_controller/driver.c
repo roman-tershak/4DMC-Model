@@ -133,7 +133,7 @@ ISR (TIMER1_OVF_vect)
     }
     else
     {
-    	if (!read_srs_debounced())
+        if (read_srs_debounced() == 0)
             srs_waiting_for_release = FALSE;
     }
 
