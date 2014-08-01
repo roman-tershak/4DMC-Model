@@ -28,7 +28,7 @@ typedef struct
 void load_sides_states(void);
 void reset_cube(void);
 
-uint8_t start_rotation(uint8_t sw_side_num, uint8_t direction);
+uint8_t rotation_notify(uint8_t sw_side_num, uint8_t direction);
 void rotation_done(uint8_t side_num);
 void handle_cycle(void);
 
