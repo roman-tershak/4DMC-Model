@@ -5,8 +5,6 @@
 #include <avr/interrupt.h>
 #include "common.h"
 
-#define ISR_TIMEOUT 5208
-
 /* Macros */
 #define set_bit(REG, BIT) ((REG) |= _BV(BIT))
 #define unset_bit(REG, BIT) ((REG) &= ~_BV(BIT))

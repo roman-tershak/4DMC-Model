@@ -163,10 +163,10 @@ ISR (TIMER1_OVF_vect)
             {
                 // Start waiting for switch release
                 sw_side_state_ptr->waiting_for_release = TRUE;
-            }
 #ifdef DEBUG_COLOR_ADJUST
-            debug_color_adjust(ct, sw_side_state_ptr->switches);
+                debug_color_adjust(ct, sw_side_state_ptr->switches);
 #endif
+            }
         }
     }
     else

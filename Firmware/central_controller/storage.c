@@ -33,13 +33,15 @@ void save_state(void)
     is_saving_states = TRUE;
 
 #ifndef DEBUG_DONT_STORE
+    USART_TRANSMIT_BYTE(0xAA);
+
     // Get the current bank from the safetale
     record_num = read_safetable_record_num();
     record_num++;
-#endif
 
     // Make a copy of the cube state
     pack_unpack_colors(PACK);
+#endif
 
     // 'Release' sides that were waiting for saving
     for (i = 0; i < SIDE_COUNT; i++)
@@ -48,7 +50,6 @@ void save_state(void)
             sides_states[i].status = SIDE_IDLE;
     }
 
-    USART_TRANSMIT_BYTE(0xAA);
 #ifndef DEBUG_DONT_STORE
     USART_TRANSMIT_BYTE(get_bank_num_storage(record_num));
 #endif
@@ -62,12 +63,12 @@ void save_state(void)
     
     // Make a record about successful storing into the safetable
     store_safetable_record_num(record_num);
+
+    USART_TRANSMIT_BYTE(0xBB);
 #endif
 
     // Unset 'is_saving' indicator
     is_saving_states = FALSE;
-
-    USART_TRANSMIT_BYTE(0xBB);
 }
 
 uint8_t load_state(void)
