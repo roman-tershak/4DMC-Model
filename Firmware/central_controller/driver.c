@@ -10,7 +10,7 @@
 
 static uint8_t get_rotation_dir(uint8_t switches);
 
-static uint8_t read_switches_debounced();
+static uint8_t read_switches_debounced(uint8_t switch_row);
 static uint8_t read_switches();
 static uint8_t read_srs_debounced();
 static uint8_t read_srs_pin();
@@ -119,6 +119,7 @@ ISR (TIMER1_OVF_vect)
 {
     static uint8_t ct = 0;
     Switches_Side_State *sw_side_state_ptr;
+    uint8_t next_switch;
 
     TCNT1 = (0xFFFF - ISR_TIMEOUT); // set the timeout
 
@@ -133,36 +134,40 @@ ISR (TIMER1_OVF_vect)
     }
     else
     {
-    	if (!read_srs_debounced())
+        if (read_srs_debounced() == 0)
             srs_waiting_for_release = FALSE;
     }
 
     // Handling Rotation side swicthes
     sw_side_state_ptr = &(switches_side_states[ct]);
+    next_switch = TRUE;
 
-    if (sw_side_state_ptr->waiting_for_release == FALSE)
+    if (!(sw_side_state_ptr->waiting_for_release))
     {
         if (sw_side_state_ptr->cycle_ct < READ_COMPLETE_SITE_STATE_CYCLES)
         {
-            set_switch_pin(ct);
             // Read switches state for the entire side
-            sw_side_state_ptr->switches |= read_switches_debounced();
+            sw_side_state_ptr->switches |= read_switches_debounced(ct);
             if (sw_side_state_ptr->switches)
             {
                 // If pressed, then increase the counter. Untill it reaches max
                 // gather all pressed side switches since they will not likely be
                 // pressed exactly in the same very moment.
                 sw_side_state_ptr->cycle_ct++;
+                next_switch = FALSE;  // Stick to this switch
             }
-            reset_switches_pins();
         }
-        else
+
+        if (sw_side_state_ptr->cycle_ct >= READ_COMPLETE_SITE_STATE_CYCLES)
         {
             // The wait period for switches ended, now start rotation
-            if (start_rotation(ct, get_rotation_dir(sw_side_state_ptr->switches)))
+            if (rotation_notify(ct, get_rotation_dir(sw_side_state_ptr->switches)))
             {
                 // Start waiting for switch release
                 sw_side_state_ptr->waiting_for_release = TRUE;
+                sw_side_state_ptr->cycle_ct = 0;
+                sw_side_state_ptr->switches = 0;
+
 #ifdef DEBUG_COLOR_ADJUST
                 debug_color_adjust(ct, sw_side_state_ptr->switches);
 #endif
@@ -172,22 +177,22 @@ ISR (TIMER1_OVF_vect)
     else
     {
         // Here we are waiting for the previously pressed switches to be released
-        set_switch_pin(ct);
         // Read switches state for the entire side and check if they are released
-        if (read_switches_debounced() == 0)
+        if (read_switches_debounced(ct) == 0)
         {
             sw_side_state_ptr->waiting_for_release = FALSE;
-            sw_side_state_ptr->switches = 0;
-            sw_side_state_ptr->cycle_ct = 0;
         }
-        reset_switches_pins();
     }
 
     // Pass the cycle further down the logic
     handle_cycle();
 
-    ct++; // increase the row
-    if (ct >= SW_SIDE_NUM) ct = 0; // reset the counter
+    if (next_switch)
+    {
+        ct++; // next sensor set/side
+        if (ct >= SW_SIDE_NUM)
+            ct = 0; // going in round cycle
+    }
 }
 
 static uint8_t get_rotation_dir(uint8_t switches)
@@ -195,9 +200,11 @@ static uint8_t get_rotation_dir(uint8_t switches)
     return SWITCH_TO_ROTATION_MATRIX[switches];
 }
 
-static uint8_t read_switches_debounced()
+static uint8_t read_switches_debounced(uint8_t switch_row)
 {
     uint8_t state;
+
+    set_switch_pin(switch_row);
 
     state = read_switches();
     _delay_ms(DEBOUNCE_DELAY_1);
@@ -208,9 +215,11 @@ static uint8_t read_switches_debounced()
         _delay_ms(DEBOUNCE_DELAY_2);
         // If during debounce delay switches (one or more) 
         // where pressed, then consider this as really pressed (debounced) switch(es)
-        return state & read_switches();
+        state & read_switches();
     }
-    return 0;
+    reset_switches_pins();
+
+    return state;
 }
 
 static uint8_t read_switches()

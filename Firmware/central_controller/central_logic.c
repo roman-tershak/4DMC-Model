@@ -96,7 +96,7 @@ static uint8_t get_initial_color_for_side(uint8_t side_num)
     }
 }
 
-uint8_t start_rotation(uint8_t sw_side_num, uint8_t direction)
+uint8_t rotation_notify(uint8_t sw_side_num, uint8_t direction)
 {
     Side_State *state_ptr;
 
