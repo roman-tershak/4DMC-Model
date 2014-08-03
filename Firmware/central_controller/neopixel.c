@@ -189,8 +189,6 @@ void light_side_color(uint8_t side_num, uint8_t* colors)
     uint8_t *rgb_color;
     uint8_t pin_mask = _BV(get_side_led_pin(side_num));
 
-    DISABLE_GLOBAL_INTERRUPTS();
-
     for (i = 0; i < SIDE_LED_COUNT; i++)
     {
 
@@ -212,8 +210,6 @@ void light_side_color(uint8_t side_num, uint8_t* colors)
         send_byte(pin_mask, rgb_color[2]);
     }
     show(pin_mask);
-
-    ENABLE_GLOBAL_INTERRUPTS();
 
 #ifdef DEBUG_COLOR_ADJUST
 #ifdef USART_DEBUG
@@ -244,8 +240,6 @@ void clear_side_color(uint8_t side_num)
     uint8_t i;
     uint8_t pin_mask = _BV(get_side_led_pin(side_num));
 
-    DISABLE_GLOBAL_INTERRUPTS();
-
     for (i = 0; i < SIDE_LED_COUNT; i++)
     {
         send_byte(pin_mask, 0);
@@ -253,6 +247,4 @@ void clear_side_color(uint8_t side_num)
         send_byte(pin_mask, 0);
     }
     show(pin_mask);
-
-    ENABLE_GLOBAL_INTERRUPTS();
 }
