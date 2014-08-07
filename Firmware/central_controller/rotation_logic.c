@@ -2,8 +2,8 @@
 #include "common.h"
 
 #define ROTATION_PHASE_1_CYCLES      0//TODO
-#define ROTATION_PHASE_2_CYCLES      4
-#define ROTATION_PHASE_F_CYCLES      8
+#define ROTATION_PHASE_2_CYCLES      12
+#define ROTATION_PHASE_F_CYCLES      24
 
 #define DIM(color) (0x8 | (color))
 #define UNDIM(color) ((color) & 0x7)

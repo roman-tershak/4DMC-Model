@@ -8,6 +8,8 @@
 #include "neopixel.h"
 #endif
 
+#define DEBUG_LOG(STEP, WHAT) deb[i++] = (uint16_t) (STEP) | (WHAT); if (i >= 25) {i = 0;} else {};
+
 static uint8_t get_rotation_dir(uint8_t switches);
 
 static uint8_t read_switches_debounced(uint8_t switch_row);
@@ -117,14 +119,14 @@ void init_driver(void)
 
 ISR (TIMER1_OVF_vect)
 {
-    static uint8_t ct = 0;
+    static volatile uint8_t ct = 0;
     Switches_Side_State *sw_side_state_ptr;
-    uint8_t next_switch;
+    uint8_t switches, next_switch;
 
     TCNT1 = (0xFFFF - ISR_TIMEOUT); // set the timeout
 
     // Handling Software Reset switch
-    if (srs_waiting_for_release == FALSE)
+    if (!srs_waiting_for_release)
     {
         if (read_srs_debounced())
         {
@@ -147,31 +149,30 @@ ISR (TIMER1_OVF_vect)
         if (sw_side_state_ptr->cycle_ct < READ_COMPLETE_SITE_STATE_CYCLES)
         {
             // Read switches state for the entire side
-            sw_side_state_ptr->switches |= read_switches_debounced(ct);
-            if (sw_side_state_ptr->switches)
+            if (switches = read_switches_debounced(ct))
             {
                 // If pressed, then increase the counter. Untill it reaches max
                 // gather all pressed side switches since they will not likely be
                 // pressed exactly in the same very moment.
+                sw_side_state_ptr->switches |= switches;
                 sw_side_state_ptr->cycle_ct++;
-                next_switch = FALSE;  // Stick to this switch
-            }
-        }
 
-        if (sw_side_state_ptr->cycle_ct >= READ_COMPLETE_SITE_STATE_CYCLES)
-        {
-            // The wait period for switches ended, now start rotation
-            if (rotation_notify(ct, get_rotation_dir(sw_side_state_ptr->switches)))
+                if (sw_side_state_ptr->cycle_ct < READ_COMPLETE_SITE_STATE_CYCLES)
+                {
+                    next_switch = FALSE;  // Stick to this switch
+                }
+                else
+                {
+                    sw_side_state_ptr->waiting_for_release = TRUE;
+                }
+            }
+            else if (sw_side_state_ptr->switches)
             {
-                // Start waiting for switch release
-                sw_side_state_ptr->waiting_for_release = TRUE;
-                sw_side_state_ptr->cycle_ct = 0;
-                sw_side_state_ptr->switches = 0;
-
-#ifdef DEBUG_COLOR_ADJUST
-                debug_color_adjust(ct, sw_side_state_ptr->switches);
-#endif
+                sw_side_state_ptr->waiting_for_release = FALSE;
+                sw_side_state_ptr->cycle_ct = READ_COMPLETE_SITE_STATE_CYCLES;
             }
+            // else
+                // Nothing, just continue waiting
         }
     }
     else
@@ -184,15 +185,31 @@ ISR (TIMER1_OVF_vect)
         }
     }
 
-    // Pass the cycle further down the logic
-    handle_cycle();
+    if (sw_side_state_ptr->cycle_ct >= READ_COMPLETE_SITE_STATE_CYCLES)
+    {
+        // The wait period for switches ended, now start rotation
+        if (rotation_notify(ct, get_rotation_dir(sw_side_state_ptr->switches)))
+        {
+            // Start waiting for switch release
+            sw_side_state_ptr->cycle_ct = 0;
+            sw_side_state_ptr->switches = 0;
+
+#ifdef DEBUG_COLOR_ADJUST
+            debug_color_adjust(ct, sw_side_state_ptr->switches);
+#endif
+        }
+    }
 
     if (next_switch)
     {
         ct++; // next sensor set/side
-        if (ct >= SW_SIDE_NUM)
-            ct = 0; // going in round cycle
+        if (ct >= SW_SIDE_NUM) ct = 0; // going in round cycle
     }
+
+    // Pass the cycle further down the logic
+    handle_cycle();
+
+    // If nothing pressed, one ISR call takes ~500 of TCNT1 counter
 }
 
 static uint8_t get_rotation_dir(uint8_t switches)
@@ -224,7 +241,7 @@ static uint8_t read_switches_debounced(uint8_t switch_row)
 
 static uint8_t read_switches()
 {
-    // TODO This depends on port pins layout - may need to change
+    // This depends on port pins layout - may need to change
     return ~read_pins(SI) & SI_MASK;
 }
 

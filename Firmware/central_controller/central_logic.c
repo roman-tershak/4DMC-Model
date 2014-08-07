@@ -229,7 +229,7 @@ void sides_colors_changed(void)
 {
     uint8_t sn, c;
 
-#ifdef USART_DEBUG
+#ifdef USART_DEBUG_
 #ifndef DEBUG_COLOR_ADJUST
     uint8_t ok = TRUE;
 #endif
@@ -240,7 +240,7 @@ void sides_colors_changed(void)
         // Send new colors to side
         light_side_color(sn, sides_states[sn].colors);
 
-#ifdef USART_DEBUG
+#ifdef USART_DEBUG_
 #ifndef DEBUG_COLOR_ADJUST
         if (!send_colors_to_usart(sn, sides_states[sn].colors))
             ok = FALSE;
@@ -249,7 +249,7 @@ void sides_colors_changed(void)
 
     }
 
-#ifdef USART_DEBUG
+#ifdef USART_DEBUG_
 #ifndef DEBUG_COLOR_ADJUST
     if (ok)
     {

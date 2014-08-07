@@ -54,6 +54,16 @@ void save_state(void)
     USART_TRANSMIT_BYTE(get_bank_num_storage(record_num));
 #endif
 
+#ifdef USART_DEBUG
+    if (!check_side_states())
+    {
+        USART_transmit(0xEC);
+        USART_transmit(0xEC);
+        USART_transmit(0xEC);
+        USART_transmit(0xEC);
+    }
+#endif
+
     // Enable interrupts, because storing takes long time
     ENABLE_GLOBAL_INTERRUPTS();
 

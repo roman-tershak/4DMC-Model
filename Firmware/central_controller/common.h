@@ -26,7 +26,7 @@
 #define ALL_COLOR_COUNT         16
 
 //#define DEBUG_COLOR_ADJUST
-//#define USART_DEBUG
-#define DEBUG_DONT_STORE
+#define USART_DEBUG
+//#define DEBUG_DONT_STORE
 
 #endif
