@@ -17,7 +17,7 @@ extern volatile Side_State sides_states[SIDE_COUNT];
 static const uint8_t rotation_phase_cycles[][3] = 
 {
     {0, 16, 32},  // The slowest set
-    {0, 11, 25},   // Middle
+    {0, 11, 22},  // Middle
     {0, 7, 14},   // Fast
     {0, 4, 8}     // The fastest set
 };

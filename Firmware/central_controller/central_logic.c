@@ -6,6 +6,7 @@
 #include "neopixel.h"
 
 #define SLOWER_IDLE_CYCLE_SPAN 200
+#define SAVE_IDLE_CYCLE_SPAN   250
 
 /* Side states checks */
 #define IS_SIDE_ROTATING_OR_WAITING    (WAITING_FOR_ROTATION | ROTATING | WAITING_FOR_SAVING)
@@ -41,6 +42,8 @@ volatile Side_State sides_states[SIDE_COUNT];
 
 static uint8_t faster = FALSE;
 static uint8_t slower = FALSE;
+static uint16_t slower_cycle_counter = SLOWER_IDLE_CYCLE_SPAN;
+static uint16_t save_cycle_counter = SAVE_IDLE_CYCLE_SPAN;
 
 
 void load_sides_states(void)
@@ -125,7 +128,6 @@ uint8_t rotation_notify(uint8_t sw_side_num, uint8_t direction)
     {
         // Cannot start rotation right now, need to rotate faster
         move_faster();
-
         return FALSE;
     }
 }
@@ -171,6 +173,7 @@ void handle_cycle(void)
                 // save_logic.c
                 if (can_save())
                 {
+                    save_cycle_counter = SAVE_IDLE_CYCLE_SPAN;
                     save_state();
                 }
                 break;
@@ -179,7 +182,6 @@ void handle_cycle(void)
             idle_cycle = FALSE;
         }
     }
-
     handle_idle_cycle(idle_cycle, rotating);
 }
 
@@ -214,8 +216,6 @@ static uint8_t can_start_rotation(uint8_t side_num, Side_State *state_ptr)
 
 static void handle_idle_cycle(uint8_t idle_cycle, uint8_t rotating)
 {
-    static uint16_t slower_cycle_counter = SLOWER_IDLE_CYCLE_SPAN;
-
     if (idle_cycle)
     {
         if (slower_cycle_counter > 0)
@@ -238,6 +238,12 @@ static void handle_idle_cycle(uint8_t idle_cycle, uint8_t rotating)
         change_phase_cycle_counters(faster, slower);
         faster = FALSE;
         slower = FALSE;
+
+        if (save_cycle_counter > 0) save_cycle_counter--;
+    }
+    else
+    {
+        save_cycle_counter = SAVE_IDLE_CYCLE_SPAN;
     }
 }
 
@@ -249,7 +255,7 @@ static void move_faster(void)
 static void move_slower(void)
 {
     slower = TRUE;
-    USART_TRANSMIT_BYTE(0xf5);
+    USART_TRANSMIT_BYTE(0x51);
 }
 
 
@@ -257,7 +263,7 @@ static uint8_t can_save(void)
 {
     uint8_t i;
 
-    if (is_saving())
+    if (is_saving() || save_cycle_counter > 0)
         return FALSE;
 
     for (i = 0; i < SIDE_COUNT; i++)
