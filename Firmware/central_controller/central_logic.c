@@ -5,6 +5,7 @@
 #include "storage.h"
 #include "neopixel.h"
 
+#define SLOWER_IDLE_CYCLE_SPAN 200
 
 /* Side states checks */
 #define IS_SIDE_ROTATING_OR_WAITING    (WAITING_FOR_ROTATION | ROTATING | WAITING_FOR_SAVING)
@@ -18,6 +19,10 @@ static uint8_t can_save(void);
 static void reset_sides_colors(void);
 static void reset_sides_states(void);
 static uint8_t get_initial_color_for_side(uint8_t side_num);
+
+static void handle_idle_cycle(uint8_t idle_cycle, uint8_t rotating);
+static void move_faster(void);
+static void move_slower(void);
 
 
 static const uint8_t DEPENDENCY_MATRIX[] = 
@@ -33,6 +38,9 @@ static const uint8_t DEPENDENCY_MATRIX[] =
 
 
 volatile Side_State sides_states[SIDE_COUNT];
+
+static uint8_t faster = FALSE;
+static uint8_t slower = FALSE;
 
 
 void load_sides_states(void)
@@ -115,6 +123,9 @@ uint8_t rotation_notify(uint8_t sw_side_num, uint8_t direction)
     }
     else
     {
+        // Cannot start rotation right now, need to rotate faster
+        move_faster();
+
         return FALSE;
     }
 }
@@ -123,6 +134,7 @@ void handle_cycle(void)
 {
     Side_State *state_ptr;
     uint8_t side_num;
+    uint8_t idle_cycle = TRUE, rotating = FALSE;
 
     for (side_num = 0; side_num < SIDE_CB; side_num++)
     {
@@ -142,6 +154,8 @@ void handle_cycle(void)
                 else
                 {
                     state_ptr->cycle_ct++;
+                    // Cannot start rotation right now, need to rotate faster
+                    move_faster();
                 }
                 break;
 
@@ -149,6 +163,7 @@ void handle_cycle(void)
                 
                 // rotation_logic.c
                 rotation_cycle(side_num);
+                rotating = TRUE;
                 break;
 
             case WAITING_FOR_SAVING:
@@ -160,8 +175,12 @@ void handle_cycle(void)
                 }
                 break;
             }
+
+            idle_cycle = FALSE;
         }
     }
+
+    handle_idle_cycle(idle_cycle, rotating);
 }
 
 void rotation_done(uint8_t side_num)
@@ -171,7 +190,7 @@ void rotation_done(uint8_t side_num)
 
 static uint8_t can_start_rotation(uint8_t side_num, Side_State *state_ptr)
 {
-    uint8_t sn, dependencies;
+    uint8_t sn, dependencies, status;
 
     // Check neighboring sides if they are not rotating
     dependencies = DEPENDENCY_MATRIX[side_num];
@@ -181,16 +200,58 @@ static uint8_t can_start_rotation(uint8_t side_num, Side_State *state_ptr)
         // Is 'sn'th side rotating?
         if (dependencies | _BV(sn))  // if sn == side_num it will be false
         {
-            // Cannot rotate this (side_num'th) side if there is...
-            if (sides_states[sn].status == ROTATING)
-                return FALSE; // ...at least one other side is rotating
-            if (sides_states[sn].status == WAITING_FOR_ROTATION && 
+            status = sides_states[sn].status;
+            // Cannot rotate this side (side_num'th) if there is...
+            if (status == ROTATING)
+                return FALSE; // ...at least one other side rotating
+            if (status == WAITING_FOR_ROTATION && 
                 state_ptr->cycle_ct < sides_states[sn].cycle_ct)
-                return FALSE; // ...at least one other side is waiting for rotation and has higher cycle_ct
+                return FALSE; // ...at least one other side waiting for rotation and has higher cycle_ct
         }
     }
     return TRUE;
 }
+
+static void handle_idle_cycle(uint8_t idle_cycle, uint8_t rotating)
+{
+    static uint16_t slower_cycle_counter = SLOWER_IDLE_CYCLE_SPAN;
+
+    if (idle_cycle)
+    {
+        if (slower_cycle_counter > 0)
+        {
+            slower_cycle_counter--;
+        }
+        else
+        {
+            move_slower();
+            slower_cycle_counter = SLOWER_IDLE_CYCLE_SPAN;
+        }
+    }
+    else
+    {
+        slower_cycle_counter = SLOWER_IDLE_CYCLE_SPAN;
+    }
+
+    if (!rotating)
+    {
+        change_phase_cycle_counters(faster, slower);
+        faster = FALSE;
+        slower = FALSE;
+    }
+}
+
+static void move_faster(void)
+{
+    faster = TRUE;
+    USART_TRANSMIT_BYTE(0xfc);
+}
+static void move_slower(void)
+{
+    slower = TRUE;
+    USART_TRANSMIT_BYTE(0xf5);
+}
+
 
 static uint8_t can_save(void)
 {

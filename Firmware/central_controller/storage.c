@@ -33,7 +33,7 @@ void save_state(void)
     is_saving_states = TRUE;
 
 #ifndef DEBUG_DONT_STORE
-    USART_TRANSMIT_BYTE(0xAA);
+    //USART_TRANSMIT_BYTE(0xAA);
 
     // Get the current bank from the safetale
     record_num = read_safetable_record_num();
@@ -51,7 +51,7 @@ void save_state(void)
     }
 
 #ifndef DEBUG_DONT_STORE
-    USART_TRANSMIT_BYTE(get_bank_num_storage(record_num));
+    //USART_TRANSMIT_BYTE(get_bank_num_storage(record_num));
 #endif
 
 #ifdef USART_DEBUG
@@ -74,7 +74,7 @@ void save_state(void)
     // Make a record about successful storing into the safetable
     store_safetable_record_num(record_num);
 
-    USART_TRANSMIT_BYTE(0xBB);
+    //USART_TRANSMIT_BYTE(0xBB);
 #endif
 
     // Unset 'is_saving' indicator

@@ -1,9 +1,6 @@
 #include "rotation_logic.h"
 #include "common.h"
-
-#define ROTATION_PHASE_1_CYCLES      0//TODO
-#define ROTATION_PHASE_2_CYCLES      12
-#define ROTATION_PHASE_F_CYCLES      24
+#include "hardware.h"
 
 #define DIM(color) (0x8 | (color))
 #define UNDIM(color) ((color) & 0x7)
@@ -13,21 +10,21 @@ typedef enum
     dim, undim, no_change
 } Dim_Action;
 
-static uint8_t* get_adjacent_matrix_indexex(uint8_t side_num, uint8_t orientation);
-static void rotate_x_dir_ccw(uint8_t side_num);
-static void rotate_x_dir_cw(uint8_t side_num);
-static void rotate_y_dir_ccw(uint8_t side_num);
-static void rotate_y_dir_cw(uint8_t side_num);
-static void rotate_z_dir_ccw(uint8_t side_num);
-static void rotate_z_dir_cw(uint8_t side_num);
-static void move_persp_x_dir_l_to_r(uint8_t side_num);
-static void move_persp_x_dir_r_to_l(uint8_t side_num);
-static void move_persp_y_dir_l_to_r(uint8_t side_num);
-static void move_persp_y_dir_r_to_l(uint8_t side_num);
-static void move_persp_z_dir_l_to_r(uint8_t side_num);
-static void move_persp_z_dir_r_to_l(uint8_t side_num);
 
 extern volatile Side_State sides_states[SIDE_COUNT];
+
+
+static const uint8_t rotation_phase_cycles[][3] = 
+{
+    {0, 16, 32},  // The slowest set
+    {0, 11, 25},   // Middle
+    {0, 7, 14},   // Fast
+    {0, 4, 8}     // The fastest set
+};
+
+static uint8_t rotation_phase_1_cycles =  0;
+static uint8_t rotation_phase_2_cycles = 16;
+static uint8_t rotation_phase_f_cycles = 32;
 
 
 /* Functions for retrieving adjacent sides */
@@ -861,13 +858,10 @@ static void move_middle_layer_z_r_to_l()
 
 static Dim_Action get_dim_action(uint8_t cycle_ct)
 {
-    switch (cycle_ct)
-    {
-        case ROTATION_PHASE_1_CYCLES: return dim;
-        case ROTATION_PHASE_2_CYCLES: return undim;
-        case ROTATION_PHASE_F_CYCLES: return no_change;
-        default: return no_change;
-    }
+    if (cycle_ct == rotation_phase_1_cycles) return dim;
+    if (cycle_ct == rotation_phase_2_cycles) return undim;
+    if (cycle_ct == rotation_phase_f_cycles) return no_change;
+    return no_change;
 }
 
 static void rotate(uint8_t side_num, uint8_t *indexes_m, uint8_t *indexes_bf, uint8_t rotation_axis, void (*rotate_adjacent_layer_ptr)(uint8_t side_num))
@@ -1160,14 +1154,31 @@ rotation_func_ptr_type get_rotation_func_ptr(uint8_t side_num, uint8_t direction
 /* The main rotation function and its counterparts */
 static uint8_t can_do_rotation_cycle(uint8_t cycle_ct)
 {
-    switch (cycle_ct)
+    if (cycle_ct == rotation_phase_1_cycles ||
+        cycle_ct == rotation_phase_2_cycles ||
+        cycle_ct == rotation_phase_f_cycles)
+        return TRUE;
+    else
+        return FALSE;
+}
+
+void change_phase_cycle_counters(uint8_t faster, uint8_t slower)
+{
+    static uint8_t index = 0;
+    int8_t index_d;
+
+    if (faster || slower)
     {
-        case ROTATION_PHASE_1_CYCLES:
-        case ROTATION_PHASE_2_CYCLES:
-        case ROTATION_PHASE_F_CYCLES: 
-            return TRUE;
-        default:
-            return FALSE;
+        index_d = faster ? (index < 3 ? 1 : 0) : (index > 0 ? -1 : 0);
+
+        if (index_d != 0)
+        {
+            index += index_d;
+
+            rotation_phase_1_cycles = rotation_phase_cycles[index][0];
+            rotation_phase_2_cycles = rotation_phase_cycles[index][1];
+            rotation_phase_f_cycles = rotation_phase_cycles[index][2];
+        }
     }
 }
 
@@ -1182,7 +1193,7 @@ void rotation_cycle(uint8_t side_num)
     }
     state_ptr->cycle_ct++;
 
-    if (state_ptr->cycle_ct > ROTATION_PHASE_F_CYCLES)
+    if (state_ptr->cycle_ct > rotation_phase_f_cycles)
         rotation_done(side_num);
 }
 

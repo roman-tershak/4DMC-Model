@@ -151,9 +151,9 @@ ISR (TIMER1_OVF_vect)
             // Read switches state for the entire side
             if (switches = read_switches_debounced(ct))
             {
-                // If pressed, then increase the counter. Untill it reaches max
-                // gather all pressed side switches since they will not likely be
-                // pressed exactly in the same very moment.
+                // If pressed, then increase the counter. Untill it reaches max, i.e.
+                // READ_COMPLETE_SITE_STATE_CYCLES gather all pressed side switches 
+                // since they won't likely be pressed exactly in the same moment.
                 sw_side_state_ptr->switches |= switches;
                 sw_side_state_ptr->cycle_ct++;
 
@@ -168,6 +168,8 @@ ISR (TIMER1_OVF_vect)
             }
             else if (sw_side_state_ptr->switches)
             {
+                // Some of the swicthes had been pressed and released before
+                // READ_COMPLETE_SITE_STATE_CYCLES expired
                 sw_side_state_ptr->waiting_for_release = FALSE;
                 sw_side_state_ptr->cycle_ct = READ_COMPLETE_SITE_STATE_CYCLES;
             }
@@ -187,7 +189,7 @@ ISR (TIMER1_OVF_vect)
 
     if (sw_side_state_ptr->cycle_ct >= READ_COMPLETE_SITE_STATE_CYCLES)
     {
-        // The wait period for switches ended, now start rotation
+        // The wait period for switches has finished, now start rotation
         if (rotation_notify(ct, get_rotation_dir(sw_side_state_ptr->switches)))
         {
             // Start waiting for switch release
