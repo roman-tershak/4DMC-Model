@@ -6,7 +6,7 @@
 #include "neopixel.h"
 
 #define SLOWER_IDLE_CYCLE_SPAN 200
-#define SAVE_IDLE_CYCLE_SPAN   200
+#define SAVE_IDLE_CYCLE_SPAN   150
 
 /* Side states checks */
 #define IS_SIDE_ROTATING_OR_WAITING    (WAITING_FOR_ROTATION | ROTATING | WAITING_FOR_SAVING)
