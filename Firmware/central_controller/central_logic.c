@@ -218,19 +218,16 @@ static void handle_idle_cycle(uint8_t idle_cycle, uint8_t rotating)
 {
     if (idle_cycle)
     {
-        if (slower_cycle_counter > 0)
-        {
-            slower_cycle_counter--;
-        }
-        else
+        slower_cycle_counter++;
+        if (slower_cycle_counter > SLOWER_IDLE_CYCLE_SPAN)
         {
             move_slower();
-            slower_cycle_counter = SLOWER_IDLE_CYCLE_SPAN;
+            slower_cycle_counter = 0;
         }
     }
     else
     {
-        slower_cycle_counter = SLOWER_IDLE_CYCLE_SPAN;
+        slower_cycle_counter = 0;
     }
 
     if (!rotating)
@@ -329,5 +326,4 @@ void sides_colors_changed(void)
 #endif
 
 }
-
 
