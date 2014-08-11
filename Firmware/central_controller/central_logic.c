@@ -173,7 +173,7 @@ void handle_cycle(void)
                 // save_logic.c
                 if (can_save())
                 {
-                    save_cycle_counter = SAVE_IDLE_CYCLE_SPAN;
+                    save_cycle_counter = 0;
                     save_state();
                 }
                 break;
@@ -236,11 +236,11 @@ static void handle_idle_cycle(uint8_t idle_cycle, uint8_t rotating)
         faster = FALSE;
         slower = FALSE;
 
-        if (save_cycle_counter > 0) save_cycle_counter--;
+        if (save_cycle_counter < SAVE_IDLE_CYCLE_SPAN) save_cycle_counter++;
     }
     else
     {
-        save_cycle_counter = SAVE_IDLE_CYCLE_SPAN;
+        save_cycle_counter = 0;
     }
 }
 
@@ -260,7 +260,7 @@ static uint8_t can_save(void)
 {
     uint8_t i;
 
-    if (is_saving() || save_cycle_counter > 0)
+    if (is_saving() || save_cycle_counter < SAVE_IDLE_CYCLE_SPAN)
         return FALSE;
 
     for (i = 0; i < SIDE_COUNT; i++)
@@ -326,4 +326,3 @@ void sides_colors_changed(void)
 #endif
 
 }
-
