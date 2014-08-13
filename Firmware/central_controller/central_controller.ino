@@ -9,8 +9,9 @@ int main (void)
 
 #ifdef USART_DEBUG
     // For debug purposes only
-    // Set baud rate to 115200, but maybe better to 76800 (25)
-    USART_init(16);
+    // Set baud rate to 115200, but maybe better to 76800 (25 @16MHz)
+    // USART_init(16);  // @16MHz
+    USART_init(8);  // @8MHz
 #endif
     
     init_driver();

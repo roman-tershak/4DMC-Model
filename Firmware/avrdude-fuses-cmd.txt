@@ -17,6 +17,13 @@ Serial program downloading (SPI) enabled; [SPIEN=0]
 ..\bin\avrdude -p atmega328p -c usbasp -P com5 -U lfuse:w:0xEF:m -U hfuse:w:0xDF:m
 
 -----------------------
+Internal Calibrated RC Oscillator; Frequency 8.0 MHz; Start-up time PWRDWN/RESET: 16K CK/14 CK + 4.1 ms; [CKSEL=0010 SUT=10]   
+Serial program downloading (SPI) enabled; [SPIEN=0]
+CKDIV8 unprogrammed: 1
+-U lfuse:w:0xE2:m -U hfuse:w:0xDF:m 
+..\bin\avrdude -p atmega328p -c usbasp -P com5 -U lfuse:w:0xE2:m -U hfuse:w:0xDF:m
+
+-----------------------
 Ext. Clock; Start-up time PWRDWN/RESET: 6 CK/14 CK + 4.1 ms; [CKSEL=0000 SUT=01]
 Serial program downloading (SPI) enabled; [SPIEN=0]
 -U lfuse:w:0xD0:m -U hfuse:w:0xDF:m
