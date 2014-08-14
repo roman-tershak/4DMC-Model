@@ -49,7 +49,7 @@ void init_ports(void)
     res_pin(SCE);
     res_pin(SCF);
     res_pin(SCG);
-    // TODO SRS temp res_pin(SCH);
+    // TODO 7/8 sides? res_pin(SCH);
 
     // Reset all swicthes pins to 1
     set_pin(SPA);

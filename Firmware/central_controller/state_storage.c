@@ -1,5 +1,7 @@
 #include "state_storage.h"
 #include "storage.h"
+#include <avr/eeprom.h>
+
 
 void read_side_states(uint8_t *side_state_dst, uint8_t bank_num)
 {
@@ -19,6 +21,6 @@ void store_side_states(uint8_t *side_state_src, uint8_t bank_num)
 
 uint8_t get_bank_num_storage(uint32_t record_num)
 {
-    return (uint8_t) (record_num % SIDES_BANK_COUNT);
+    return (uint8_t) (record_num % STATE_BANK_COUNT);
 }
 

@@ -90,7 +90,7 @@ uint8_t load_state(void)
     
     record_num = read_safetable_record_num();
 
-    for (i = SIDES_BANK_COUNT; i > 0 && record_num > 0; i--)
+    for (i = STATE_BANK_COUNT; i > 0 && record_num > 0; i--)
     {
         read_side_states(colors_packed_buff, get_bank_num_storage(record_num));
         pack_unpack_colors(UNPACK);

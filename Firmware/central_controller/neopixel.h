@@ -1,7 +1,7 @@
 #ifndef H_NEOPIXEL
 #define H_NEOPIXEL
 
-#include <avr/io.h>
+#include <stdio.h>
 #include "hardware.h"
 
 #ifdef __cplusplus

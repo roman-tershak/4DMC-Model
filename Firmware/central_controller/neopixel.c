@@ -157,10 +157,10 @@ static void send_byte(uint8_t pin_mask, uint8_t byte_val)
         if (byte_val & i)
         {
             set_bit_mask(SC_PORT, pin_mask);
-            DELAY_CYCLES(NS_TO_CYCLES(T1H) - 4);       // 1-bit width less  overhead for the actual bit setting
+            DELAY_CYCLES(NS_TO_CYCLES(T1H) - 4);       // 1-bit width less overhead for the actual bit setting
             // Note that this delay could be longer and everything would still work
             unset_bit_mask(SC_PORT, pin_mask);
-            DELAY_CYCLES(NS_TO_CYCLES(T1L) - 6);       // TODO 1-bit gap less the overhead
+            DELAY_CYCLES(NS_TO_CYCLES(T1L) - 6);       // 1-bit gap less the overhead
         }
         else
         {
@@ -170,7 +170,7 @@ static void send_byte(uint8_t pin_mask, uint8_t byte_val)
             // This line is really the only tight goldilocks timing in the whole program!
             // **************************************************************************
             unset_bit_mask(SC_PORT, pin_mask);
-            DELAY_CYCLES(NS_TO_CYCLES(T0L) - 6);       // TODO 0-bit gap less overhead
+            DELAY_CYCLES(NS_TO_CYCLES(T0L) - 6);       // 0-bit gap less overhead
         }
     }
 }

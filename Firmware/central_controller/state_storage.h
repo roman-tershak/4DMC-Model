@@ -1,7 +1,7 @@
 #ifndef H_STATE_STORAGE
 #define H_STATE_STORAGE
 
-#include <avr/eeprom.h>
+#include <stdio.h>
 
 #ifdef __cplusplus
  extern "C" {

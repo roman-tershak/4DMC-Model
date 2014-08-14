@@ -11,7 +11,7 @@
 #define STATE_STORAGE_START_ADDRESS   (SAFETABLE_LEN)
 #define STATE_STORAGE_LEN             (EEPROM_SIZE - SAFETABLE_LEN)
 #define STATE_BANK_LEN                81
-#define SIDES_BANK_COUNT              (STATE_STORAGE_LEN / STATE_BANK_LEN)
+#define STATE_BANK_COUNT              (STATE_STORAGE_LEN / STATE_BANK_LEN)
 
 // Used in the storage
 #define STATE_DATA_STORAGE_LEN        (STATE_BANK_LEN)

@@ -3,11 +3,11 @@
 
 #include "hardware.h"
 
-//#define ISR_TIMEOUT 2604 // @ 16MHz
 #define ISR_TIMEOUT 1302 // @ 8MHz it will give ~100 interrupts per second
-//#define ISR_TIMEOUT 5208
-//#define ISR_TIMEOUT 3906
-// With ISR_TIMEOUT = 5208 it will give 48 timer interrupts per second
+/* 
+ * With ISR_TIMEOUT = 2604 @ 16MHz it will give ~100 timer interrupts per second
+ * 5208 @ 16MHz will give 48 timer interrupts per second
+ */
 
 #define DEBOUNCE_DELAY_1 2
 #define DEBOUNCE_DELAY_2 10

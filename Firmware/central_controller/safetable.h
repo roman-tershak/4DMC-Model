@@ -1,7 +1,6 @@
 #ifndef H_SAFETABLE
 #define H_SAFETABLE
 
-#include <avr/eeprom.h>
 #include "storage.h"
 
 #define SAFETABLE_RECORD_LEN     4

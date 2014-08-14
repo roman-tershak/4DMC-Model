@@ -2,7 +2,6 @@
 #define H_CENTRAL_LOGIC
 
 #include <stdio.h>
-#include <avr/io.h>
 #include "common.h"
 
 

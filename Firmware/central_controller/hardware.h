@@ -92,10 +92,9 @@
 
 
 // Software Reset input pin
-// TODO use PORTC6 (RESET) ?
-#define SRS_PIN PIND
-#define SRS_DDR DDRD
-#define SRS_MASK _BV(PORTD7)
+#define SRS_PIN PINB
+#define SRS_DDR DDRB
+#define SRS_MASK _BV(PORTB7)
 
 
 // Side color control outputs. They send control sequences of bytes to side LED's
