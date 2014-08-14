@@ -192,13 +192,12 @@ ISR (TIMER1_OVF_vect)
         // The wait period for switches has finished, now start rotation
         if (rotation_notify(ct, get_rotation_dir(sw_side_state_ptr->switches)))
         {
-            // Start waiting for switch release
-            sw_side_state_ptr->cycle_ct = 0;
-            sw_side_state_ptr->switches = 0;
-
 #ifdef DEBUG_COLOR_ADJUST
             debug_color_adjust(ct, sw_side_state_ptr->switches);
 #endif
+            // Start waiting for switch release
+            sw_side_state_ptr->cycle_ct = 0;
+            sw_side_state_ptr->switches = 0;
         }
     }
 

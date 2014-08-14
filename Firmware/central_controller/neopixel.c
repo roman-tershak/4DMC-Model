@@ -31,9 +31,9 @@ void __builtin_avr_delay_cycles(uint32_t __n) {
 static const uint8_t COLOR_MATRIX[16][3] = 
 {
     /* Main colors */
-    { 0,  0, 24},   // blue
-    { 0, 19, 15},   // light blue
-    { 0, 21,  0},   // green
+    { 0,  0, 28},   // blue
+    { 0, 23, 13},   // light blue
+    { 0, 27,  0},   // green
     {28, 28,  0},   // yellow
     {34, 13,  0},   // orange
     {24,  0,  0},   // red
@@ -56,9 +56,9 @@ static const uint8_t COLOR_MATRIX[16][3] =
 
 uint8_t color_matrix_adjust[9][3] =
 {
-    { 0,  0, 24},   // blue
-    { 0, 19, 15},   // light blue
-    { 0, 21,  0},   // green
+    { 0,  0, 28},   // blue
+    { 0, 23, 13},   // light blue
+    { 0, 27,  0},   // green
     {28, 28,  0},   // yellow
     {34, 13,  0},   // orange
     {24,  0,  0},   // red

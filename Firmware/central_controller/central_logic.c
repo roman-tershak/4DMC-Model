@@ -247,12 +247,12 @@ static void handle_idle_cycle(uint8_t idle_cycle, uint8_t rotating)
 static void move_faster(void)
 {
     faster = TRUE;
-    USART_TRANSMIT_BYTE(0xfc);
+//    USART_TRANSMIT_BYTE(0xfc);
 }
 static void move_slower(void)
 {
     slower = TRUE;
-    USART_TRANSMIT_BYTE(0x51);
+//    USART_TRANSMIT_BYTE(0x51);
 }
 
 
