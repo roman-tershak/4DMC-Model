@@ -62,11 +62,9 @@ void init_ports(void)
 
 void init_timer1(void)
 {
-    // TODO select the correct mode
     TCCR1B = _BV(CS11) | _BV(CS10); // set prescaller to 64
-
     TIMSK1 = _BV(TOIE1); // enable timer1 over-flow interrupt
-    sei(); // enable global interrupts
+    ENABLE_GLOBAL_INTERRUPTS(); // enable global interrupts
 }
 
 port_pin_t get_side_led_pin(uint8_t side_num)
@@ -89,7 +87,7 @@ port_pin_t get_side_led_pin(uint8_t side_num)
 
 void USART_init(uint16_t ubrr)
 {
-    /*Set baud rate */
+    /* Set baud rate */
     UBRR0H = (uint8_t) (ubrr >> 8);
     UBRR0L = (uint8_t) ubrr;
     /* Enable double speed */
@@ -102,7 +100,7 @@ void USART_init(uint16_t ubrr)
 
 void USART_transmit(uint8_t data)
 {
-    /* Since RX and TX use the same wire, disable receiver */
+    /* Since RX and TX may use the same wire (in previous schema edition), disable receiver */
     unset_bit(UCSR0B, RXEN0);
     /* Wait for empty transmit buffer */
     while ( !(UCSR0A & _BV(UDRE0)) );
