@@ -9,7 +9,7 @@ int main (void)
 
 #ifdef USART_DEBUG
     // For debug purposes only
-    USART_init(8);  // @8MHz
+    USART_init(16);  // 57600 @8MHz
 	/*
 	 * 115200 - 16 @ 16MHz, 8 @ 8MHz; 76800 - 25 @ 16MHz
 	 */
