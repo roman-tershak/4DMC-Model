@@ -66,26 +66,32 @@
 
 // Switches input ports. They read a side switches states in the switches matrix
 #define SI0_PIN PINC
+#define SI0_PORT PORTC
 #define SI0_DDR DDRC
 #define SI0_MASK _BV(PORTC0)
 
 #define SI1_PIN PINC
+#define SI1_PORT PORTC
 #define SI1_DDR DDRC
 #define SI1_MASK _BV(PORTC1)
 
 #define SI2_PIN PINC
+#define SI2_PORT PORTC
 #define SI2_DDR DDRC
 #define SI2_MASK _BV(PORTC2)
 
 #define SI3_PIN PINC
+#define SI3_PORT PORTC
 #define SI3_DDR DDRC
 #define SI3_MASK _BV(PORTC3)
 
 #define SI4_PIN PINC
+#define SI4_PORT PORTC
 #define SI4_DDR DDRC
 #define SI4_MASK _BV(PORTC4)
 
 #define SI5_PIN PINC
+#define SI5_PORT PORTC
 #define SI5_DDR DDRC
 #define SI5_MASK _BV(PORTC5)
 
@@ -95,6 +101,7 @@
 
 // Software Reset input pin
 #define SRS_PIN PINB
+#define SRS_PORT PORTB
 #define SRS_DDR DDRB
 #define SRS_MASK _BV(PORTB7)
 

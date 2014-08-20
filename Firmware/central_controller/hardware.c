@@ -39,7 +39,7 @@ void init_ports(void)
     dir_out(TX);
 #endif
 
-    // Reset all side color control pins to 1
+    // Reset all side color control pins to 0
 #ifndef USART_DEBUG
     res_pin(SCA);  // RX
     res_pin(SCB);  // TX
@@ -58,6 +58,18 @@ void init_ports(void)
     set_pin(SPD);
     set_pin(SPE);
     set_pin(SPF);
+
+    // Enable pull-ups for all SI pins as well as for SRS.
+    // PUD bit in MCUCR register by default is 0, meaning that all pull-ups are enabled by default.
+    // For activating pull-ups PORTxn are used. They need to be set to 1.
+    set_pin(SI0);
+    set_pin(SI1);
+    set_pin(SI2);
+    set_pin(SI3);
+    set_pin(SI4);
+    set_pin(SI5);
+
+    set_pin(SRS);
 }
 
 void init_timer1(void)
