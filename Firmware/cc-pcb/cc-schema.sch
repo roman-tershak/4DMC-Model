@@ -1,0 +1,160 @@
+EESchema Schematic File Version 2
+LIBS:power
+LIBS:device
+LIBS:transistors
+LIBS:conn
+LIBS:linear
+LIBS:regul
+LIBS:74xx
+LIBS:cmos4000
+LIBS:adc-dac
+LIBS:memory
+LIBS:xilinx
+LIBS:special
+LIBS:microcontrollers
+LIBS:dsp
+LIBS:microchip
+LIBS:analog_switches
+LIBS:motorola
+LIBS:texas
+LIBS:intel
+LIBS:audio
+LIBS:interface
+LIBS:digital-audio
+LIBS:philips
+LIBS:display
+LIBS:cypress
+LIBS:siliconi
+LIBS:opto
+LIBS:atmel
+LIBS:contrib
+LIBS:valves
+LIBS:cc-schema-cache
+EELAYER 27 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title "cc-schema.sch"
+Date "19 aug 2014"
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L ATMEGA328P-A IC?
+U 1 1 53F3A6E6
+P 3800 3650
+F 0 "IC?" H 3050 4900 40  0000 L BNN
+F 1 "ATMEGA328P-A" H 4200 2250 40  0000 L BNN
+F 2 "TQFP32" H 3800 3650 30  0000 C CIN
+F 3 "" H 3800 3650 60  0000 C CNN
+	1    3800 3650
+	1    0    0    -1  
+$EndComp
+$Comp
+L DIODE D?
+U 1 1 53F3AA52
+P 5800 1600
+F 0 "D?" H 5800 1700 40  0000 C CNN
+F 1 "DIODE" H 5800 1500 40  0000 C CNN
+F 2 "~" H 5800 1600 60  0000 C CNN
+F 3 "~" H 5800 1600 60  0000 C CNN
+	1    5800 1600
+	-1   0    0    1   
+$EndComp
+$Comp
+L DIODE D?
+U 1 1 53F3AAD7
+P 5800 1900
+F 0 "D?" H 5800 2000 40  0000 C CNN
+F 1 "DIODE" H 5800 1800 40  0000 C CNN
+F 2 "~" H 5800 1900 60  0000 C CNN
+F 3 "~" H 5800 1900 60  0000 C CNN
+	1    5800 1900
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	5000 2550 4800 2550
+Wire Wire Line
+	5000 1600 5000 2550
+Wire Wire Line
+	5000 1600 5600 1600
+Wire Wire Line
+	5100 2650 4800 2650
+Wire Wire Line
+	5100 1900 5100 2650
+$Comp
+L DIODE D?
+U 1 1 53F3ACD2
+P 5800 2200
+F 0 "D?" H 5800 2300 40  0000 C CNN
+F 1 "DIODE" H 5800 2100 40  0000 C CNN
+F 2 "~" H 5800 2200 60  0000 C CNN
+F 3 "~" H 5800 2200 60  0000 C CNN
+	1    5800 2200
+	-1   0    0    1   
+$EndComp
+$Comp
+L DIODE D?
+U 1 1 53F3ACD8
+P 5800 2500
+F 0 "D?" H 5800 2600 40  0000 C CNN
+F 1 "DIODE" H 5800 2400 40  0000 C CNN
+F 2 "~" H 5800 2500 60  0000 C CNN
+F 3 "~" H 5800 2500 60  0000 C CNN
+	1    5800 2500
+	-1   0    0    1   
+$EndComp
+$Comp
+L DIODE D?
+U 1 1 53F3ACEC
+P 5800 2800
+F 0 "D?" H 5800 2900 40  0000 C CNN
+F 1 "DIODE" H 5800 2700 40  0000 C CNN
+F 2 "~" H 5800 2800 60  0000 C CNN
+F 3 "~" H 5800 2800 60  0000 C CNN
+	1    5800 2800
+	-1   0    0    1   
+$EndComp
+$Comp
+L DIODE D?
+U 1 1 53F3ACF3
+P 5800 3100
+F 0 "D?" H 5800 3200 40  0000 C CNN
+F 1 "DIODE" H 5800 3000 40  0000 C CNN
+F 2 "~" H 5800 3100 60  0000 C CNN
+F 3 "~" H 5800 3100 60  0000 C CNN
+	1    5800 3100
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	5100 1900 5600 1900
+Wire Wire Line
+	4800 2750 5200 2750
+Wire Wire Line
+	5200 2750 5200 2200
+Wire Wire Line
+	5200 2200 5600 2200
+Wire Wire Line
+	4800 2850 5300 2850
+Wire Wire Line
+	5300 2850 5300 2500
+Wire Wire Line
+	5300 2500 5600 2500
+Wire Wire Line
+	4800 2950 5400 2950
+Wire Wire Line
+	5400 2950 5400 2800
+Wire Wire Line
+	5400 2800 5600 2800
+Wire Wire Line
+	4800 3050 5500 3050
+Wire Wire Line
+	5500 3050 5500 3100
+Wire Wire Line
+	5500 3100 5600 3100
+$EndSCHEMATC
