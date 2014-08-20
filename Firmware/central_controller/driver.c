@@ -154,12 +154,13 @@ ISR (TIMER1_OVF_vect)
                 // If pressed, then increase the counter. Untill it reaches max, i.e.
                 // READ_COMPLETE_SITE_STATE_CYCLES gather all pressed side switches 
                 // since they won't likely be pressed exactly in the same moment.
+                // So for this '|=' operator is used.
                 sw_side_state_ptr->switches |= switches;
                 sw_side_state_ptr->cycle_ct++;
 
                 if (sw_side_state_ptr->cycle_ct < READ_COMPLETE_SITE_STATE_CYCLES)
                 {
-                    next_switch = FALSE;  // Stick to this switch
+                    next_switch = FALSE;  // Stick to this switches set (one side)
                 }
                 else
                 {
@@ -207,10 +208,8 @@ ISR (TIMER1_OVF_vect)
         if (ct >= SW_SIDE_NUM) ct = 0; // going in round cycle
     }
 
-    // Pass the cycle further down the logic
+    // Pass the cycle tick further down the logic
     handle_cycle();
-
-    // If nothing pressed, one ISR call takes ~500 of TCNT1 counter
 }
 
 static uint8_t get_rotation_dir(uint8_t switches)

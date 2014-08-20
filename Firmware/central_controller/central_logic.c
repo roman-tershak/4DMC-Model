@@ -135,8 +135,10 @@ uint8_t rotation_notify(uint8_t sw_side_num, uint8_t direction)
 void handle_cycle(void)
 {
     Side_State *state_ptr;
-    uint8_t side_num;
-    uint8_t idle_cycle = TRUE, rotating = FALSE;
+    uint8_t side_num, idle_cycle, rotating;
+
+    idle_cycle = TRUE;
+    rotating = FALSE;
 
     for (side_num = 0; side_num < SIDE_CB; side_num++)
     {
@@ -293,9 +295,9 @@ void sides_colors_changed(void)
 {
     uint8_t sn, c;
 
-#ifdef USART_DEBUG_
+#ifdef USART_DEBUG
 #ifndef DEBUG_COLOR_ADJUST
-    uint8_t ok = TRUE;
+    // uint8_t ok = TRUE;
 #endif
 #endif
 
@@ -304,24 +306,24 @@ void sides_colors_changed(void)
         // Send new colors to side
         light_side_color(sn, sides_states[sn].colors);
 
-#ifdef USART_DEBUG_
+#ifdef USART_DEBUG
 #ifndef DEBUG_COLOR_ADJUST
-        if (!send_colors_to_usart(sn, sides_states[sn].colors))
-            ok = FALSE;
+        // if (!send_colors_to_usart(sn, sides_states[sn].colors))
+        //     ok = FALSE;
 #endif
 #endif
 
     }
 
-#ifdef USART_DEBUG_
+#ifdef USART_DEBUG
 #ifndef DEBUG_COLOR_ADJUST
-    if (ok)
-    {
-        USART_transmit(0xff);
-        USART_transmit(0x0C);
-        USART_transmit(0xE1);
-        USART_transmit(0xff);
-    }
+    // if (ok)
+    // {
+    //     USART_transmit(0xff);
+    //     USART_transmit(0x0C);
+    //     USART_transmit(0xE1);
+    //     USART_transmit(0xff);
+    // }
 #endif
 #endif
 

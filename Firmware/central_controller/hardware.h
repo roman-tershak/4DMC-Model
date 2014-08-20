@@ -1,6 +1,8 @@
 #ifndef H_HARDWARE
 #define H_HARDWARE
 
+// The Internal Calibrated RC Oscillator is used. This allows to increase a number of pins
+// that can be used as IO pins, as well as to reduce a number of electronic parties.
 #define F_CPU 8000000
 
 #include <avr/io.h>

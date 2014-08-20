@@ -40,9 +40,9 @@ static const uint8_t COLOR_MATRIX[16][3] =
     {24,  0, 12},   // pink
     {24,  8, 32},   // white-pink
     /* Transitioning colors */
-    { 0,  0,  8},   // dim blue
-    { 0,  6,  5},   // dim light blue
-    { 0,  7,  0},   // dim green
+    { 0,  0,  9},   // dim blue
+    { 0,  6,  4},   // dim light blue
+    { 0,  9,  0},   // dim green
     { 9,  9,  0},   // dim yellow
     {11,  4,  0},   // dim orange
     { 8,  0,  0},   // dim red
@@ -175,7 +175,7 @@ static void send_byte(uint8_t pin_mask, uint8_t byte_val)
     }
 }
 
-// Unset pin (just in case) and wait long enough without sending any bots 
+// Unset pin (just in case) and wait long enough without sending any bits 
 // to cause the pixels to latch and display the last sent frame
 static void show(uint8_t pin_mask)
 {
@@ -232,19 +232,4 @@ void light_side_color(uint8_t side_num, uint8_t* colors)
 /* DEBUG COLOR ADJUSTMENT CODE - END */
 #endif
 #endif
-}
-
-// TODO Do we need it?
-void clear_side_color(uint8_t side_num)
-{
-    uint8_t i;
-    uint8_t pin_mask = _BV(get_side_led_pin(side_num));
-
-    for (i = 0; i < SIDE_LED_COUNT; i++)
-    {
-        send_byte(pin_mask, 0);
-        send_byte(pin_mask, 0);
-        send_byte(pin_mask, 0);
-    }
-    show(pin_mask);
 }
