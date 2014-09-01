@@ -1,8 +1,8 @@
-update=27.08.2014 23:41:27
+update=Monday, September 01, 2014 03:26:02 PM
 last_client=eeschema
 [eeschema]
 version=1
-LibDir=C:/Program Files (x86)/KiCad/share/library/converted;C:/Program Files (x86)/KiCad/share/library/contrib
+LibDir=/Applications/KiCad/data/library/smisioto
 NetFmtName=
 RptD_X=0
 RptD_Y=100
@@ -39,3 +39,13 @@ LibName27=opto
 LibName28=atmel
 LibName29=contrib
 LibName30=valves
+LibName31=w_analog
+LibName32=w_connectors
+LibName33=w_device
+LibName34=w_logic
+LibName35=w_memory
+LibName36=w_microcontrollers
+LibName37=w_opto
+LibName38=w_relay
+LibName39=w_rtx
+LibName40=w_transistor
