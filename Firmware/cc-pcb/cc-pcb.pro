@@ -1,5 +1,5 @@
-update=Tuesday, September 02, 2014 05:20:09 PM
-last_client=cvpcb
+update=02.09.2014 23:22:40
+last_client=kicad
 [pcbnew]
 [pcbnew/libraries]
 LibName1=sockets
@@ -213,3 +213,5 @@ EquName11=smd_trans-diodes
 EquName12=standard-trans-diodes
 EquName13=capa_pol
 EquName14=ci
+[general]
+version=1
