@@ -48,7 +48,7 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
 Title "cc-schema.sch"
-Date "1 sep 2014"
+Date "2 sep 2014"
 Rev ""
 Comp ""
 Comment1 ""
@@ -344,12 +344,6 @@ Wire Wire Line
 	2200 4100 2200 4450
 Wire Wire Line
 	2300 4100 2200 4100
-Connection ~ 2200 2100
-Wire Wire Line
-	2200 2100 2300 2100
-Connection ~ 2200 2000
-Wire Wire Line
-	2300 2000 2200 2000
 Wire Wire Line
 	5800 5300 6100 5300
 Wire Wire Line
@@ -474,9 +468,6 @@ Wire Wire Line
 	4800 2400 4800 6400
 Wire Wire Line
 	4800 6400 2800 6400
-Connection ~ 2200 2300
-Wire Wire Line
-	2200 2600 2300 2600
 Connection ~ 3950 4750
 Wire Wire Line
 	3950 4750 3950 4900
@@ -493,11 +484,9 @@ Wire Wire Line
 Wire Wire Line
 	2200 2300 2300 2300
 Wire Wire Line
-	2200 1800 2200 2600
+	2700 700  2700 850 
 Wire Wire Line
-	2700 850  2700 700 
-Wire Wire Line
-	2550 850  2700 850 
+	2700 850  2550 850 
 Connection ~ 2700 1050
 Wire Wire Line
 	2550 1050 2700 1050
@@ -604,4 +593,35 @@ Wire Wire Line
 Wire Wire Line
 	3350 1250 2700 1250
 Connection ~ 2700 1250
+$Comp
+L PWR_FLAG #FLG013
+U 1 1 5405B6E7
+P 2700 700
+F 0 "#FLG013" H 2700 795 30  0001 C CNN
+F 1 "PWR_FLAG" H 2700 880 30  0000 C CNN
+F 2 "" H 2700 700 60  0000 C CNN
+F 3 "" H 2700 700 60  0000 C CNN
+	1    2700 700 
+	0    -1   -1   0   
+$EndComp
+$Comp
+L PWR_FLAG #FLG014
+U 1 1 5405B6F6
+P 2700 1300
+F 0 "#FLG014" H 2700 1395 30  0001 C CNN
+F 1 "PWR_FLAG" H 2700 1480 30  0000 C CNN
+F 2 "" H 2700 1300 60  0000 C CNN
+F 3 "" H 2700 1300 60  0000 C CNN
+	1    2700 1300
+	0    -1   -1   0   
+$EndComp
+NoConn ~ 2300 2600
+Wire Wire Line
+	2200 2300 2200 1800
+Wire Wire Line
+	2300 2100 2200 2100
+Connection ~ 2200 2100
+Wire Wire Line
+	2300 2000 2200 2000
+Connection ~ 2200 2000
 $EndSCHEMATC
