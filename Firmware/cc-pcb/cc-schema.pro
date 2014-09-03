@@ -1,5 +1,5 @@
-update=Monday, September 01, 2014 03:26:02 PM
-last_client=eeschema
+update=Wednesday, September 03, 2014 05:34:53 PM
+last_client=kicad
 [eeschema]
 version=1
 LibDir=/Applications/KiCad/data/library/smisioto
@@ -49,3 +49,5 @@ LibName37=w_opto
 LibName38=w_relay
 LibName39=w_rtx
 LibName40=w_transistor
+[general]
+version=1
