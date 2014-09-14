@@ -31,23 +31,23 @@ void __builtin_avr_delay_cycles(uint32_t __n) {
 static const uint8_t COLOR_MATRIX[16][3] = 
 {
     /* Main colors */
-    { 0,  0, 28},   // blue
-    { 0, 23, 13},   // light blue
-    { 0, 27,  0},   // green
-    {28, 28,  0},   // yellow
-    {34, 13,  0},   // orange
-    {24,  0,  0},   // red
-    {24,  0, 12},   // pink
-    {24,  8, 32},   // white-pink
+    { 0,  0, 35},   // blue
+    { 0, 29, 16},   // light blue
+    { 0, 34,  0},   // green
+    {35, 35,  0},   // yellow
+    {43, 16,  0},   // orange
+    {30,  0,  0},   // red
+    {30,  0, 15},   // pink
+    {30, 10, 40},   // white-pink
     /* Transitioning colors */
-    { 0,  0,  9},   // dim blue
-    { 0,  6,  4},   // dim light blue
-    { 0,  9,  0},   // dim green
-    { 9,  9,  0},   // dim yellow
-    {11,  4,  0},   // dim orange
-    { 8,  0,  0},   // dim red
-    { 8,  0,  4},   // dim pink
-    { 8,  3, 11}    // dim white-pink
+    { 0,  0, 14},   // dim blue
+    { 0, 11,  7},   // dim light blue
+    { 0, 13,  0},   // dim green
+    {14, 14,  0},   // dim yellow
+    {17,  7,  0},   // dim orange
+    {12,  0,  0},   // dim red
+    {12,  0,  6},   // dim pink
+    {12,  4, 16}    // dim white-pink
 };
 
 
@@ -56,14 +56,14 @@ static const uint8_t COLOR_MATRIX[16][3] =
 
 uint8_t color_matrix_adjust[9][3] =
 {
-    { 0,  0, 28},   // blue
-    { 0, 23, 13},   // light blue
-    { 0, 27,  0},   // green
-    {28, 28,  0},   // yellow
-    {34, 13,  0},   // orange
-    {24,  0,  0},   // red
-    {24,  0, 12},   // pink
-    {24,  8, 32},   // white-pink
+    { 0,  0, 35},   // blue
+    { 0, 29, 16},   // light blue
+    { 0, 34,  0},   // green
+    {35, 35,  0},   // yellow
+    {43, 16,  0},   // orange
+    {30,  0,  0},   // red
+    {30,  0, 15},   // pink
+    {30, 10, 40},   // white-pink
     {0,   0,  0}
 };
 
