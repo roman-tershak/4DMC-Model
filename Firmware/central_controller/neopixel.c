@@ -198,7 +198,7 @@ void light_side_color(uint8_t side_num, uint8_t* colors)
         }
 #endif
 
-#ifdef DOUBLE_COLOR_LEDS
+#ifdef DOUBLE_LEDS
         for (j = 0; j < 2; j++)
         {
 #endif
@@ -220,7 +220,7 @@ void light_side_color(uint8_t side_num, uint8_t* colors)
             send_byte(pin_mask, rgb_color[0]);
             send_byte(pin_mask, rgb_color[2]);
 
-#ifdef DOUBLE_COLOR_LEDS
+#ifdef DOUBLE_LEDS
         }
 #endif
 
