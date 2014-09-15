@@ -293,7 +293,7 @@ static uint8_t send_colors_to_usart(uint8_t sn, uint8_t *colors)
 
 void sides_colors_changed(void)
 {
-    uint8_t sn, c;
+    uint8_t sn;
 
 #ifdef USART_DEBUG
 #ifndef DEBUG_COLOR_ADJUST
@@ -301,7 +301,7 @@ void sides_colors_changed(void)
 #endif
 #endif
 
-    for (sn = 0; sn < SIDE_CB; sn++)
+    for (sn = 0; sn < LIGHT_SIDE_COUNT; sn++)
     {
         // Send new colors to side
         light_side_color(sn, sides_states[sn].colors);

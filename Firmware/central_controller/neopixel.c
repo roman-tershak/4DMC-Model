@@ -189,8 +189,14 @@ void light_side_color(uint8_t side_num, uint8_t* colors)
     uint8_t *rgb_color;
     uint8_t pin_mask = _BV(get_side_led_pin(side_num));
 
-    for (i = 0; i < SIDE_LED_COUNT; i++)
+    for (i = 0; i < SIDE_CUBES_COUNT; i++)
     {
+#if LIGHT_SIDE_COUNT == SIDE_COUNT
+        if (side_num == SIDE_CB && i == CB_ABSENT_CUBIE_NUM)
+        {
+            continue;
+        }
+#endif
 
 #ifdef DOUBLE_COLOR_LEDS
         for (j = 0; j < 2; j++)
