@@ -25,6 +25,8 @@
 #define MAIN_COLOR_COUNT        8
 #define ALL_COLOR_COUNT         16
 
+/* All LEDs go in pairs */
+#define DOUBLE_COLOR_LEDS
 //#define DEBUG_COLOR_ADJUST
 //#define USART_DEBUG
 //#define DEBUG_DONT_STORE

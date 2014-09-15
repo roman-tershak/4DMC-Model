@@ -185,29 +185,39 @@ static void show(uint8_t pin_mask)
 
 void light_side_color(uint8_t side_num, uint8_t* colors)
 {
-    uint8_t i;
+    uint8_t i, j;
     uint8_t *rgb_color;
     uint8_t pin_mask = _BV(get_side_led_pin(side_num));
 
     for (i = 0; i < SIDE_LED_COUNT; i++)
     {
 
+#ifdef DOUBLE_COLOR_LEDS
+        for (j = 0; j < 2; j++)
+        {
+#endif
+
 #ifdef DEBUG_COLOR_ADJUST
 /* DEBUG COLOR ADJUSTMENT CODE - START */
-        if (i < 8)
-            rgb_color = color_matrix_adjust[i];
-        else if (i < 16)
-            rgb_color = COLOR_MATRIX[i];
-        else
-            rgb_color = color_matrix_adjust[8];
+            if (i < 8)
+                rgb_color = color_matrix_adjust[i];
+            else if (i < 16)
+                rgb_color = COLOR_MATRIX[i];
+            else
+                rgb_color = color_matrix_adjust[8];
 /* DEBUG COLOR ADJUSTMENT CODE - END */
 #else
-        rgb_color = COLOR_MATRIX[colors[i]];
+            rgb_color = COLOR_MATRIX[colors[i]];
 #endif
-        // Note: Follow the order of GRB to sent data and the high bit sent at first. 
-        send_byte(pin_mask, rgb_color[1]);
-        send_byte(pin_mask, rgb_color[0]);
-        send_byte(pin_mask, rgb_color[2]);
+            // Note: Follow the order of GRB to sent data and the high bit sent at first. 
+            send_byte(pin_mask, rgb_color[1]);
+            send_byte(pin_mask, rgb_color[0]);
+            send_byte(pin_mask, rgb_color[2]);
+
+#ifdef DOUBLE_COLOR_LEDS
+        }
+#endif
+
     }
     show(pin_mask);
 
