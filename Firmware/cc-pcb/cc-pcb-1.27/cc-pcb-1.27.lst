@@ -1,0 +1,44 @@
+eeschema (2014-01-10 BZR 4027)-stable  >> Creation date: Sunday, September 21, 2014 12:38:35 PM
+#Cmp ( order = Reference )
+| C1         10uF        
+| C2         0.1uF       
+| CON1       BARREL_JACK 
+| D1         DIODE       
+| D2         DIODE       
+| D3         DIODE       
+| D4         DIODE       
+| D5         DIODE       
+| D6         DIODE       
+| IC1        ATMEGA328P-A
+| P1         CONN_6      
+| P2         CONN_6      
+| P3         CONN_8      
+| P4         CONN_2      
+| P5         CONN_6      
+| P6         CONN_6      
+| R1         10k         
+| SW1        SRS         
+#End Cmp
+
+#Cmp ( order = Value )
+| 0.1uF        C2        
+| 10uF         C1        
+| BARREL_JACK  CON1      
+| DIODE        D1        
+| DIODE        D2        
+| DIODE        D3        
+| DIODE        D4        
+| DIODE        D5        
+| DIODE        D6        
+| ATMEGA328P-A IC1       
+| CONN_6       P1        
+| CONN_6       P2        
+| CONN_8       P3        
+| CONN_2       P4        
+| CONN_6       P5        
+| CONN_6       P6        
+| 10k          R1        
+| SRS          SW1       
+#End Cmp
+
+#End List
