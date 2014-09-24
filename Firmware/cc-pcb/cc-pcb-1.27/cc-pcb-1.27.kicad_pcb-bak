@@ -932,7 +932,7 @@
   )
 
   (module pin_strip_1.27mm_4x2_90 (layer F.Cu) (tedit 5418ADA2) (tstamp 54155E23)
-    (at 183.896 83.693 90)
+    (at 183.896 83.947 90)
     (descr "Pin strip 1.27mm 4x2pin 90°")
     (tags "CONN DEV")
     (path /540475A9)
@@ -990,7 +990,7 @@
   )
 
   (module pin_strip_1.27mm_4x2_90 (layer F.Cu) (tedit 5418ADA2) (tstamp 54155E33)
-    (at 184.531 89.916 90)
+    (at 183.896 94.361 90)
     (descr "Pin strip 1.27mm 4x2pin 90°")
     (tags "CONN DEV")
     (path /5404826A)
