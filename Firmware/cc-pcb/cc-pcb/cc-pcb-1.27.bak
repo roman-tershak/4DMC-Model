@@ -77,7 +77,7 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
 Title "cc-schema.sch"
-Date "30 sep 2014"
+Date "1 oct 2014"
 Rev ""
 Comp ""
 Comment1 ""
@@ -571,33 +571,17 @@ Wire Wire Line
 Wire Wire Line
 	4200 3250 6000 3250
 Wire Wire Line
-	6000 3250 6000 4200
-Wire Wire Line
-	6000 4200 8600 4200
-Wire Wire Line
 	4200 3150 6100 3150
-Wire Wire Line
-	6100 3150 6100 4100
-Wire Wire Line
-	6100 4100 8600 4100
 Wire Wire Line
 	4200 3050 6200 3050
 Wire Wire Line
-	6200 3050 6200 4000
-Wire Wire Line
-	6200 4000 8600 4000
-Wire Wire Line
 	4200 2950 6300 2950
 Wire Wire Line
-	6300 2950 6300 3900
-Wire Wire Line
-	6300 3900 8600 3900
+	6300 2950 6300 4000
 Wire Wire Line
 	4200 2850 6400 2850
 Wire Wire Line
-	6400 2850 6400 3800
-Wire Wire Line
-	6400 3800 8600 3800
+	6400 2850 6400 4200
 Wire Wire Line
 	4200 2500 6600 2500
 Wire Wire Line
@@ -624,10 +608,6 @@ Wire Wire Line
 	4200 2000 8100 2000
 Wire Wire Line
 	8100 2000 8100 2400
-Wire Wire Line
-	7200 3100 7200 3500
-Wire Wire Line
-	7200 3500 8600 3500
 Wire Wire Line
 	7800 2900 7800 3400
 Wire Wire Line
@@ -663,7 +643,27 @@ Wire Wire Line
 Wire Wire Line
 	8100 3600 8600 3600
 Wire Wire Line
-	6900 3200 6900 3300
+	6000 3250 6000 4100
 Wire Wire Line
-	6900 3300 8600 3300
+	6000 4100 8600 4100
+Wire Wire Line
+	6100 3150 6100 3900
+Wire Wire Line
+	6100 3900 8600 3900
+Wire Wire Line
+	6200 3050 6200 3800
+Wire Wire Line
+	6200 3800 8600 3800
+Wire Wire Line
+	6300 4000 8600 4000
+Wire Wire Line
+	6400 4200 8600 4200
+Wire Wire Line
+	6900 3500 8600 3500
+Wire Wire Line
+	6900 3200 6900 3500
+Wire Wire Line
+	7200 3100 7200 3300
+Wire Wire Line
+	7200 3300 8600 3300
 $EndSCHEMATC
