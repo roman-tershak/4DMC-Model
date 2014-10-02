@@ -1,4 +1,4 @@
-eeschema (2014-01-10 BZR 4027)-stable  >> Creation date: Sunday, September 21, 2014 12:38:35 PM
+eeschema (2014-01-10 BZR 4027)-stable  >> Creation date: Thursday, October 02, 2014 05:41:25 PM
 #Cmp ( order = Reference )
 | C1         10uF        
 | C2         0.1uF       
@@ -10,9 +10,7 @@ eeschema (2014-01-10 BZR 4027)-stable  >> Creation date: Sunday, September 21, 2
 | D5         DIODE       
 | D6         DIODE       
 | IC1        ATMEGA328P-A
-| P1         CONN_6      
-| P2         CONN_6      
-| P3         CONN_8      
+| P1         CONN_20     
 | P4         CONN_2      
 | P5         CONN_6      
 | P6         CONN_6      
@@ -31,9 +29,7 @@ eeschema (2014-01-10 BZR 4027)-stable  >> Creation date: Sunday, September 21, 2
 | DIODE        D5        
 | DIODE        D6        
 | ATMEGA328P-A IC1       
-| CONN_6       P1        
-| CONN_6       P2        
-| CONN_8       P3        
+| CONN_20      P1        
 | CONN_2       P4        
 | CONN_6       P5        
 | CONN_6       P6        
