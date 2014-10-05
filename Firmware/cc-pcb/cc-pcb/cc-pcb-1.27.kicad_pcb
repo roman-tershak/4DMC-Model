@@ -59,7 +59,7 @@
     (aux_axis_origin 153.67 72.39)
     (visible_elements 7FFFFBFF)
     (pcbplotparams
-      (layerselection 3178497)
+      (layerselection 284196865)
       (usegerberextensions true)
       (excludeedgelayer true)
       (linewidth 0.150000)
@@ -81,9 +81,9 @@
       (subtractmaskfromsilk false)
       (outputformat 1)
       (mirror false)
-      (drillshape 1)
+      (drillshape 0)
       (scaleselection 1)
-      (outputdirectory ""))
+      (outputdirectory D:/Tests/workspace/4DMC-Model/Firmware/cc-pcb/cc-pcb/))
   )
 
   (net 0 "")
@@ -273,7 +273,7 @@
     )
   )
 
-  (module pin_array_3x2 (layer F.Cu) (tedit 542C5290) (tstamp 542B0274)
+  (module pin_array_3x2 (layer F.Cu) (tedit 5431316E) (tstamp 542B0274)
     (at 174.244 103.378 180)
     (descr "Double rangee de contacts 2 x 4 pins")
     (tags CONN)
@@ -281,7 +281,7 @@
     (fp_text reference P6 (at 0 -3.81 180) (layer F.SilkS)
       (effects (font (size 1.016 1.016) (thickness 0.2032)))
     )
-    (fp_text value CONN_6 (at 0 3.81 180) (layer F.SilkS) hide
+    (fp_text value "" (at 0 3.81 180) (layer F.SilkS) hide
       (effects (font (size 1.016 1.016) (thickness 0.2032)))
     )
     (fp_line (start 3.81 2.54) (end -3.81 2.54) (layer F.SilkS) (width 0.2032))
@@ -319,7 +319,7 @@
     )
   )
 
-  (module PIN_ARRAY-6X1 (layer F.Cu) (tedit 542C52B2) (tstamp 5422CAC8)
+  (module PIN_ARRAY-6X1 (layer F.Cu) (tedit 543130C7) (tstamp 5422CAC8)
     (at 157.48 93.726 270)
     (descr "Connecteur 6 pins")
     (tags "CONN DEV")
@@ -327,7 +327,7 @@
     (fp_text reference P5 (at 0 -2.159 270) (layer F.SilkS)
       (effects (font (size 1.016 1.016) (thickness 0.2032)))
     )
-    (fp_text value CONN_6 (at 0 2.159 270) (layer F.SilkS) hide
+    (fp_text value "" (at 0 2.159 270) (layer F.SilkS) hide
       (effects (font (size 1.016 0.889) (thickness 0.2032)))
     )
     (fp_line (start -7.62 1.27) (end -7.62 -1.27) (layer F.SilkS) (width 0.3048))
@@ -366,10 +366,10 @@
     )
   )
 
-  (module hole_2mm (layer F.Cu) (tedit 542B142C) (tstamp 542C63A6)
+  (module hole_2mm (layer F.Cu) (tedit 543133C4) (tstamp 542C63A6)
     (at 189.992 75.184)
     (descr "Hole 2mm")
-    (fp_text reference H1 (at 0 -2.794) (layer F.SilkS)
+    (fp_text reference H1 (at 0 -2.794) (layer F.SilkS) hide
       (effects (font (size 1.524 1.524) (thickness 0.3048)))
     )
     (fp_text value "" (at 0 2.54) (layer F.SilkS)
@@ -388,10 +388,10 @@
     )
   )
 
-  (module hole_2mm (layer F.Cu) (tedit 542B143D) (tstamp 542C63B5)
+  (module hole_2mm (layer F.Cu) (tedit 543133CC) (tstamp 542C63B5)
     (at 189.992 106.172)
     (descr "Hole 2mm")
-    (fp_text reference H2 (at 0 -2.794) (layer F.SilkS)
+    (fp_text reference H2 (at 0 -2.794) (layer F.SilkS) hide
       (effects (font (size 1.524 1.524) (thickness 0.3048)))
     )
     (fp_text value "" (at 0 2.54) (layer F.SilkS)
@@ -410,10 +410,10 @@
     )
   )
 
-  (module hole_2mm (layer F.Cu) (tedit 542B1444) (tstamp 542C63D4)
+  (module hole_2mm (layer F.Cu) (tedit 543133D6) (tstamp 542C63D4)
     (at 156.972 106.172)
     (descr "Hole 2mm")
-    (fp_text reference H3 (at 0 -2.794) (layer F.SilkS)
+    (fp_text reference H3 (at 0 -2.794) (layer F.SilkS) hide
       (effects (font (size 1.524 1.524) (thickness 0.3048)))
     )
     (fp_text value "" (at 0 2.54) (layer F.SilkS)
@@ -432,7 +432,7 @@
     )
   )
 
-  (module pin_strip_1.27mm_10x2_90 (layer F.Cu) (tedit 542EEF29) (tstamp 54155E33)
+  (module pin_strip_1.27mm_10x2_90 (layer F.Cu) (tedit 543131C5) (tstamp 54155E33)
     (at 185.166 87.122 90)
     (descr "Pin strip 1.27mm 10x2pin 90°")
     (tags "CONN DEV")
@@ -440,7 +440,7 @@
     (fp_text reference P1 (at 0 -2.3 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value CONN_20 (at 0 -3.8 90) (layer F.SilkS) hide
+    (fp_text value "" (at 0 -3.8 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start 5.715 1.651) (end 5.715 6.223) (layer F.SilkS) (width 0.15))
@@ -544,13 +544,13 @@
     )
   )
 
-  (module TQFP32 (layer F.Cu) (tedit 542EF6AD) (tstamp 5408CD8F)
+  (module TQFP32 (layer F.Cu) (tedit 543131AB) (tstamp 5408CD8F)
     (at 168.402 92.456 270)
     (path /53F3A6E6)
-    (fp_text reference IC1 (at 0 -1.27 270) (layer F.SilkS)
+    (fp_text reference IC1 (at 0 0 270) (layer F.SilkS)
       (effects (font (size 1.27 1.016) (thickness 0.2032)))
     )
-    (fp_text value ATMEGA328P-A (at 0 1.905 270) (layer F.SilkS)
+    (fp_text value "" (at 0 1.905 270) (layer F.SilkS)
       (effects (font (size 1.27 1.016) (thickness 0.2032)))
     )
     (fp_line (start 3.937 3.937) (end 3.937 3.302) (layer F.SilkS) (width 0.15))
@@ -693,14 +693,14 @@
     )
   )
 
-  (module sod323 (layer F.Cu) (tedit 542EF52B) (tstamp 5427F194)
+  (module sod323 (layer F.Cu) (tedit 5431310D) (tstamp 5427F194)
     (at 161.544 104.14 90)
     (descr SOD323)
     (path /53F3AA52)
     (fp_text reference D1 (at 0 -1.09982 90) (layer F.SilkS)
       (effects (font (size 0.39878 0.39878) (thickness 0.09906)))
     )
-    (fp_text value DIODE (at 0 1.19888 90) (layer F.SilkS) hide
+    (fp_text value "" (at 0 1.19888 90) (layer F.SilkS) hide
       (effects (font (size 0.39878 0.39878) (thickness 0.09906)))
     )
     (fp_line (start 0.889 0.635) (end 0.889 0.762) (layer F.SilkS) (width 0.15))
@@ -728,14 +728,14 @@
     )
   )
 
-  (module sod323 (layer F.Cu) (tedit 542EF52B) (tstamp 5427F185)
+  (module sod323 (layer F.Cu) (tedit 54313116) (tstamp 5427F185)
     (at 164.592 104.14 90)
     (descr SOD323)
     (path /53F3AAD7)
     (fp_text reference D2 (at 0 -1.09982 90) (layer F.SilkS)
       (effects (font (size 0.39878 0.39878) (thickness 0.09906)))
     )
-    (fp_text value DIODE (at 0 1.19888 90) (layer F.SilkS) hide
+    (fp_text value "" (at 0 1.19888 90) (layer F.SilkS) hide
       (effects (font (size 0.39878 0.39878) (thickness 0.09906)))
     )
     (fp_line (start 0.889 0.635) (end 0.889 0.762) (layer F.SilkS) (width 0.15))
@@ -763,14 +763,14 @@
     )
   )
 
-  (module sod323 (layer F.Cu) (tedit 542EF52B) (tstamp 542AF62B)
+  (module sod323 (layer F.Cu) (tedit 54313120) (tstamp 542AF62B)
     (at 167.64 104.14 90)
     (descr SOD323)
     (path /53F3ACD2)
     (fp_text reference D3 (at 0 -1.09982 90) (layer F.SilkS)
       (effects (font (size 0.39878 0.39878) (thickness 0.09906)))
     )
-    (fp_text value DIODE (at 0 1.19888 90) (layer F.SilkS) hide
+    (fp_text value "" (at 0 1.19888 90) (layer F.SilkS) hide
       (effects (font (size 0.39878 0.39878) (thickness 0.09906)))
     )
     (fp_line (start 0.889 0.635) (end 0.889 0.762) (layer F.SilkS) (width 0.15))
@@ -798,14 +798,14 @@
     )
   )
 
-  (module sod323 (layer F.Cu) (tedit 542EF52B) (tstamp 542C0781)
+  (module sod323 (layer F.Cu) (tedit 54313158) (tstamp 542C0781)
     (at 180.848 95.504 180)
     (descr SOD323)
     (path /53F3ACD8)
     (fp_text reference D4 (at 0 -1.09982 180) (layer F.SilkS)
       (effects (font (size 0.39878 0.39878) (thickness 0.09906)))
     )
-    (fp_text value DIODE (at 0 1.19888 180) (layer F.SilkS) hide
+    (fp_text value "" (at 0 1.19888 180) (layer F.SilkS) hide
       (effects (font (size 0.39878 0.39878) (thickness 0.09906)))
     )
     (fp_line (start 0.889 0.635) (end 0.889 0.762) (layer F.SilkS) (width 0.15))
@@ -833,14 +833,14 @@
     )
   )
 
-  (module sod323 (layer F.Cu) (tedit 542EF52B) (tstamp 542C0740)
+  (module sod323 (layer F.Cu) (tedit 54313148) (tstamp 542C0740)
     (at 180.848 92.964 180)
     (descr SOD323)
     (path /53F3ACEC)
     (fp_text reference D5 (at 0 -1.09982 180) (layer F.SilkS)
       (effects (font (size 0.39878 0.39878) (thickness 0.09906)))
     )
-    (fp_text value DIODE (at 0 1.19888 180) (layer F.SilkS) hide
+    (fp_text value "" (at 0 1.19888 180) (layer F.SilkS) hide
       (effects (font (size 0.39878 0.39878) (thickness 0.09906)))
     )
     (fp_line (start 0.889 0.635) (end 0.889 0.762) (layer F.SilkS) (width 0.15))
@@ -868,14 +868,14 @@
     )
   )
 
-  (module sod323 (layer F.Cu) (tedit 542EF52B) (tstamp 54086CC6)
+  (module sod323 (layer F.Cu) (tedit 5431312F) (tstamp 54086CC6)
     (at 180.848 90.424 180)
     (descr SOD323)
     (path /53F3ACF3)
     (fp_text reference D6 (at 0 -1.09982 180) (layer F.SilkS)
       (effects (font (size 0.39878 0.39878) (thickness 0.09906)))
     )
-    (fp_text value DIODE (at 0 1.19888 180) (layer F.SilkS) hide
+    (fp_text value "" (at 0 1.19888 180) (layer F.SilkS) hide
       (effects (font (size 0.39878 0.39878) (thickness 0.09906)))
     )
     (fp_line (start 0.889 0.635) (end 0.889 0.762) (layer F.SilkS) (width 0.15))
@@ -903,7 +903,7 @@
     )
   )
 
-  (module pin_strip_2-90 (layer F.Cu) (tedit 542EF1F1) (tstamp 5422CAB8)
+  (module pin_strip_2-90 (layer F.Cu) (tedit 543131D0) (tstamp 5422CAB8)
     (at 181.61 100.33 90)
     (descr "Pin strip 2pin 90")
     (tags "CONN DEV")
@@ -911,7 +911,7 @@
     (fp_text reference P4 (at 0 -2.159 90) (layer F.SilkS)
       (effects (font (size 1.016 1.016) (thickness 0.2032)))
     )
-    (fp_text value CONN_2 (at 0.254 -3.556 90) (layer F.SilkS) hide
+    (fp_text value "" (at 0.254 -3.556 90) (layer F.SilkS) hide
       (effects (font (size 1.016 0.889) (thickness 0.2032)))
     )
     (fp_line (start -1.27 1.27) (end -1.27 10.16) (layer F.SilkS) (width 0.3))
@@ -938,15 +938,15 @@
     )
   )
 
-  (module BARREL_JACK (layer F.Cu) (tedit 542EFABA) (tstamp 54155EB4)
+  (module BARREL_JACK (layer F.Cu) (tedit 54313236) (tstamp 54155EB4)
     (at 157.48 76.962)
     (descr "DC Barrel Jack")
     (tags "Power Jack")
     (path /53FA2BF3)
-    (fp_text reference CON1 (at 10.09904 0 90) (layer F.SilkS)
+    (fp_text reference CON1 (at 10.09904 0 90) (layer F.SilkS) hide
       (effects (font (size 1.016 1.016) (thickness 0.2032)))
     )
-    (fp_text value BARREL_JACK (at 0 -5.99948) (layer F.SilkS) hide
+    (fp_text value "" (at 0 -5.99948) (layer F.SilkS) hide
       (effects (font (size 1.016 1.016) (thickness 0.2032)))
     )
     (fp_line (start -7.493 4.572) (end 1.016 4.572) (layer F.SilkS) (width 0.3))
@@ -1278,7 +1278,7 @@
   (segment (start 175.178302 83.438998) (end 180.4493 78.168) (width 0.254) (layer F.Cu) (net 30) (tstamp 542C5093))
   (segment (start 167.894002 83.438998) (end 175.178302 83.438998) (width 0.254) (layer F.Cu) (net 30) (tstamp 542C5087))
   (segment (start 163.6268 87.7062) (end 167.894002 83.438998) (width 0.254) (layer F.Cu) (net 30) (tstamp 542C507D))
-  (segment (start 157.48 94.996) (end 156.464 94.996) (width 1.016) (layer B.Cu) (net 31) (status 400000))
+  (segment (start 157.48 94.996) (end 156.464 94.996) (width 1.016) (layer B.Cu) (net 31))
   (segment (start 156.464 94.996) (end 155.575 94.107) (width 1.016) (layer B.Cu) (net 31) (tstamp 5430DD58))
   (segment (start 155.575 94.107) (end 155.575 85.471) (width 1.016) (layer B.Cu) (net 31) (tstamp 5430DD59))
   (segment (start 155.575 85.471) (end 156.21 84.836) (width 1.016) (layer B.Cu) (net 31) (tstamp 5430DD5A))
@@ -1332,13 +1332,13 @@
     (fill (arc_segments 16) (thermal_gap 0.508) (thermal_bridge_width 0.508))
     (polygon
       (pts
-        (xy 191.008 95.25) (xy 187.198 99.187) (xy 187.198 109.22) (xy 159.766 109.22) (xy 159.766 103.378)
+        (xy 191.008 95.377) (xy 187.198 99.187) (xy 187.198 109.093) (xy 159.766 109.22) (xy 159.766 103.378)
         (xy 153.67 103.378) (xy 153.67 72.39) (xy 187.198 72.39) (xy 187.198 77.851) (xy 191.008 81.661)
       )
     )
     (filled_polygon
       (pts
-        (xy 190.323 95.77521) (xy 189.103 97.035876) (xy 189.103 94.107) (xy 189.103 88.011) (xy 189.044996 87.719395)
+        (xy 190.323 95.882395) (xy 189.103 97.102395) (xy 189.103 94.107) (xy 189.103 88.011) (xy 189.044996 87.719395)
         (xy 188.879815 87.472185) (xy 188.879815 87.472184) (xy 187.355815 85.948185) (xy 187.108605 85.783004) (xy 187.051599 85.771664)
         (xy 187.138386 85.641779) (xy 187.22288 85.217) (xy 187.138386 84.792221) (xy 186.997921 84.582) (xy 187.138386 84.371779)
         (xy 187.22288 83.947) (xy 187.138386 83.522221) (xy 186.997921 83.312) (xy 187.138386 83.101779) (xy 187.22288 82.677)
@@ -1384,7 +1384,7 @@
         (xy 183.179539 98.933) (xy 183.30204 98.71693) (xy 183.28708 98.642723) (xy 183.02545 98.161974) (xy 182.599761 97.817941)
         (xy 182.505096 97.79) (xy 185.42 97.79) (xy 185.42 97.789999) (xy 185.711604 97.731996) (xy 185.711605 97.731996)
         (xy 185.958815 97.566815) (xy 188.879815 94.645816) (xy 188.879815 94.645815) (xy 189.044996 94.398605) (xy 189.102999 94.107001)
-        (xy 189.103 94.107) (xy 189.103 97.035876) (xy 187.071 99.13561) (xy 187.071 108.535) (xy 183.34493 108.535)
+        (xy 189.103 94.107) (xy 189.103 97.102395) (xy 187.071 99.134395) (xy 187.071 108.535) (xy 183.34493 108.535)
         (xy 183.34493 102.236245) (xy 183.34493 100.712245) (xy 183.248461 100.478771) (xy 183.069988 100.299987) (xy 182.836684 100.203111)
         (xy 182.722318 100.20301) (xy 183.02545 99.958026) (xy 183.28708 99.477277) (xy 183.30204 99.40307) (xy 183.179539 99.187)
         (xy 181.737 99.187) (xy 181.737 99.207) (xy 181.483 99.207) (xy 181.483 99.187) (xy 180.040461 99.187)
@@ -1456,7 +1456,7 @@
         (xy 157.827369 101.45736) (xy 158.211142 101.298396) (xy 158.280607 101.056212) (xy 158.280607 103.251) (xy 154.355 103.251)
         (xy 154.355 73.075) (xy 174.546976 73.075) (xy 174.505419 73.233814) (xy 175.26 73.988395) (xy 176.014581 73.233814)
         (xy 175.973023 73.075) (xy 182.166976 73.075) (xy 182.125419 73.233814) (xy 182.88 73.988395) (xy 183.634581 73.233814)
-        (xy 183.593023 73.075) (xy 187.071 73.075) (xy 187.071 77.903605) (xy 190.323 81.155605) (xy 190.323 95.77521)
+        (xy 183.593023 73.075) (xy 187.071 73.075) (xy 187.071 77.903605) (xy 190.323 81.155605) (xy 190.323 95.882395)
       )
     )
   )
@@ -1466,40 +1466,8 @@
     (fill (arc_segments 16) (thermal_gap 0.508) (thermal_bridge_width 0.508))
     (polygon
       (pts
-        (xy 191.008 92.583) (xy 187.198 96.393) (xy 187.198 109.22) (xy 159.766 109.22) (xy 159.766 103.378)
+        (xy 191.008 95.377) (xy 187.198 99.187) (xy 187.198 109.22) (xy 159.766 109.22) (xy 159.766 103.378)
         (xy 153.67 103.378) (xy 153.67 72.39) (xy 187.198 72.39) (xy 187.198 77.851) (xy 191.008 81.661)
-      )
-    )
-    (filled_polygon
-      (pts
-        (xy 170.801135 84.836) (xy 170.657185 84.932185) (xy 169.887565 85.701805) (xy 169.722384 85.949015) (xy 169.67358 86.194367)
-        (xy 169.647429 86.062894) (xy 169.454717 85.774481) (xy 169.030618 85.350382) (xy 168.742206 85.157671) (xy 168.402 85.09)
-        (xy 168.08263 85.09) (xy 168.33663 84.836) (xy 170.801135 84.836)
-      )
-    )
-    (filled_polygon
-      (pts
-        (xy 171.614312 94.030636) (xy 171.593621 94.080466) (xy 171.5934 94.333085) (xy 171.5934 94.782665) (xy 171.613259 94.83073)
-        (xy 171.593621 94.878026) (xy 171.5934 95.130645) (xy 171.5934 95.579869) (xy 171.573054 95.571421) (xy 171.320435 95.5712)
-        (xy 170.870855 95.5712) (xy 170.827882 95.588955) (xy 170.785654 95.571421) (xy 170.533035 95.5712) (xy 170.083455 95.5712)
-        (xy 170.027751 95.594216) (xy 169.972854 95.571421) (xy 169.720235 95.5712) (xy 169.270655 95.5712) (xy 169.227682 95.588955)
-        (xy 169.185454 95.571421) (xy 169.104904 95.57135) (xy 168.946195 95.73006) (xy 168.946195 95.758496) (xy 168.858397 95.846142)
-        (xy 168.821128 95.935895) (xy 168.784431 95.847081) (xy 168.721405 95.783945) (xy 168.721405 95.73006) (xy 168.562695 95.57135)
-        (xy 168.482146 95.571421) (xy 168.4274 95.594153) (xy 168.372654 95.571421) (xy 168.120035 95.5712) (xy 167.670455 95.5712)
-        (xy 167.627482 95.588955) (xy 167.585254 95.571421) (xy 167.332635 95.5712) (xy 167.259 95.5712) (xy 167.259 94.363863)
-        (xy 167.284622 94.338286) (xy 167.449313 93.941668) (xy 167.449687 93.512216) (xy 167.285689 93.115311) (xy 167.259 93.088575)
-        (xy 167.259 91.808236) (xy 167.854617 91.212619) (xy 167.854617 91.212618) (xy 167.854618 91.212618) (xy 168.047329 90.924206)
-        (xy 168.115 90.584001) (xy 168.114999 90.584) (xy 168.115 90.584) (xy 168.115 89.27465) (xy 168.153082 89.27465)
-        (xy 168.153082 89.130507) (xy 168.297184 89.274609) (xy 168.377734 89.274539) (xy 168.42613 89.254443) (xy 168.474526 89.274539)
-        (xy 168.727145 89.27476) (xy 169.176725 89.27476) (xy 169.226063 89.254373) (xy 169.274626 89.274539) (xy 169.355175 89.274609)
-        (xy 169.513885 89.1159) (xy 169.513885 89.074785) (xy 169.588983 88.999818) (xy 169.626251 88.910064) (xy 169.662949 88.998879)
-        (xy 169.738675 89.074736) (xy 169.738675 89.1159) (xy 169.897384 89.274609) (xy 169.930005 89.27458) (xy 169.646378 89.557714)
-        (xy 169.481687 89.954332) (xy 169.481554 90.106665) (xy 169.077216 90.106313) (xy 168.680311 90.270311) (xy 168.376378 90.573714)
-        (xy 168.211687 90.970332) (xy 168.211313 91.399784) (xy 168.375311 91.796689) (xy 168.678714 92.100622) (xy 169.075332 92.265313)
-        (xy 169.481664 92.265666) (xy 169.481313 92.669784) (xy 169.645311 93.066689) (xy 169.948714 93.370622) (xy 170.345332 93.535313)
-        (xy 170.774784 93.535687) (xy 171.171689 93.371689) (xy 171.475622 93.068286) (xy 171.590645 92.79128) (xy 171.5934 92.79128)
-        (xy 171.5934 93.182465) (xy 171.613259 93.23053) (xy 171.593621 93.277826) (xy 171.5934 93.530445) (xy 171.5934 93.980025)
-        (xy 171.614312 94.030636)
       )
     )
     (filled_polygon
@@ -1521,7 +1489,7 @@
     )
     (filled_polygon
       (pts
-        (xy 190.323 93.088395) (xy 188.7727 94.638695) (xy 188.7727 84.1506) (xy 188.7727 80.583) (xy 188.714696 80.291395)
+        (xy 190.323 95.882395) (xy 188.7727 97.432695) (xy 188.7727 84.1506) (xy 188.7727 80.583) (xy 188.714696 80.291395)
         (xy 188.549515 80.044185) (xy 188.549515 80.044184) (xy 185.096515 76.591185) (xy 184.849305 76.426004) (xy 184.5577 76.368)
         (xy 184.225924 76.368) (xy 184.225924 74.36052) (xy 184.197146 73.830802) (xy 184.049798 73.475072) (xy 183.814186 73.413419)
         (xy 183.059605 74.168) (xy 183.814186 74.922581) (xy 184.049798 74.860928) (xy 184.225924 74.36052) (xy 184.225924 76.368)
@@ -1597,7 +1565,7 @@
         (xy 187.138386 88.602221) (xy 186.997921 88.392) (xy 187.138386 88.181779) (xy 187.22288 87.757) (xy 187.138386 87.332221)
         (xy 186.997921 87.122) (xy 187.138386 86.911779) (xy 187.22288 86.487) (xy 187.138386 86.062221) (xy 187.066533 85.954686)
         (xy 187.235904 85.920996) (xy 187.235905 85.920996) (xy 187.483115 85.755815) (xy 188.549515 84.689416) (xy 188.549515 84.689415)
-        (xy 188.714696 84.442205) (xy 188.772699 84.1506) (xy 188.7727 84.1506) (xy 188.7727 94.638695) (xy 187.071 96.340395)
+        (xy 188.714696 84.442205) (xy 188.772699 84.1506) (xy 188.7727 84.1506) (xy 188.7727 97.432695) (xy 187.071 99.134395)
         (xy 187.071 108.535) (xy 159.893 108.535) (xy 159.893 103.251) (xy 158.889143 103.251) (xy 158.889143 100.283696)
         (xy 158.86136 99.728631) (xy 158.702396 99.344858) (xy 158.460212 99.275393) (xy 158.280607 99.454998) (xy 158.280607 99.095788)
         (xy 158.211142 98.853604) (xy 158.087652 98.809547) (xy 158.211142 98.758396) (xy 158.280607 98.516212) (xy 157.48 97.715605)
@@ -1612,7 +1580,30 @@
         (xy 158.211142 101.298396) (xy 158.280607 101.056212) (xy 158.280607 103.251) (xy 154.355 103.251) (xy 154.355 73.075)
         (xy 174.546976 73.075) (xy 174.505419 73.233814) (xy 175.26 73.988395) (xy 176.014581 73.233814) (xy 175.973023 73.075)
         (xy 182.166976 73.075) (xy 182.125419 73.233814) (xy 182.88 73.988395) (xy 183.634581 73.233814) (xy 183.593023 73.075)
-        (xy 187.071 73.075) (xy 187.071 77.903605) (xy 190.323 81.155605) (xy 190.323 93.088395)
+        (xy 187.071 73.075) (xy 187.071 77.903605) (xy 190.323 81.155605) (xy 190.323 95.882395)
+      )
+    )
+  )
+  (zone (net 0) (net_name "") (layer F.Cu) (tstamp 54312BA3) (hatch edge 0.508)
+    (connect_pads (clearance 0.508))
+    (min_thickness 0.254)
+    (keepout (tracks allowed) (vias allowed) (copperpour not_allowed))
+    (fill (arc_segments 16) (thermal_gap 0.508) (thermal_bridge_width 0.508))
+    (polygon
+      (pts
+        (xy 171.831 95.758) (xy 164.973 95.758) (xy 164.973 89.027) (xy 171.831 89.027)
+      )
+    )
+  )
+  (zone (net 0) (net_name "") (layer F.Cu) (tstamp 54312F28) (hatch edge 0.508)
+    (connect_pads (clearance 0.508))
+    (min_thickness 0.254)
+    (keepout (tracks allowed) (vias allowed) (copperpour not_allowed))
+    (fill (arc_segments 16) (thermal_gap 0.508) (thermal_bridge_width 0.508))
+    (polygon
+      (pts
+        (xy 168.021 84.582) (xy 171.196 84.582) (xy 171.196 84.963) (xy 170.18 85.979) (xy 169.291 85.979)
+        (xy 168.529 85.344) (xy 167.259 85.344) (xy 168.021 84.582)
       )
     )
   )
