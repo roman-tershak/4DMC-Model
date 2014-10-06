@@ -15,7 +15,7 @@
   (page A3)
   (layers
     (15 F.Cu signal)
-    (0 B.Cu signal hide)
+    (0 B.Cu signal)
     (16 B.Adhes user)
     (17 F.Adhes user)
     (18 B.Paste user)
@@ -59,7 +59,7 @@
     (aux_axis_origin 153.67 72.39)
     (visible_elements 7FFFFBFF)
     (pcbplotparams
-      (layerselection 3178497)
+      (layerselection 284196865)
       (usegerberextensions true)
       (excludeedgelayer true)
       (linewidth 0.150000)
@@ -81,9 +81,9 @@
       (subtractmaskfromsilk false)
       (outputformat 1)
       (mirror false)
-      (drillshape 1)
+      (drillshape 0)
       (scaleselection 1)
-      (outputdirectory ""))
+      (outputdirectory D:/Tests/workspace/4DMC-Model/Firmware/cc-pcb/cc-pcb/))
   )
 
   (net 0 "")
