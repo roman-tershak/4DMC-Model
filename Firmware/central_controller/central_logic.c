@@ -95,14 +95,14 @@ static uint8_t get_initial_color_for_side(uint8_t side_num)
 {
     switch (side_num)
     {
-        case SIDE_XL: return 0;
-        case SIDE_XR: return 1;
-        case SIDE_YL: return 2;
-        case SIDE_YR: return 3;
-        case SIDE_ZL: return 4;
-        case SIDE_ZR: return 5;
-        case SIDE_CF: return 6;
-        case SIDE_CB: return 7;
+        case SIDE_XL: return BLUE;
+        case SIDE_XR: return LIGHT_BLUE;
+        case SIDE_YL: return GREEN;
+        case SIDE_YR: return YELLOW;
+        case SIDE_ZL: return ORANGE;
+        case SIDE_ZR: return RED;
+        case SIDE_CF: return PINK;
+        case SIDE_CB: return PURPLE;
         default: return 0;
     }
 }

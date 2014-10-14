@@ -38,7 +38,7 @@ static const uint8_t COLOR_MATRIX[16][3] =
     {43, 16,  0},   // orange
     {30,  0,  0},   // red
     {30,  0, 15},   // pink
-    {30, 10, 40},   // white-pink
+    {30, 10, 40},   // purple
     /* Transitioning colors */
     { 0,  0, 14},   // dim blue
     { 0, 11,  7},   // dim light blue
@@ -47,7 +47,7 @@ static const uint8_t COLOR_MATRIX[16][3] =
     {17,  7,  0},   // dim orange
     {12,  0,  0},   // dim red
     {12,  0,  6},   // dim pink
-    {12,  4, 16}    // dim white-pink
+    {12,  4, 16}    // dim purple
 };
 
 

@@ -4,6 +4,16 @@
 #include <stdio.h>
 #include "hardware.h"
 
+// Color names and numbers
+#define BLUE        0
+#define LIGHT_BLUE  1
+#define GREEN       2
+#define YELLOW      3
+#define ORANGE      4
+#define RED         5
+#define PINK        6
+#define PURPLE      7
+
 #ifdef __cplusplus
  extern "C" {
 #endif
