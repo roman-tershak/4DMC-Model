@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by CvPcb (2014-01-10 BZR 4027)-stable date = Friday, October 24, 2014 12:55:45 PM
+Cmp-Mod V01 Created by CvPcb (2013-07-07 BZR 4022)-stable date = 03.11.2014 17:04:39
 
 BeginCmp
 TimeStamp = /53FCF596;
@@ -79,23 +79,58 @@ EndCmp
 
 BeginCmp
 TimeStamp = /5411AEED;
-Reference = P4;
+Reference = P2;
 ValeurCmp = CONN_2;
-IdModule  = pin_strip_2-90;
+IdModule  = XH2.54_2-90;
 EndCmp
 
 BeginCmp
-TimeStamp = /53FA2625;
+TimeStamp = /54551C83;
 Reference = P5;
-ValeurCmp = CONN_6;
-IdModule  = PIN_ARRAY-6X1;
+ValeurCmp = CONN_1;
+IdModule  = PINTST;
 EndCmp
 
 BeginCmp
-TimeStamp = /53FCECA3;
+TimeStamp = /54551C74;
 Reference = P6;
-ValeurCmp = CONN_6;
-IdModule  = pin_array_3x2;
+ValeurCmp = CONN_1;
+IdModule  = PINTST;
+EndCmp
+
+BeginCmp
+TimeStamp = /54551C65;
+Reference = P7;
+ValeurCmp = CONN_1;
+IdModule  = PINTST;
+EndCmp
+
+BeginCmp
+TimeStamp = /545798A5;
+Reference = P8;
+ValeurCmp = CONN_1;
+IdModule  = PINTST;
+EndCmp
+
+BeginCmp
+TimeStamp = /545798B4;
+Reference = P9;
+ValeurCmp = CONN_1;
+IdModule  = PINTST;
+EndCmp
+
+BeginCmp
+TimeStamp = /545798CD;
+Reference = P10;
+ValeurCmp = CONN_1;
+IdModule  = PINTST;
+EndCmp
+
+BeginCmp
+TimeStamp = /545798DC;
+Reference = P11;
+ValeurCmp = CONN_1;
+IdModule  = PINTST;
 EndCmp
 
 BeginCmp
