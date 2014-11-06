@@ -77,7 +77,7 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
 Title "cc-schema.sch"
-Date "3 nov 2014"
+Date "4 nov 2014"
 Rev ""
 Comp ""
 Comment1 ""
@@ -498,7 +498,7 @@ Wire Wire Line
 Wire Wire Line
 	6600 2500 6600 2800
 Wire Wire Line
-	6600 3200 6600 3800
+	6600 3200 6600 4200
 Wire Wire Line
 	4200 2400 6900 2400
 Wire Wire Line
@@ -561,8 +561,6 @@ Wire Wire Line
 	6100 3900 8600 3900
 Wire Wire Line
 	6900 3100 6900 4000
-Wire Wire Line
-	7200 3000 7200 4200
 $Comp
 L CONN_1 P7
 U 1 1 54551C65
@@ -641,11 +639,7 @@ F 3 "" H 2650 6000 60  0000 C CNN
 	-1   0    0    1   
 $EndComp
 Wire Wire Line
-	6600 3800 8600 3800
-Wire Wire Line
 	6900 4000 8600 4000
-Wire Wire Line
-	7200 4200 8600 4200
 Wire Wire Line
 	6200 3050 6200 3700
 Wire Wire Line
@@ -658,4 +652,10 @@ Wire Wire Line
 	6400 2850 6400 3300
 Wire Wire Line
 	6400 3300 8600 3300
+Wire Wire Line
+	7200 3000 7200 3800
+Wire Wire Line
+	7200 3800 8600 3800
+Wire Wire Line
+	6600 4200 8600 4200
 $EndSCHEMATC
