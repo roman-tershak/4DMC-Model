@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by CvPcb (2013-07-07 BZR 4022)-stable date = 03.11.2014 17:04:39
+Cmp-Mod V01 Created by CvPcb (2013-07-07 BZR 4022)-stable date = 09.11.2014 12:10:21
 
 BeginCmp
 TimeStamp = /53FCF596;
@@ -85,51 +85,58 @@ IdModule  = XH2.54_2-90;
 EndCmp
 
 BeginCmp
+TimeStamp = /545F3974;
+Reference = P4;
+ValeurCmp = GND;
+IdModule  = PINTST;
+EndCmp
+
+BeginCmp
 TimeStamp = /54551C83;
 Reference = P5;
-ValeurCmp = CONN_1;
+ValeurCmp = DTR;
 IdModule  = PINTST;
 EndCmp
 
 BeginCmp
 TimeStamp = /54551C74;
 Reference = P6;
-ValeurCmp = CONN_1;
+ValeurCmp = TXD;
 IdModule  = PINTST;
 EndCmp
 
 BeginCmp
 TimeStamp = /54551C65;
 Reference = P7;
-ValeurCmp = CONN_1;
+ValeurCmp = RXD;
 IdModule  = PINTST;
 EndCmp
 
 BeginCmp
 TimeStamp = /545798A5;
 Reference = P8;
-ValeurCmp = CONN_1;
+ValeurCmp = RST;
 IdModule  = PINTST;
 EndCmp
 
 BeginCmp
 TimeStamp = /545798B4;
 Reference = P9;
-ValeurCmp = CONN_1;
+ValeurCmp = MOSI;
 IdModule  = PINTST;
 EndCmp
 
 BeginCmp
 TimeStamp = /545798CD;
 Reference = P10;
-ValeurCmp = CONN_1;
+ValeurCmp = SCK;
 IdModule  = PINTST;
 EndCmp
 
 BeginCmp
 TimeStamp = /545798DC;
 Reference = P11;
-ValeurCmp = CONN_1;
+ValeurCmp = MISO;
 IdModule  = PINTST;
 EndCmp
 
