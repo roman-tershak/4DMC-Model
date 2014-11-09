@@ -1,7 +1,7 @@
 (export (version D)
   (design
     (source D:/Tests/workspace/4DMC-Model/Firmware/cc-pcb/cc-pcb/cc-pcb-1.27.sch)
-    (date "09.11.2014 12:09:48")
+    (date "09.11.2014 12:48:33")
     (tool "eeschema (2013-07-07 BZR 4022)-stable"))
   (components
     (comp (ref IC1)
