@@ -3,3 +3,6 @@ KiCad Libs
 cc-pcb-1.27.kicad_pcb-bak
 cc-pcb-1.27.bak
 gerber-files
+*.blend1
+*.blend2
+*.blend3
