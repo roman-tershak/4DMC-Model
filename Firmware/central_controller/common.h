@@ -26,7 +26,7 @@
 #define ALL_COLOR_COUNT         16
 
 /* All LEDs go in pairs */
-#define DOUBLE_LEDS
+//#define DOUBLE_LEDS
 #define CB_ABSENT_CUBIE_NUM     13
 
 /* Debug directives */
