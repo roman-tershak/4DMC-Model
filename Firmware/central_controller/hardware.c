@@ -31,7 +31,7 @@ void init_ports(void)
     dir_out(SCE);
     dir_out(SCF);
     dir_out(SCG);
-    // TODO dir_out(SCH);
+    dir_out(SCH);
 
 #ifdef USART_DEBUG
     // For debug purposes
@@ -49,7 +49,7 @@ void init_ports(void)
     res_pin(SCE);
     res_pin(SCF);
     res_pin(SCG);
-    // TODO 7/8 sides? res_pin(SCH);
+    res_pin(SCH);
 
     // Reset all swicthes pins to 1
     set_pin(SPA);

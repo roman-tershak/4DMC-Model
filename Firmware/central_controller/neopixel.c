@@ -31,6 +31,31 @@ void __builtin_avr_delay_cycles(uint32_t __n) {
 static const uint8_t COLOR_MATRIX[16][3] = 
 {
     /* Main colors */
+/*    { 0,  0, 175},   // blue
+    { 0, 145, 80},   // light blue
+    { 0, 170,  0},   // green
+    {175, 175,  0},   // yellow
+    {215, 80,  0},   // orange
+    {150,  0,  0},   // red
+    {150,  0, 75},   // pink
+    {150, 50, 200},   // purple*/
+    /* Looks like the below colors are the best so far */
+    { 0,  0, 140},   // blue
+    { 0, 116, 64},   // light blue
+    { 0, 136,  0},   // green
+    {140, 140,  0},   // yellow
+    {172, 64,  0},   // orange
+    {120,  0,  0},   // red
+    {120,  0, 60},   // pink
+    {120, 40, 160},   // purple
+/*    { 0,  0, 105},   // blue
+    { 0, 87, 48},   // light blue
+    { 0, 102,  0},   // green
+    {105, 105,  0},   // yellow
+    {129, 48,  0},   // orange
+    {90,  0,  0},   // red
+    {90,  0, 45},   // pink
+    {90, 30, 120},   // purple*/
 /*    { 0,  0, 70},   // blue
     { 0, 58, 32},   // light blue
     { 0, 68,  0},   // green
@@ -39,24 +64,15 @@ static const uint8_t COLOR_MATRIX[16][3] =
     {60,  0,  0},   // red
     {60,  0, 30},   // pink
     {60, 20, 80},   // purple*/
-    /* Transitioning colors */
-/*    { 0,  0, 14},   // dim blue
-    { 0, 11,  7},   // dim light blue
-    { 0, 13,  0},   // dim green
-    {14, 14,  0},   // dim yellow
-    {17,  7,  0},   // dim orange
-    {12,  0,  0},   // dim red
-    {12,  0,  6},   // dim pink
-    {12,  4, 16}    // dim purple*/
     /* Main colors */
-    { 0,  0, 35},   // blue
+/*    { 0,  0, 35},   // blue
     { 0, 29, 16},   // light blue
     { 0, 34,  0},   // green
     {35, 35,  0},   // yellow
     {43, 16,  0},   // orange
     {30,  0,  0},   // red
     {30,  0, 15},   // pink
-    {30, 10, 40},   // purple
+    {30, 10, 40},   // purple*/
     /* Transitioning colors */
     { 0,  0, 14},   // dim blue
     { 0, 11,  7},   // dim light blue
