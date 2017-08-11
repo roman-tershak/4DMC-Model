@@ -688,8 +688,7 @@ void change_phase_cycle_counters(uint8_t faster, uint8_t slower)
             index += index_d;
 
             rotation_phase_1_cycles = rotation_phase_cycles[index][0];
-            rotation_phase_2_cycles = rotation_phase_cycles[index][1];
-            rotation_phase_f_cycles = rotation_phase_cycles[index][2];
+            rotation_phase_f_cycles = rotation_phase_cycles[index][1];
         }
     }
 }
