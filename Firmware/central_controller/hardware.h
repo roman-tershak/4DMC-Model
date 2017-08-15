@@ -63,6 +63,10 @@
 #define SPF_DDR DDRB
 #define SPF_MASK _BV(PORTB5)
 
+#define SPG_PORT PORTB
+#define SPG_DDR DDRB
+#define SPG_MASK _BV(PORTB6)
+
 
 // Switches input ports. They read a side switches states in the switches matrix
 #define SI0_PIN PINC

@@ -90,14 +90,14 @@ static const uint8_t COLOR_MATRIX[16][3] =
 
 uint8_t color_matrix_adjust[9][3] =
 {
-    { 0,  0, 35},   // blue
-    { 0, 29, 16},   // light blue
-    { 0, 34,  0},   // green
-    {35, 35,  0},   // yellow
-    {43, 16,  0},   // orange
-    {30,  0,  0},   // red
-    {30,  0, 15},   // pink
-    {30, 10, 40},   // white-pink
+    { 0,  0, 140},   // blue
+    { 0, 116, 64},   // light blue
+    { 0, 136,  0},   // green
+    {140, 140,  0},   // yellow
+    {172, 64,  0},   // orange
+    {120,  0,  0},   // red
+    {120,  0, 60},   // pink
+    {120, 40, 160},   // purple
     {0,   0,  0}
 };
 
@@ -225,11 +225,13 @@ void light_side_color(uint8_t side_num, uint8_t* colors)
 
     for (i = 0; i < SIDE_CUBES_COUNT; i++)
     {
+#ifdef ABSENT_CUBIE
 #if LIGHT_SIDE_COUNT == SIDE_COUNT
         if (side_num == SIDE_CB && i == CB_ABSENT_CUBIE_NUM)
         {
             continue;
         }
+#endif
 #endif
 
 #ifdef DOUBLE_LEDS

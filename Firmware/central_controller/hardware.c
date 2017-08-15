@@ -10,6 +10,7 @@ void init_ports(void)
     dir_out(SPD);
     dir_out(SPE);
     dir_out(SPF);
+    dir_out(SPG);
 
     dir_in(SI0);
     dir_in(SI1);
@@ -58,6 +59,7 @@ void init_ports(void)
     set_pin(SPD);
     set_pin(SPE);
     set_pin(SPF);
+    set_pin(SPG);
 
     // Enable pull-ups for all SI pins as well as for SRS.
     // PUD bit in MCUCR register by default is 0, meaning that all pull-ups are enabled by default.
