@@ -17,7 +17,7 @@
 #define SIDE_CB  7
 
 #define SIDE_COUNT        8
-#define SIDE_CUBES_COUNT  27
+#define SIDE_CUBES_COUNT  8
 
 #define LIGHT_SIDE_COUNT  (SIDE_COUNT)
 
@@ -27,7 +27,8 @@
 
 /* All LEDs go in pairs */
 //#define DOUBLE_LEDS
-#define CB_ABSENT_CUBIE_NUM     13
+//#define ABSENT_CUBIE
+//#define CB_ABSENT_CUBIE_NUM     13
 
 /* Debug directives */
 //#define DEBUG_COLOR_ADJUST

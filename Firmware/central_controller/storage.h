@@ -6,11 +6,11 @@
 #define EEPROM_SIZE                   1024
 
 #define SAFETABLE_START_ADDRESS       0x0
-#define SAFETABLE_LEN                 48
+#define SAFETABLE_LEN                 144
 
 #define STATE_STORAGE_START_ADDRESS   (SAFETABLE_LEN)
 #define STATE_STORAGE_LEN             (EEPROM_SIZE - SAFETABLE_LEN)
-#define STATE_BANK_LEN                81
+#define STATE_BANK_LEN                24
 #define STATE_BANK_COUNT              (STATE_STORAGE_LEN / STATE_BANK_LEN)
 
 // Used in the storage
