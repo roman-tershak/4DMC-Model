@@ -579,16 +579,16 @@ static void rotate_z_dir_cw(uint8_t side_num)
  *           (side_yr) z y                                                      x___                                      
  *                      \|                                                          |\                                    
  *                   x<--                                                           | \z                                  
- * (side_xl)                               ^X (side_xr)                             y                     z  X   (side_xr)
- *      Z ___                              |                        (side_xl)              |Z              \ |            
- *           |\                            |___Z                             ___Y          |____Y           \|___Y        
- *           | Y            |Y              \                               |\              \ (side_cf)                   
- *           vX             |                Y                              | \Z             \X                           
- *                           ---->X                                         vX                                            
- *                           \   (side_yl)                                                         ^Y                     
- *                            Z                                                                    |                      
- *                       x^                                                                        |                      
- *                         \___Y                                                          X         ---->X                
+ * (side_xl)                |Z             ^X (side_xr)                             y                     z  X  (side_xr)
+ *      Z ___               |  (side_cf)   |                        (side_xl)              |Z              \ |               X\
+ *           |\              --->X         |___Z                             ___Y          |____Y           \|___Y             \___Y
+ *           | Y             \              \                               |\              \ (side_cf)                        |   (side_cb)
+ *           vX               \Y             Y                              | \Z             \X                                |Z
+ *                                |Y                                        vX                                            
+ *                                |                                                                ^Y                     
+ *                                 ---->X                                                          |                      
+ *                       x^        \   (side_yl)                                                   |                      
+ *                         \___Y    \Z                                                    X         ---->X                
  *                         |                                                              |         \  (side_yl)          
  *               (side_zl)  Z                                                             |___Z      Z                    
  *                                                                              (side_zl)  \                              
@@ -638,7 +638,14 @@ static const rotation_func_ptr_type ROTATION_FUNC_MATRIX[] =
     /* SIDE_ZR , (ROTATION_Y | DIR_CCW)  */ rotate_z_dir_cw,
     /* SIDE_ZR , (ROTATION_Y | DIR_CW)   */ rotate_z_dir_ccw,
     /* SIDE_ZR , (ROTATION_Z | DIR_CCW)  */ rotate_x_dir_ccw,
-    /* SIDE_ZR , (ROTATION_Z | DIR_CW)   */ rotate_x_dir_cw
+    /* SIDE_ZR , (ROTATION_Z | DIR_CW)   */ rotate_x_dir_cw,
+
+    /* SIDE_CF , (ROTATION_X | DIR_CCW)  */ rotate_y_dir_ccw,
+    /* SIDE_CF , (ROTATION_X | DIR_CW)   */ rotate_y_dir_cw,
+    /* SIDE_CF , (ROTATION_Y | DIR_CCW)  */ rotate_x_dir_ccw,
+    /* SIDE_CF , (ROTATION_Y | DIR_CW)   */ rotate_x_dir_cw,
+    /* SIDE_CF , (ROTATION_Z | DIR_CCW)  */ rotate_z_dir_ccw,
+    /* SIDE_CF , (ROTATION_Z | DIR_CW)   */ rotate_z_dir_cw
 };
 
 
