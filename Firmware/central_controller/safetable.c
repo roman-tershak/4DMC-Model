@@ -7,6 +7,7 @@ uint32_t read_safetable_record_num(void)
 {
     uint8_t i;
     uint32_t record_num_max;
+    // In-memory buffer for the safetable
     static uint32_t safetable[SAFETABLE_RECORD_COUNT];
     // Read the whole safetable
     eeprom_read_block((void*) safetable, (const void*) SAFETABLE_START_ADDRESS, SAFETABLE_LEN);
@@ -15,9 +16,9 @@ uint32_t read_safetable_record_num(void)
     for (i = 0; i < SAFETABLE_RECORD_COUNT; i++)
     {
         if (safetable[i] > record_num_max)
-            record_num_max = safetable[i];
+            record_num_max = safetable[i]; // store the current max
     }
-    return record_num_max;
+    return record_num_max; // the max value (the latest bank used)
 }
 
 void store_safetable_record_num(uint32_t record_num)
