@@ -122,12 +122,12 @@ static void pack_unpack_colors(uint8_t what)
         for (j = 0; j < SIDE_CUBES_COUNT; j++)
         {
             //   0          1           2          3           4           5
-            // |xxx,xxx,xx|x,xxx,xxx,x|xx,xxx,xxx|,xxx,xxx,xx|x,xxx,xxx,x|xx,...
+            // |xxx,xxx,xx|x,xxx,xxx,x|xx,xxx,xxx,|xxx,xxx,xx|x,xxx,xxx,x|xx,...
             //   0   1   2    3   4   5    6   7    8   9  10   11  12   13   
             buff_byte_index = buff_bit_index / 8;
             byte_bit_index = buff_bit_index % 8;
 
-            // 'data' will contain this and the subsequent bytes
+            // 'data' will contain this and the next byte
             data = 0;
             data |= colors_packed_buff[buff_byte_index];
             data |= ((uint16_t) colors_packed_buff[buff_byte_index + 1]) << 8;
@@ -169,7 +169,7 @@ static uint8_t check_side_states(void)
     }
     for (i = 0; i < MAIN_COLOR_COUNT; i++)
     {
-        // Different colors should be SIDE_CUBES_COUNT each
+        // There should be exactly SIDE_CUBES_COUNT stickers of each color
         if (color_counts[i] != SIDE_CUBES_COUNT)
             return FALSE;
     }
