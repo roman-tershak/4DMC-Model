@@ -19,6 +19,7 @@
 #endif
 
 /* Hardware NeoPixel LED Functions */
+void light_color_buff(uint8_t pin_mask, uint8_t* color_buff_ptr, uint8_t color_buff_len)
 void light_side_color(uint8_t side_num, uint8_t *colors);
 
 #ifdef DEBUG_COLOR_ADJUST

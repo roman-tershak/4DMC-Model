@@ -83,7 +83,9 @@ void init_timer1(void)
 
 port_pin_t get_side_led_pin(uint8_t side_num)
 {
-    switch (side_num)
+    return SCA_PIN;
+
+/*    switch (side_num)
     {
         case SIDE_XL: return SCA_PIN;
         case SIDE_XR: return SCB_PIN;
@@ -93,7 +95,7 @@ port_pin_t get_side_led_pin(uint8_t side_num)
         case SIDE_ZR: return SCF_PIN;
         case SIDE_CF: return SCG_PIN;
         case SIDE_CB: return SCH_PIN;
-    }
+    }*/
 }
 
 

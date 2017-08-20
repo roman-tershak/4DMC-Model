@@ -38,6 +38,36 @@ static const uint8_t DEPENDENCY_MATRIX[] =
 };
 
 
+/*
+ *                            (side_zr)
+ *                       y   x
+ *                        \ |
+ *                         \| 
+ *   (side_yr)        z<----
+ *             x___
+ *                 |\
+ *                 | \z
+ *                 y                     z  X   (side_xr)      x  (side_cb)
+ * (side_xl)              |Z              \ |                   \
+ *          ___Y          |____Y           \|___Y                \ ___Y
+ *         |\              \ (side_cf)                            |
+ *         | \Z             \X                                    |
+ *         vX                                                     vZ
+ *                                ^Y
+ *                                |
+ *                                |
+ *                       X         ---->X
+ *                       |         \  (side_yl)
+ *                       |___Z      Z
+ *             (side_zl)  \
+ *                         \Y
+ *
+ */
+static const uint8_t LED_TO_STICKERS_MATRIX[STICKER_COUNT][2] = 
+{
+    {},
+};
+
 volatile Side_State sides_states[SIDE_COUNT];
 
 static uint8_t faster = FALSE;
@@ -293,7 +323,8 @@ static uint8_t send_colors_to_usart(uint8_t sn, uint8_t *colors)
 
 void sides_colors_changed(void)
 {
-    uint8_t sn;
+    // In-memory buffer for all stickers colors
+    static uint8_t color_buff[STICKER_COUNT];
 
 #ifdef USART_DEBUG
 #ifndef DEBUG_COLOR_ADJUST
@@ -301,22 +332,31 @@ void sides_colors_changed(void)
 #endif
 #endif
 
+    uint8_t sn, i, *buff_ptr, *led2st_ptr;
+    uint8_t pin_mask = _BV(get_side_led_pin(0));
+
+    buff_ptr = color_buff;
+    led2st_ptr = LED_TO_STICKERS_MATRIX[0];
+
+    for (i = 0; i < STICKER_COUNT; i++)
+    {
+        *buff_ptr++ = sides_states[*led2st_ptr++].colors[*led2st_ptr++];
+    }
+
+    light_color_buff(pin_mask, color_buff, STICKER_COUNT);
+
+
+#ifdef USART_DEBUG
+#ifndef DEBUG_COLOR_ADJUST
     for (sn = 0; sn < LIGHT_SIDE_COUNT; sn++)
     {
         // Send new colors to side
         light_side_color(sn, sides_states[sn].colors);
 
-#ifdef USART_DEBUG
-#ifndef DEBUG_COLOR_ADJUST
         // if (!send_colors_to_usart(sn, sides_states[sn].colors))
         //     ok = FALSE;
-#endif
-#endif
 
     }
-
-#ifdef USART_DEBUG
-#ifndef DEBUG_COLOR_ADJUST
     // if (ok)
     // {
     //     USART_transmit(0xff);

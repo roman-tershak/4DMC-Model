@@ -217,6 +217,26 @@ static void show(uint8_t pin_mask)
     DELAY_CYCLES(NS_TO_CYCLES(RES));               
 }
 
+void light_color_buff(uint8_t pin_mask, uint8_t* color_buff_ptr, uint8_t color_buff_len)
+{
+    uint8_t *rgb_color_matrix_ptr, *color_buff_end;
+
+    color_buff_end = color_buff_ptr + color_buff_len;
+    
+    while (color_buff_ptr < color_buff_end)
+    {
+        rgb_color_matrix_ptr = COLOR_MATRIX[*color_buff_ptr++];
+
+        // Note: Follow the order of GRB to sent data and the high bit sent at first. 
+        send_byte(pin_mask, rgb_color_matrix_ptr[1]);
+        send_byte(pin_mask, rgb_color_matrix_ptr[0]);
+        send_byte(pin_mask, rgb_color_matrix_ptr[2]);
+
+    }
+    show(pin_mask);
+
+}
+
 void light_side_color(uint8_t side_num, uint8_t* colors)
 {
     uint8_t i, j;

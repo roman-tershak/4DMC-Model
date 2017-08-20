@@ -18,6 +18,7 @@
 
 #define SIDE_COUNT        8
 #define SIDE_CUBES_COUNT  8
+#define STICKER_COUNT     (SIDE_COUNT * SIDE_CUBES_COUNT)
 
 #define LIGHT_SIDE_COUNT  (SIDE_COUNT)
 
