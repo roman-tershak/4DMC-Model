@@ -24,7 +24,7 @@ void store_safetable_record_num(uint32_t record_num)
 {
     uint8_t *record_num_address = SAFETABLE_START_ADDRESS + 
             (record_num % SAFETABLE_RECORD_COUNT) * SAFETABLE_RECORD_LEN;
-    // record_num's are writen sequentionally
+    // record_num's are written sequentially
     eeprom_write_dword((uint32_t*) record_num_address, record_num);
 }
 
