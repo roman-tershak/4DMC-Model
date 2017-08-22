@@ -39,28 +39,28 @@ static const uint8_t DEPENDENCY_MATRIX[] =
 
 
 /*
- *                            (side_zr)
- *                       y   x
- *                        \ |
- *                         \| 
- *   (side_yr)        z<----
- *             x___
- *                 |\
- *                 | \z
- *                 y                     z  X   (side_xr)      x  (side_cb)
- * (side_xl)              |Z              \ |                   \
- *          ___Y          |____Y           \|___Y                \ ___Y
- *         |\              \ (side_cf)                            |
- *         | \Z             \X                                    |
- *         vX                                                     vZ
- *                                ^Y
- *                                |
- *                                |
- *                       X         ---->X
- *                       |         \  (side_yl)
- *                       |___Z      Z
- *             (side_zl)  \
- *                         \Y
+ *                                                                                                  (side_zr)
+ *                                                                                             y   x
+ *                                                 _ 13                                         \ |
+ *                                 ____    ----     **                                           \| 
+ *                  6__  ------                    *                       (side_yr)        z<----
+ *                 *                              *                                  x___
+ *                *                              *    *                                  |\
+ *               *                       _12    14                                       | \z
+ *              *              7 _ ----   *   --*                                        y                     z  X   (side_xr)      x  (side_cb)
+ *             5__  -----      *         * |           *                 (side_xl)              |Z              \ |                   \
+ *             *              * |     __15                                        ___Y          |____Y           \|___Y                \ ___Y
+ *                           4_ -----     _11    *                               |\              \ (side_cf)                            |
+ *                              8_  ---  | *            *                        | \Z             \X                                    |
+ *              *            |  *         *                                      vX                                                     vZ
+ *                             *      ___16       *  ___ 10                                             ^Y
+ *                            3_ ---____    -----       *                                               |
+ *               *      9__  -----                     *                                                |
+ *                     *                           *  *                                        X         ---->X
+ *                    *                              *                                         |         \  (side_yl)
+ *                *  *                          ___ 1                                          |___Z      Z
+ *                  *         _____    -----                                         (side_zl)  \
+ *                 2_ -----                                                                      \Y
  *
  */
 static const uint8_t LED_TO_STICKERS_MATRIX[STICKER_COUNT][2] = 
