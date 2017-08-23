@@ -19,7 +19,7 @@ static const uint8_t rotation_phase_cycles[][2] =
     {0, 16},  // The slowest set
     {0, 11},  // Middle
     {0, 7},   // Fast
-    {0, 4}     // The fastest set
+    {0, 4}    // The fastest set
 };
 
 static uint8_t rotation_phase_1_cycles = rotation_phase_cycles[0][0];

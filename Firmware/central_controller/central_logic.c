@@ -22,8 +22,6 @@ static void reset_sides_states(void);
 static uint8_t get_initial_color_for_side(uint8_t side_num);
 
 static void handle_idle_cycle(uint8_t idle_cycle, uint8_t rotating);
-static void move_faster(void);
-static void move_slower(void);
 
 
 static const uint8_t DEPENDENCY_MATRIX[] = 
@@ -34,11 +32,30 @@ static const uint8_t DEPENDENCY_MATRIX[] =
     (_BV(SIDE_XL) | _BV(SIDE_XR) | _BV(SIDE_ZL) | _BV(SIDE_ZR) | _BV(SIDE_CF) | _BV(SIDE_CB)), // For SIDE_YR
     (_BV(SIDE_XL) | _BV(SIDE_XR) | _BV(SIDE_YL) | _BV(SIDE_YR) | _BV(SIDE_CF) | _BV(SIDE_CB)), // For SIDE_ZL
     (_BV(SIDE_XL) | _BV(SIDE_XR) | _BV(SIDE_YL) | _BV(SIDE_YR) | _BV(SIDE_CF) | _BV(SIDE_CB)), // For SIDE_ZR
-    (_BV(SIDE_XL) | _BV(SIDE_XR) | _BV(SIDE_YL) | _BV(SIDE_YR) | _BV(SIDE_ZL) | _BV(SIDE_ZR))  // For SIDE_CF
+    (_BV(SIDE_XL) | _BV(SIDE_XR) | _BV(SIDE_YL) | _BV(SIDE_YR) | _BV(SIDE_ZL) | _BV(SIDE_ZR)), // For SIDE_CF
+    (_BV(SIDE_XL) | _BV(SIDE_XR) | _BV(SIDE_YL) | _BV(SIDE_YR) | _BV(SIDE_ZL) | _BV(SIDE_ZR))  // For SIDE_CB
 };
 
 
 /*
+ *   This is one side cubies local orientation. Each side has its own orientation of XYZ axes
+ *
+ *                                                                      v
+ *                                                                      |
+ *                                                                      |
+ *                                                                     .*
+ *                                                                   . * .
+ *            ^Y                                                   .  * .
+ *            |                                                  .   *     .
+ *            |  2          3                                  .    *   .
+ *            |                                              .   1 *    4 _ -*
+ *            |                                            .      @  _-@-   *
+ *            |6          7                              .      _*--    .  @ 3  .
+ *            |  0          1                          .   _ -- *  .       .*
+ *              -------------->X                     . _--   . *             *.   .
+ *           /                                     ._-  .          *      *      .
+ *          /  4          5                    <--*                    @ 2          .
+ *         Z
  *                                                                                                  (side_zr)
  *                                                                                             y   x
  *                                                 _ 13                                         \ |
@@ -47,9 +64,9 @@ static const uint8_t DEPENDENCY_MATRIX[] =
  *                 *                              *                                  x___
  *                *                              *    *                                  |\
  *               *                       _12    14                                       | \z
- *              *              7 _ ----   *   --*                                        y                     z  X   (side_xr)      x  (side_cb)
+ *              *              7 _ ----   *   --*                                        y                     z  X   (side_xr)      x  (side_cb, inverted)
  *             5__  -----      *         * |           *                 (side_xl)              |Z              \ |                   \
- *             *              * |     __15                                        ___Y          |____Y           \|___Y                \ ___Y
+ *             *              * |     __15                                        ___Y          |____Y           \|___Y           Y~___\
  *                           4_ -----     _11    *                               |\              \ (side_cf)                            |
  *                              8_  ---  | *            *                        | \Z             \X                                    |
  *              *            |  *         *                                      vX                                                     vZ
@@ -65,7 +82,22 @@ static const uint8_t DEPENDENCY_MATRIX[] =
  */
 static const uint8_t LED_TO_STICKERS_MATRIX[STICKER_COUNT][2] = 
 {
-    {},
+    {SIDE_ZL, 6}, {SIDE_CB, 4}, {SIDE_XR, 2}, {SIDE_YL, 5}, // corner 1
+    {SIDE_ZL, 2}, {SIDE_XL, 5}, {SIDE_CB, 6}, {SIDE_YL, 4}, // corner 2
+    {SIDE_YL, 0}, {SIDE_CF, 1}, {SIDE_ZL, 3}, {SIDE_XL, 7}, // corner 3
+    {SIDE_YL, 2}, {SIDE_ZR, 4}, {SIDE_CF, 5}, {SIDE_XL, 6}, // corner 4
+    {SIDE_XL, 4}, {SIDE_CB, 2}, {SIDE_YL, 6}, {SIDE_ZR, 5}, // corner 5
+    {SIDE_XL, 0}, {SIDE_YR, 1}, {SIDE_CB, 3}, {SIDE_ZR, 7}, // corner 6
+    {SIDE_YR, 5}, {SIDE_CF, 4}, {SIDE_ZR, 6}, {SIDE_XL, 2}, // corner 7
+    {SIDE_, }, {SIDE_, }, {SIDE_, }, {SIDE_, }, // corner 8
+    {SIDE_, }, {SIDE_, }, {SIDE_, }, {SIDE_, }, // corner 9
+    {SIDE_, }, {SIDE_, }, {SIDE_, }, {SIDE_, }, // corner 10
+    {SIDE_, }, {SIDE_, }, {SIDE_, }, {SIDE_, }, // corner 11
+    {SIDE_, }, {SIDE_, }, {SIDE_, }, {SIDE_, }, // corner 12
+    {SIDE_, }, {SIDE_, }, {SIDE_, }, {SIDE_, }, // corner 13
+    {SIDE_, }, {SIDE_, }, {SIDE_, }, {SIDE_, }, // corner 14
+    {SIDE_, }, {SIDE_, }, {SIDE_, }, {SIDE_, }, // corner 15
+    {SIDE_, }, {SIDE_, }, {SIDE_, }, {SIDE_, }  // corner 16
 };
 
 volatile Side_State sides_states[SIDE_COUNT];
@@ -144,7 +176,7 @@ uint8_t rotation_notify(uint8_t sw_side_num, uint8_t direction)
     if (direction == MOVE_NONE)
         return TRUE;
 
-    state_ptr = &(sides_states[direction == MOVE_PERSP ? SIDE_CF : sw_side_num]);
+    state_ptr = &(sides_states[sw_side_num]);
 
     if (state_ptr->status & CAN_ROTATE)
     {
@@ -157,7 +189,9 @@ uint8_t rotation_notify(uint8_t sw_side_num, uint8_t direction)
     else
     {
         // Cannot start rotation right now, need to rotate faster
-        move_faster();
+        faster = TRUE;
+//      USART_TRANSMIT_BYTE(0xfc);
+
         return FALSE;
     }
 }
@@ -170,7 +204,7 @@ void handle_cycle(void)
     idle_cycle = TRUE;
     rotating = FALSE;
 
-    for (side_num = 0; side_num < SIDE_CB; side_num++)
+    for (side_num = 0; side_num < SIDE_COUNT; side_num++)
     {
         state_ptr = &(sides_states[side_num]);
 
@@ -189,7 +223,8 @@ void handle_cycle(void)
                 {
                     state_ptr->cycle_ct++;
                     // Cannot start rotation right now, need to rotate faster
-                    move_faster();
+                    faster = TRUE;
+//                  USART_TRANSMIT_BYTE(0xfc);
                 }
                 break;
 
@@ -228,7 +263,7 @@ static uint8_t can_start_rotation(uint8_t side_num, Side_State *state_ptr)
 
     // Check neighboring sides if they are not rotating
     dependencies = DEPENDENCY_MATRIX[side_num];
-    for (sn = 0; sn < SIDE_CB; sn++)
+    for (sn = 0; sn < SIDE_COUNT; sn++)
     {
         // Is the side being checked dependant on 'sn'th side?
         // Is 'sn'th side rotating?
@@ -237,7 +272,7 @@ static uint8_t can_start_rotation(uint8_t side_num, Side_State *state_ptr)
             status = sides_states[sn].status;
             // Cannot rotate this side (side_num'th) if there is...
             if (status == ROTATING)
-                return FALSE; // ...at least one other side rotating
+                return FALSE; // ...at least one neighboring side rotating
             if (status == WAITING_FOR_ROTATION && 
                 state_ptr->cycle_ct < sides_states[sn].cycle_ct)
                 return FALSE; // ...at least one other side waiting for rotation and has higher cycle_ct
@@ -253,7 +288,8 @@ static void handle_idle_cycle(uint8_t idle_cycle, uint8_t rotating)
         slower_cycle_counter++;
         if (slower_cycle_counter > SLOWER_IDLE_CYCLE_SPAN)
         {
-            move_slower();
+            slower = TRUE;
+//          USART_TRANSMIT_BYTE(0x51);
             slower_cycle_counter = 0;
         }
     }
@@ -274,17 +310,6 @@ static void handle_idle_cycle(uint8_t idle_cycle, uint8_t rotating)
     {
         save_cycle_counter = 0;
     }
-}
-
-static void move_faster(void)
-{
-    faster = TRUE;
-//    USART_TRANSMIT_BYTE(0xfc);
-}
-static void move_slower(void)
-{
-    slower = TRUE;
-//    USART_TRANSMIT_BYTE(0x51);
 }
 
 
