@@ -89,15 +89,15 @@ static const uint8_t LED_TO_STICKERS_MATRIX[STICKER_COUNT][2] =
     {SIDE_XL, 4}, {SIDE_CB, 2}, {SIDE_YL, 6}, {SIDE_ZR, 5}, // corner 5
     {SIDE_XL, 0}, {SIDE_YR, 1}, {SIDE_CB, 3}, {SIDE_ZR, 7}, // corner 6
     {SIDE_YR, 5}, {SIDE_CF, 4}, {SIDE_ZR, 6}, {SIDE_XL, 2}, // corner 7
-    {SIDE_, }, {SIDE_, }, {SIDE_, }, {SIDE_, }, // corner 8
-    {SIDE_, }, {SIDE_, }, {SIDE_, }, {SIDE_, }, // corner 9
-    {SIDE_, }, {SIDE_, }, {SIDE_, }, {SIDE_, }, // corner 10
-    {SIDE_, }, {SIDE_, }, {SIDE_, }, {SIDE_, }, // corner 11
-    {SIDE_, }, {SIDE_, }, {SIDE_, }, {SIDE_, }, // corner 12
-    {SIDE_, }, {SIDE_, }, {SIDE_, }, {SIDE_, }, // corner 13
-    {SIDE_, }, {SIDE_, }, {SIDE_, }, {SIDE_, }, // corner 14
-    {SIDE_, }, {SIDE_, }, {SIDE_, }, {SIDE_, }, // corner 15
-    {SIDE_, }, {SIDE_, }, {SIDE_, }, {SIDE_, }  // corner 16
+    {SIDE_YR, 7}, {SIDE_ZL, 1}, {SIDE_CF, 0}, {SIDE_XL, 3}, // corner 8
+    {SIDE_ZL, 0}, {SIDE_CB, 7}, {SIDE_XL, 1}, {SIDE_YR, 3}, // corner 9
+    {SIDE_ZL, 4}, {SIDE_XR, 6}, {SIDE_CB, 5}, {SIDE_YR, 2}, // corner 10
+    {SIDE_YR, 6}, {SIDE_CF, 2}, {SIDE_ZL, 5}, {SIDE_XR, 4}, // corner 11
+    {SIDE_YR, 4}, {SIDE_ZR, 2}, {SIDE_CF, 6}, {SIDE_XR, 5}, // corner 12
+    {SIDE_XR, 7}, {SIDE_CB, 1}, {SIDE_YR, 0}, {SIDE_ZR, 3}, // corner 13
+    {SIDE_XR, 3}, {SIDE_YL, 7}, {SIDE_CB, 0}, {SIDE_ZR, 1}, // corner 14
+    {SIDE_YL, 3}, {SIDE_CF, 7}, {SIDE_ZR, 0}, {SIDE_XR, 1}, // corner 15
+    {SIDE_YL, 1}, {SIDE_ZL, 7}, {SIDE_CF, 3}, {SIDE_XR, 0}  // corner 16
 };
 
 volatile Side_State sides_states[SIDE_COUNT];
