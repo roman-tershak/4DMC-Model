@@ -36,51 +36,51 @@ static const uint8_t SWITCH_TO_ROTATION_MATRIX[64] =
     /* 0x00                                                */   (MOVE_NONE),
     /* 0x01                                          SW_XL */   (ROTATION_Y | DIR_CCW),
     /* 0x02                                  SW_XR         */   (ROTATION_Y | DIR_CW),
-    /* 0x03                                  SW_XR | SW_XL */   (MOVE_PERSP),
+    /* 0x03                                  SW_XR | SW_XL */   (MOVE_NONE),
     /* 0x04                          SW_YL                 */   (ROTATION_X | DIR_CW),
-    /* 0x05                          SW_YL         | SW_XL */   (MOVE_PERSP),
-    /* 0x06                          SW_YL | SW_XR         */   (MOVE_PERSP),
-    /* 0x07                          SW_YL | SW_XR | SW_XL */   (MOVE_PERSP),
+    /* 0x05                          SW_YL         | SW_XL */   (MOVE_NONE),
+    /* 0x06                          SW_YL | SW_XR         */   (MOVE_NONE),
+    /* 0x07                          SW_YL | SW_XR | SW_XL */   (MOVE_NONE),
     /* 0x08                  SW_YR                         */   (ROTATION_X | DIR_CCW),
-    /* 0x09                  SW_YR                 | SW_XL */   (MOVE_PERSP),
-    /* 0x0A                  SW_YR         | SW_XR         */   (MOVE_PERSP),
-    /* 0x0B                  SW_YR         | SW_XR | SW_XL */   (MOVE_PERSP),
-    /* 0x0C                  SW_YR | SW_YL                 */   (MOVE_PERSP),
-    /* 0x0D                  SW_YR | SW_YL         | SW_XL */   (MOVE_PERSP),
-    /* 0x0E                  SW_YR | SW_YL | SW_XR         */   (MOVE_PERSP),
-    /* 0x0F                  SW_YR | SW_YL | SW_XR | SW_XL */   (MOVE_PERSP),
+    /* 0x09                  SW_YR                 | SW_XL */   (MOVE_NONE),
+    /* 0x0A                  SW_YR         | SW_XR         */   (MOVE_NONE),
+    /* 0x0B                  SW_YR         | SW_XR | SW_XL */   (MOVE_NONE),
+    /* 0x0C                  SW_YR | SW_YL                 */   (MOVE_NONE),
+    /* 0x0D                  SW_YR | SW_YL         | SW_XL */   (MOVE_NONE),
+    /* 0x0E                  SW_YR | SW_YL | SW_XR         */   (MOVE_NONE),
+    /* 0x0F                  SW_YR | SW_YL | SW_XR | SW_XL */   (MOVE_NONE),
     /* 0x10          SW_ZL |                               */   (ROTATION_Z | DIR_CCW),
     /* 0x11          SW_ZL |                         SW_XL */   (ROTATION_Y | DIR_CCW), 
     /* 0x12          SW_ZL |                 SW_XR         */   (ROTATION_Y | DIR_CW),  
-    /* 0x13          SW_ZL |                 SW_XR | SW_XL */   (MOVE_PERSP),           
+    /* 0x13          SW_ZL |                 SW_XR | SW_XL */   (MOVE_NONE),           
     /* 0x14          SW_ZL |         SW_YL                 */   (ROTATION_X | DIR_CW),  
-    /* 0x15          SW_ZL |         SW_YL         | SW_XL */   (MOVE_PERSP),           
-    /* 0x16          SW_ZL |         SW_YL | SW_XR         */   (MOVE_PERSP),           
-    /* 0x17          SW_ZL |         SW_YL | SW_XR | SW_XL */   (MOVE_PERSP),           
+    /* 0x15          SW_ZL |         SW_YL         | SW_XL */   (MOVE_NONE),           
+    /* 0x16          SW_ZL |         SW_YL | SW_XR         */   (MOVE_NONE),           
+    /* 0x17          SW_ZL |         SW_YL | SW_XR | SW_XL */   (MOVE_NONE),           
     /* 0x18          SW_ZL | SW_YR                         */   (ROTATION_X | DIR_CCW), 
-    /* 0x19          SW_ZL | SW_YR                 | SW_XL */   (MOVE_PERSP),           
-    /* 0x1A          SW_ZL | SW_YR         | SW_XR         */   (MOVE_PERSP),           
-    /* 0x1B          SW_ZL | SW_YR         | SW_XR | SW_XL */   (MOVE_PERSP),           
-    /* 0x1C          SW_ZL | SW_YR | SW_YL                 */   (MOVE_PERSP),           
-    /* 0x1D          SW_ZL | SW_YR | SW_YL         | SW_XL */   (MOVE_PERSP),           
-    /* 0x1E          SW_ZL | SW_YR | SW_YL | SW_XR         */   (MOVE_PERSP),           
-    /* 0x1F          SW_ZL | SW_YR | SW_YL | SW_XR | SW_XL */   (MOVE_PERSP),           
+    /* 0x19          SW_ZL | SW_YR                 | SW_XL */   (MOVE_NONE),           
+    /* 0x1A          SW_ZL | SW_YR         | SW_XR         */   (MOVE_NONE),           
+    /* 0x1B          SW_ZL | SW_YR         | SW_XR | SW_XL */   (MOVE_NONE),           
+    /* 0x1C          SW_ZL | SW_YR | SW_YL                 */   (MOVE_NONE),           
+    /* 0x1D          SW_ZL | SW_YR | SW_YL         | SW_XL */   (MOVE_NONE),           
+    /* 0x1E          SW_ZL | SW_YR | SW_YL | SW_XR         */   (MOVE_NONE),           
+    /* 0x1F          SW_ZL | SW_YR | SW_YL | SW_XR | SW_XL */   (MOVE_NONE),           
     /* 0x20  SW_ZR |                                       */   (ROTATION_Z | DIR_CW),
     /* 0x21  SW_ZR |                                 SW_XL */   (ROTATION_Y | DIR_CCW), 
     /* 0x22  SW_ZR |                         SW_XR         */   (ROTATION_Y | DIR_CW),  
-    /* 0x23  SW_ZR |                         SW_XR | SW_XL */   (MOVE_PERSP),           
+    /* 0x23  SW_ZR |                         SW_XR | SW_XL */   (MOVE_NONE),           
     /* 0x24  SW_ZR |                 SW_YL                 */   (ROTATION_X | DIR_CW),  
-    /* 0x25  SW_ZR |                 SW_YL         | SW_XL */   (MOVE_PERSP),           
-    /* 0x26  SW_ZR |                 SW_YL | SW_XR         */   (MOVE_PERSP),           
-    /* 0x27  SW_ZR |                 SW_YL | SW_XR | SW_XL */   (MOVE_PERSP),           
+    /* 0x25  SW_ZR |                 SW_YL         | SW_XL */   (MOVE_NONE),           
+    /* 0x26  SW_ZR |                 SW_YL | SW_XR         */   (MOVE_NONE),           
+    /* 0x27  SW_ZR |                 SW_YL | SW_XR | SW_XL */   (MOVE_NONE),           
     /* 0x28  SW_ZR |         SW_YR                         */   (ROTATION_X | DIR_CCW), 
-    /* 0x29  SW_ZR |         SW_YR                 | SW_XL */   (MOVE_PERSP),           
-    /* 0x2A  SW_ZR |         SW_YR         | SW_XR         */   (MOVE_PERSP),           
-    /* 0x2B  SW_ZR |         SW_YR         | SW_XR | SW_XL */   (MOVE_PERSP),           
-    /* 0x2C  SW_ZR |         SW_YR | SW_YL                 */   (MOVE_PERSP),           
-    /* 0x2D  SW_ZR |         SW_YR | SW_YL         | SW_XL */   (MOVE_PERSP),           
-    /* 0x2E  SW_ZR |         SW_YR | SW_YL | SW_XR         */   (MOVE_PERSP),           
-    /* 0x2F  SW_ZR |         SW_YR | SW_YL | SW_XR | SW_XL */   (MOVE_PERSP),           
+    /* 0x29  SW_ZR |         SW_YR                 | SW_XL */   (MOVE_NONE),           
+    /* 0x2A  SW_ZR |         SW_YR         | SW_XR         */   (MOVE_NONE),           
+    /* 0x2B  SW_ZR |         SW_YR         | SW_XR | SW_XL */   (MOVE_NONE),           
+    /* 0x2C  SW_ZR |         SW_YR | SW_YL                 */   (MOVE_NONE),           
+    /* 0x2D  SW_ZR |         SW_YR | SW_YL         | SW_XL */   (MOVE_NONE),           
+    /* 0x2E  SW_ZR |         SW_YR | SW_YL | SW_XR         */   (MOVE_NONE),           
+    /* 0x2F  SW_ZR |         SW_YR | SW_YL | SW_XR | SW_XL */   (MOVE_NONE),           
     /* 0x30  SW_ZR | SW_ZL |                               */   (MOVE_NONE),
     /* 0x31  SW_ZR | SW_ZL |                         SW_XL */   (MOVE_NONE),
     /* 0x32  SW_ZR | SW_ZL |                 SW_XR         */   (MOVE_NONE),
@@ -151,7 +151,7 @@ ISR (TIMER1_OVF_vect)
             // Read switches state for the entire side
             if (switches = read_switches_debounced(ct))
             {
-                // If pressed, then increase the counter. Untill it reaches max, i.e.
+                // If pressed, then increase the counter. Until it reaches max, i.e.
                 // READ_COMPLETE_SITE_STATE_CYCLES gather all pressed side switches 
                 // since they won't likely be pressed exactly in the same moment.
                 // So for this '|=' operator is used.
@@ -169,7 +169,7 @@ ISR (TIMER1_OVF_vect)
             }
             else if (sw_side_state_ptr->switches)
             {
-                // Some of the swicthes had been pressed and released before
+                // Some of the switches had been pressed and released before
                 // READ_COMPLETE_SITE_STATE_CYCLES expired
                 sw_side_state_ptr->waiting_for_release = FALSE;
                 sw_side_state_ptr->cycle_ct = READ_COMPLETE_SITE_STATE_CYCLES;
@@ -270,6 +270,7 @@ static void set_switch_pin(uint8_t pin)
     case 3: res_pin(SPD); break;
     case 4: res_pin(SPE); break;
     case 5: res_pin(SPF); break;
+    case 6: res_pin(SPG); break;
     }
 }
 
@@ -282,4 +283,5 @@ static void reset_switches_pins(void)
     set_pin(SPD);
     set_pin(SPE);
     set_pin(SPF);
+    set_pin(SPG);
 }

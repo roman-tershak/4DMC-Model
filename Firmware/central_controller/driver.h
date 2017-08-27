@@ -21,7 +21,7 @@
 #define SW_ZL  _BV(4)
 #define SW_ZR  _BV(5)
 
-#define SW_SIDE_NUM 6
+#define SW_SIDE_NUM 7
 
 #ifdef __cplusplus
  extern "C" {

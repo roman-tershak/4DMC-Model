@@ -9,7 +9,7 @@
 #define SAVE_IDLE_CYCLE_SPAN   150
 
 /* Side states checks */
-#define IS_SIDE_ROTATING_OR_WAITING    (WAITING_FOR_ROTATION | ROTATING | WAITING_FOR_SAVING)
+#define IS_SIDE_ROTATING_OR_WAITING    (WAITING_FOR_ROTATION | ROTATING)
 #define CAN_ROTATE  (SIDE_IDLE | WAITING_FOR_SAVING)
 #define CANNOT_BE_SAVED (ROTATING)
 
@@ -107,6 +107,8 @@ static uint8_t slower = FALSE;
 static uint16_t slower_cycle_counter = SLOWER_IDLE_CYCLE_SPAN;
 static uint16_t save_cycle_counter = SAVE_IDLE_CYCLE_SPAN;
 
+static volatile uint8_t waiting_for_saving = FALSE;
+
 
 void load_sides_states(void)
 {
@@ -121,7 +123,9 @@ void reset_cube(void)
 {
     reset_sides_colors();
     reset_sides_states();
-    sides_states[0].status = WAITING_FOR_SAVING;
+
+    waiting_for_saving = TRUE;
+
     sides_colors_changed();
 }
 
@@ -235,26 +239,31 @@ void handle_cycle(void)
                 rotating = TRUE;
                 break;
 
-            case WAITING_FOR_SAVING:
-
-                // save_logic.c
-                if (can_save())
-                {
-                    save_cycle_counter = 0;
-                    save_state();
-                }
-                break;
             }
 
             idle_cycle = FALSE;
         }
     }
+
+    if (waiting_for_saving)
+    {
+        // save_logic.c
+        if (can_save())
+        {
+            waiting_for_saving = FALSE;
+            save_cycle_counter = 0;
+
+            save_state();
+        }
+    }
+
     handle_idle_cycle(idle_cycle, rotating);
 }
 
 void rotation_done(uint8_t side_num)
 {
-    sides_states[side_num].status = WAITING_FOR_SAVING;
+    waiting_for_saving = TRUE;
+    sides_states[side_num].status = SIDE_IDLE;
 }
 
 static uint8_t can_start_rotation(uint8_t side_num, Side_State *state_ptr)
@@ -265,7 +274,7 @@ static uint8_t can_start_rotation(uint8_t side_num, Side_State *state_ptr)
     dependencies = DEPENDENCY_MATRIX[side_num];
     for (sn = 0; sn < SIDE_COUNT; sn++)
     {
-        // Is the side being checked dependant on 'sn'th side?
+        // Is the side being checked neighboring 'sn'th side?
         // Is 'sn'th side rotating?
         if (dependencies | _BV(sn))  // if sn == side_num it will be false
         {
@@ -358,7 +367,7 @@ void sides_colors_changed(void)
 #endif
 
     uint8_t sn, i, *buff_ptr, *led2st_ptr;
-    uint8_t pin_mask = _BV(get_side_led_pin(0));
+    uint8_t pin_mask = _BV(get_side_led_pin(TODO0TODO)); // TODO
 
     buff_ptr = color_buff;
     led2st_ptr = LED_TO_STICKERS_MATRIX[0];

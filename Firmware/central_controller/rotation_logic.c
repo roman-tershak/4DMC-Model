@@ -568,31 +568,31 @@ static void rotate_z_dir_cw(uint8_t side_num)
 /* Matrix of rotation and perspective moving functions */
 
 /* 
- *               Sensors orientation                                         Cube sides orientation
- *                                     
+ *               Sensors orientation                                             Cube sides orientation
  * 
- *                          (side_zr)                                                          (side_zr)                  
- *                         Z                                                              y   x                           
- *                        |___Y                                                            \ |                            
- *                         \                                                                \|                            
- *                          vX                                        (side_yr)        z<----                             
- *           (side_yr) z y                                                      x___                                      
- *                      \|                                                          |\                                    
- *                   x<--                                                           | \z                                  
- * (side_xl)                |Z             ^X (side_xr)                             y                     z  X  (side_xr)
- *      Z ___               |  (side_cf)   |                        (side_xl)              |Z              \ |               X\
- *           |\              --->X         |___Z                             ___Y          |____Y           \|___Y             \___Y
- *           | Y             \              \                               |\              \ (side_cf)                        |   (side_cb)
- *           vX               \Y             Y                              | \Z             \X                                |Z
- *                                |Y                                        vX                                            
- *                                |                                                                ^Y                     
- *                                 ---->X                                                          |                      
- *                       x^        \   (side_yl)                                                   |                      
- *                         \___Y    \Z                                                    X         ---->X                
- *                         |                                                              |         \  (side_yl)          
- *               (side_zl)  Z                                                             |___Z      Z                    
- *                                                                              (side_zl)  \                              
- *                                                                                          \Y                            
+ * 
+ *                          (side_zr)                                                                     (side_zr)                  
+ *                         Z                                                                         y   x                           
+ *                        |___Y                                                                       \ |                            
+ *                         \                                                                           \|                            
+ *                          vX                                                   (side_yr)        z<----                             
+ *           (side_yr) z y                                                                 x___                                      
+ *                      \|                                                                     |\                                    
+ *                   x<--                                                                      | \z                                  
+ * (side_xl)                               ^X (side_xr)     |Z                                 y                     z  X  (side_xr)
+ *      Z ___             Y\ |Z (side_cf)  |                |                  (side_xl)              |Z              \ |               X\
+ *           |\             \|             |___Z      ~X<---                            ___Y          |____Y           \|___Y        ~Y___\
+ *           | Y              --->X         \                \                         |\              \ (side_cf)                        | (side_cb)
+ *           vX                              Y      (side_cb) \Y                       | \Z             \X                                |Z
+ *                                |Y                                                   vX                                            
+ *                                |                                                                           ^Y                     
+ *                                 ---->X                                                                     |                      
+ *                       x^        \   (side_yl)                                                              |                      
+ *                         \___Y    \Z                                                               X         ---->X                
+ *                         |                                                                         |         \  (side_yl)          
+ *               (side_zl)  Z                                                                        |___Z      Z                    
+ *                                                                                         (side_zl)  \                              
+ *                                                                                                     \Y                            
  *                                     
  */
 
@@ -645,7 +645,14 @@ static const rotation_func_ptr_type ROTATION_FUNC_MATRIX[] =
     /* SIDE_CF , (ROTATION_Y | DIR_CCW)  */ rotate_x_dir_ccw,
     /* SIDE_CF , (ROTATION_Y | DIR_CW)   */ rotate_x_dir_cw,
     /* SIDE_CF , (ROTATION_Z | DIR_CCW)  */ rotate_z_dir_ccw,
-    /* SIDE_CF , (ROTATION_Z | DIR_CW)   */ rotate_z_dir_cw
+    /* SIDE_CF , (ROTATION_Z | DIR_CW)   */ rotate_z_dir_cw,
+
+    /* SIDE_CB , (ROTATION_X | DIR_CCW)  */ rotate_y_dir_ccw,
+    /* SIDE_CB , (ROTATION_X | DIR_CW)   */ rotate_y_dir_cw,
+    /* SIDE_CB , (ROTATION_Y | DIR_CCW)  */ rotate_x_dir_cw,
+    /* SIDE_CB , (ROTATION_Y | DIR_CW)   */ rotate_x_dir_ccw,
+    /* SIDE_CB , (ROTATION_Z | DIR_CCW)  */ rotate_z_dir_cw,
+    /* SIDE_CB , (ROTATION_Z | DIR_CW)   */ rotate_z_dir_ccw
 };
 
 

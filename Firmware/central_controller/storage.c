@@ -41,16 +41,7 @@ void save_state(void)
 
     // Make a copy of the cube state
     pack_unpack_colors(PACK);
-#endif
 
-    // 'Release' sides that were waiting for saving
-    for (i = 0; i < SIDE_COUNT; i++)
-    {
-        if (sides_states[i].status == WAITING_FOR_SAVING)
-            sides_states[i].status = SIDE_IDLE;
-    }
-
-#ifndef DEBUG_DONT_STORE
     USART_TRANSMIT_BYTE(get_bank_num_storage(record_num));
 #endif
 
