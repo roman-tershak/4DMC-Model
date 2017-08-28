@@ -121,7 +121,7 @@ ISR (TIMER1_OVF_vect)
 {
     static volatile uint8_t ct = 0;
     Switches_Side_State *sw_side_state_ptr;
-    uint8_t switches, next_switch;
+    uint8_t switches;
 
     TCNT1 = (0xFFFF - ISR_TIMEOUT); // set the timeout
 
@@ -142,7 +142,6 @@ ISR (TIMER1_OVF_vect)
 
     // Handling Rotation side swicthes
     sw_side_state_ptr = &(switches_side_states[ct]);
-    next_switch = TRUE;
 
     if (!(sw_side_state_ptr->waiting_for_release))
     {
@@ -154,15 +153,10 @@ ISR (TIMER1_OVF_vect)
                 // If pressed, then increase the counter. Until it reaches max, i.e.
                 // READ_COMPLETE_SITE_STATE_CYCLES gather all pressed side switches 
                 // since they won't likely be pressed exactly in the same moment.
-                // So for this '|=' operator is used.
-                sw_side_state_ptr->switches |= switches;
+                sw_side_state_ptr->switches = switches;
                 sw_side_state_ptr->cycle_ct++;
 
-                if (sw_side_state_ptr->cycle_ct < READ_COMPLETE_SITE_STATE_CYCLES)
-                {
-                    next_switch = FALSE;  // Stick to this switches set (one side)
-                }
-                else
+                if (sw_side_state_ptr->cycle_ct >= READ_COMPLETE_SITE_STATE_CYCLES)
                 {
                     sw_side_state_ptr->waiting_for_release = TRUE;
                 }
@@ -191,7 +185,7 @@ ISR (TIMER1_OVF_vect)
     if (sw_side_state_ptr->cycle_ct >= READ_COMPLETE_SITE_STATE_CYCLES)
     {
         // The wait period for switches has finished, now start rotation
-        if (rotation_notify(ct, get_rotation_dir(sw_side_state_ptr->switches)))
+        if (rotation_notify(ct, get_rotation_dir(ct)))
         {
 #ifdef DEBUG_COLOR_ADJUST
             debug_color_adjust(ct, sw_side_state_ptr->switches);
@@ -202,11 +196,8 @@ ISR (TIMER1_OVF_vect)
         }
     }
 
-    if (next_switch)
-    {
-        ct++; // next sensor set/side
-        if (ct >= SW_SIDE_NUM) ct = 0; // going in round cycle
-    }
+    ct++; // next sensor set/side
+    if (ct >= SW_SIDE_NUM) ct = 0; // going in round cycle
 
     // Pass the cycle tick further down the logic
     handle_cycle();
