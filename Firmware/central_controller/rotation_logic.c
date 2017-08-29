@@ -690,20 +690,20 @@ void rotation_cycle(uint8_t side_num)
 void change_phase_cycle_counters(uint8_t faster, uint8_t slower)
 {
     static uint8_t index = 0;
-    int8_t index_d;
+    int8_t *rotation_phase_cycles_ptr;
 
-    if (faster || slower)
+    // Faster takes the priority over slower
+    if (faster && index < 3)
     {
-        // Faster takes the priority over slower
-        index_d = faster ? (index < 3 ? 1 : 0) : (index > 0 ? -1 : 0);
-
-        if (index_d != 0)
-        {
-            index += index_d;
-
-            rotation_phase_1_cycles = rotation_phase_cycles[index][0];
-            rotation_phase_f_cycles = rotation_phase_cycles[index][1];
-        }
+        rotation_phase_cycles_ptr = &(rotation_phase_cycles[++index]);
+        rotation_phase_1_cycles = *rotation_phase_cycles_ptr++;
+        rotation_phase_f_cycles = *rotation_phase_cycles_ptr;
+    }
+    else if (slower && index)
+    {
+        rotation_phase_cycles_ptr = &(rotation_phase_cycles[--index]);
+        rotation_phase_1_cycles = *rotation_phase_cycles_ptr++;
+        rotation_phase_f_cycles = *rotation_phase_cycles_ptr;
     }
 }
 
