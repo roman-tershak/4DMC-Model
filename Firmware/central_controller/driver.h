@@ -9,8 +9,11 @@
  * 5208 @ 16MHz will give 48 timer interrupts per second
  */
 
-#define DEBOUNCE_DELAY_1 2
-#define DEBOUNCE_DELAY_2 10
+#define DEBOUNCE_DELAY_1  2
+#define DEBOUNCE_DELAY_2  10
+
+#define WAITING_FOR_RELEASE  1
+#define DOUBLE_CLICK         2
 
 #define READ_COMPLETE_SITE_STATE_CYCLES 16 // TODO
 
@@ -29,7 +32,7 @@
 
 typedef struct 
 {
-    uint8_t waiting_for_release;
+    uint8_t flags;
     uint8_t switches;
     uint8_t cycle_ct;
 } Switches_Side_State;

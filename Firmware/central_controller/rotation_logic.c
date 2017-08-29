@@ -565,7 +565,7 @@ static void rotate_z_dir_cw(uint8_t side_num)
     rotate(side_num, ROTATION_Z_CW_INDEXES, ROTATION_X_CW_INDEXES, AXIS_Z, rotate_adjacent_layer_z_cw);
 }
 
-/* Matrix of rotation and perspective moving functions */
+/* Matrix of rotation functions */
 
 /* 
  *               Sensors orientation                                             Cube sides orientation

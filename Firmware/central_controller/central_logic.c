@@ -194,7 +194,8 @@ uint8_t rotation_notify(uint8_t sw_side_num, uint8_t direction)
     {
         // Cannot start rotation right now, need to rotate faster
         faster = TRUE;
-//      USART_TRANSMIT_BYTE(0xfc);
+
+        USART_TRANSMIT_BYTE(0xfc);
 
         return FALSE;
     }

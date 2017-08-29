@@ -111,7 +111,7 @@ void init_driver(void)
     {
         sw_side_state_ptr = &(switches_side_states[i]);
 
-        sw_side_state_ptr->waiting_for_release = FALSE;
+        sw_side_state_ptr->flags = 0;
         sw_side_state_ptr->switches = 0;
         sw_side_state_ptr->cycle_ct = 0;
     }
@@ -121,7 +121,7 @@ ISR (TIMER1_OVF_vect)
 {
     static volatile uint8_t ct = 0;
     Switches_Side_State *sw_side_state_ptr;
-    uint8_t switches;
+    uint8_t switches, next_side, rs, rd;
 
     TCNT1 = (0xFFFF - ISR_TIMEOUT); // set the timeout
 
@@ -142,31 +142,43 @@ ISR (TIMER1_OVF_vect)
 
     // Handling Rotation side swicthes
     sw_side_state_ptr = &(switches_side_states[ct]);
+    next_side = TRUE;
 
-    if (!(sw_side_state_ptr->waiting_for_release))
+    if (!(sw_side_state_ptr->flags & WAITING_FOR_RELEASE))
     {
         if (sw_side_state_ptr->cycle_ct < READ_COMPLETE_SITE_STATE_CYCLES)
         {
             // Read switches state for the entire side
-            if (switches = read_switches_debounced(ct))
+            if (switches = read_switches_debounced(ct))  // pressed?
             {
                 // If pressed, then increase the counter. Until it reaches max, i.e.
-                // READ_COMPLETE_SITE_STATE_CYCLES gather all pressed side switches 
-                // since they won't likely be pressed exactly in the same moment.
-                sw_side_state_ptr->switches = switches;
-                sw_side_state_ptr->cycle_ct++;
+                // READ_COMPLETE_SITE_STATE_CYCLES gather all pressed side switches.
 
-                if (sw_side_state_ptr->cycle_ct >= READ_COMPLETE_SITE_STATE_CYCLES)
+                if (sw_side_state_ptr->switches == switches)  // double click?
                 {
-                    sw_side_state_ptr->waiting_for_release = TRUE;
+                    sw_side_state_ptr->flags |= (DOUBLE_CLICK | WAITING_FOR_RELEASE);
+                    sw_side_state_ptr->cycle_ct = READ_COMPLETE_SITE_STATE_CYCLES;
+                }
+                else
+                {
+                    sw_side_state_ptr->switches = switches;
+                    sw_side_state_ptr->cycle_ct++;
+
+                    if (sw_side_state_ptr->cycle_ct >= READ_COMPLETE_SITE_STATE_CYCLES)
+                    {
+                        sw_side_state_ptr->flags |= WAITING_FOR_RELEASE;
+                    }
+                    else
+                    {
+                        next_side = FALSE;  // Stick to this switches set (one side)
+                    }
                 }
             }
             else if (sw_side_state_ptr->switches)
             {
                 // Some of the switches had been pressed and released before
                 // READ_COMPLETE_SITE_STATE_CYCLES expired
-                sw_side_state_ptr->waiting_for_release = FALSE;
-                sw_side_state_ptr->cycle_ct = READ_COMPLETE_SITE_STATE_CYCLES;
+                sw_side_state_ptr->cycle_ct++;
             }
             // else
                 // Nothing, just continue waiting
@@ -178,31 +190,64 @@ ISR (TIMER1_OVF_vect)
         // Read switches state for the entire side and check if they are released
         if (read_switches_debounced(ct) == 0)
         {
-            sw_side_state_ptr->waiting_for_release = FALSE;
+            sw_side_state_ptr->flags &= ~WAITING_FOR_RELEASE;
         }
     }
 
     if (sw_side_state_ptr->cycle_ct >= READ_COMPLETE_SITE_STATE_CYCLES)
     {
         // The wait period for switches has finished, now start rotation
-        if (rotation_notify(ct, get_rotation_dir(ct)))
+        rs = get_rotation_side();
+        rd = get_rotation_dir(ct);
+
+        if (rotation_notify(rs, rd))
         {
 #ifdef DEBUG_COLOR_ADJUST
             debug_color_adjust(ct, sw_side_state_ptr->switches);
 #endif
-            // Start waiting for switch release
             sw_side_state_ptr->cycle_ct = 0;
             sw_side_state_ptr->switches = 0;
+            sw_side_state_ptr->flags &= ~DOUBLE_CLICK;
         }
     }
 
-    ct++; // next sensor set/side
-    if (ct >= SW_SIDE_NUM) ct = 0; // going in round cycle
+    if (next_side)
+    {
+        ct++; // next sensor set/side
+        if (ct >= SW_SIDE_NUM) ct = 0; // going in round cycle
+    }
 
     // Pass the cycle tick further down the logic
     handle_cycle();
 }
 
+/* 
+ *               Sensors orientation
+ * 
+ * 
+ *                          (side_zr)
+ *                         Z
+ *                        |___Y
+ *                         \
+ *                          vX
+ *           (side_yr) z y
+ *                      \|
+ *                   x<-- 
+ * (side_xl)                               ^X (side_xr)       |Z
+ *      Z ___             Y\ |Z (side_cf)  |                  |
+ *           |\             \|             |___Z        ~X<---
+ *           | Y              --->X         \                  \
+ *           vX                              Y        (side_cb) \Y
+ *                                |Y
+ *                                |
+ *                                 ---->X
+ *                       x^        \   (side_yl)
+ *                         \___Y    \Z
+ *                         |
+ *               (side_zl)  Z
+ * 
+ */
+static uint8_t get_rotation_side(uint8_t )
 static uint8_t get_rotation_dir(uint8_t switches)
 {
     return SWITCH_TO_ROTATION_MATRIX[switches];
