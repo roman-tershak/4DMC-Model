@@ -24,6 +24,15 @@
 #define SW_ZL  _BV(4)
 #define SW_ZR  _BV(5)
 
+#define SW_SIDE_XL  0
+#define SW_SIDE_XR  1
+#define SW_SIDE_YL  2
+#define SW_SIDE_YR  3
+#define SW_SIDE_ZL  4
+#define SW_SIDE_ZR  5
+#define SW_SIDE_CF  6
+#define SW_SIDE_CB  7
+
 #define SW_SIDE_NUM 7
 
 #ifdef __cplusplus

@@ -247,7 +247,19 @@ ISR (TIMER1_OVF_vect)
  *               (side_zl)  Z
  * 
  */
-static uint8_t get_rotation_side(uint8_t )
+static const uint8_t SWITCH_TO_ROTATION_MATRIX[64] =
+{
+};
+
+static uint8_t get_rotation_side(uint8_t swn, Switches_Side_State *sw_side_state_ptr)
+{
+    if (swn < SW_SIDE_CF && 
+            sw_side_state_ptr->flags & DOUBLE_CLICK)
+    {
+        
+        
+    }
+}
 static uint8_t get_rotation_dir(uint8_t switches)
 {
     return SWITCH_TO_ROTATION_MATRIX[switches];

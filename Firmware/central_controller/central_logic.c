@@ -229,7 +229,8 @@ void handle_cycle(void)
                     state_ptr->cycle_ct++;
                     // Cannot start rotation right now, need to rotate faster
                     faster = TRUE;
-//                  USART_TRANSMIT_BYTE(0xfc);
+
+                    USART_TRANSMIT_BYTE(0xfc);
                 }
                 break;
 
@@ -299,8 +300,9 @@ static void handle_idle_cycle(uint8_t idle_cycle, uint8_t rotating)
         if (slower_cycle_counter > SLOWER_IDLE_CYCLE_SPAN)
         {
             slower = TRUE;
-//          USART_TRANSMIT_BYTE(0x51);
             slower_cycle_counter = 0;
+
+            USART_TRANSMIT_BYTE(0x51);
         }
     }
     else
@@ -338,6 +340,25 @@ static uint8_t can_save(void)
     return TRUE;
 }
 
+void sides_colors_changed(void)
+{
+    // In-memory buffer for all stickers colors
+    static uint8_t color_buff[STICKER_COUNT];
+
+    uint8_t sn, i, *buff_ptr, *led2st_ptr;
+    uint8_t pin_mask = _BV(get_side_led_pin(TODO0TODO)); // TODO
+
+    buff_ptr = color_buff;
+    led2st_ptr = LED_TO_STICKERS_MATRIX[0];
+
+    for (i = 0; i < STICKER_COUNT; i++)
+    {
+        *buff_ptr++ = sides_states[*led2st_ptr++].colors[*led2st_ptr++];
+    }
+
+    light_color_buff(pin_mask, color_buff, STICKER_COUNT);
+}
+
 #ifdef USART_DEBUG
 static uint8_t send_colors_to_usart(uint8_t sn, uint8_t *colors)
 {
@@ -356,50 +377,3 @@ static uint8_t send_colors_to_usart(uint8_t sn, uint8_t *colors)
 }
 #endif
 
-void sides_colors_changed(void)
-{
-    // In-memory buffer for all stickers colors
-    static uint8_t color_buff[STICKER_COUNT];
-
-#ifdef USART_DEBUG
-#ifndef DEBUG_COLOR_ADJUST
-    // uint8_t ok = TRUE;
-#endif
-#endif
-
-    uint8_t sn, i, *buff_ptr, *led2st_ptr;
-    uint8_t pin_mask = _BV(get_side_led_pin(TODO0TODO)); // TODO
-
-    buff_ptr = color_buff;
-    led2st_ptr = LED_TO_STICKERS_MATRIX[0];
-
-    for (i = 0; i < STICKER_COUNT; i++)
-    {
-        *buff_ptr++ = sides_states[*led2st_ptr++].colors[*led2st_ptr++];
-    }
-
-    light_color_buff(pin_mask, color_buff, STICKER_COUNT);
-
-
-#ifdef USART_DEBUG
-#ifndef DEBUG_COLOR_ADJUST
-    for (sn = 0; sn < LIGHT_SIDE_COUNT; sn++)
-    {
-        // Send new colors to side
-        light_side_color(sn, sides_states[sn].colors);
-
-        // if (!send_colors_to_usart(sn, sides_states[sn].colors))
-        //     ok = FALSE;
-
-    }
-    // if (ok)
-    // {
-    //     USART_transmit(0xff);
-    //     USART_transmit(0x0C);
-    //     USART_transmit(0xE1);
-    //     USART_transmit(0xff);
-    // }
-#endif
-#endif
-
-}

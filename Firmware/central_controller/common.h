@@ -26,11 +26,6 @@
 #define MAIN_COLOR_COUNT        8
 #define ALL_COLOR_COUNT         16
 
-/* All LEDs go in pairs */
-//#define DOUBLE_LEDS
-//#define ABSENT_CUBIE
-//#define CB_ABSENT_CUBIE_NUM     13
-
 /* Debug directives */
 //#define DEBUG_COLOR_ADJUST
 //#define USART_DEBUG
