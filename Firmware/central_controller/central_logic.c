@@ -10,7 +10,7 @@
 
 /* Side states checks */
 #define IS_SIDE_ROTATING_OR_WAITING    (WAITING_FOR_ROTATION | ROTATING)
-#define CAN_ROTATE  (SIDE_IDLE | WAITING_FOR_SAVING)
+#define CAN_ROTATE  (SIDE_IDLE)
 #define CANNOT_BE_SAVED (ROTATING)
 
 
@@ -283,9 +283,12 @@ static uint8_t can_start_rotation(uint8_t side_num, Side_State *state_ptr)
             status = sides_states[sn].status;
             // Cannot rotate this side (side_num'th) if there is...
             if (status == ROTATING)
+
                 return FALSE; // ...at least one neighboring side rotating
-            if (status == WAITING_FOR_ROTATION && 
+
+            else if (status == WAITING_FOR_ROTATION && 
                 state_ptr->cycle_ct < sides_states[sn].cycle_ct)
+
                 return FALSE; // ...at least one other side waiting for rotation and has higher cycle_ct
         }
     }

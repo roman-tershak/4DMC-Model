@@ -9,7 +9,6 @@
 #define SIDE_IDLE               _BV(0)
 #define WAITING_FOR_ROTATION    _BV(1)
 #define ROTATING                _BV(2)
-#define WAITING_FOR_SAVING      _BV(3)
 
 
 #ifdef __cplusplus

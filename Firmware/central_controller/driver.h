@@ -17,12 +17,14 @@
 
 #define READ_COMPLETE_SITE_STATE_CYCLES 16 // TODO
 
-#define SW_XL  _BV(0)
-#define SW_XR  _BV(1)
-#define SW_YL  _BV(2)
-#define SW_YR  _BV(3)
-#define SW_ZL  _BV(4)
-#define SW_ZR  _BV(5)
+#define SW_XL  0x1
+#define SW_XR  0x2
+#define SW_YL  0x4
+#define SW_YR  0x8
+#define SW_ZL  0x10
+#define SW_ZR  0x20
+
+#define SW_XLR_YLR  (SW_XL | SW_XR | SW_YL |SW_YR)
 
 #define SW_SIDE_XL  0
 #define SW_SIDE_XR  1
@@ -44,7 +46,8 @@ typedef struct
     uint8_t flags;
     uint8_t switches;
     uint8_t cycle_ct;
-} Switches_Side_State;
+}
+Switches_Side_State;
 
 
 void init_driver(void);

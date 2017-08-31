@@ -665,11 +665,7 @@ rotation_func_ptr_type get_rotation_func_ptr(uint8_t side_num, uint8_t direction
 /* The main rotation function and its counterparts */
 static uint8_t can_do_rotation_cycle(uint8_t cycle_ct)
 {
-    if (cycle_ct == rotation_phase_1_cycles ||
-        cycle_ct == rotation_phase_f_cycles)
-        return TRUE;
-    else
-        return FALSE;
+    return (cycle_ct == rotation_phase_1_cycles || cycle_ct == rotation_phase_f_cycles) ? TRUE : FALSE;
 }
 
 void rotation_cycle(uint8_t side_num)

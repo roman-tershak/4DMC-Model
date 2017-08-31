@@ -9,14 +9,13 @@
 
 /* Rotation directions */
 // Main axis rotations
-#define ROTATION_X      (AXIS_X << 1)
-#define ROTATION_Y      (AXIS_Y << 1)
-#define ROTATION_Z      (AXIS_Z << 1)
+#define ROTATION_X      0x0
+#define ROTATION_Y      0x2
+#define ROTATION_Z      0x4
 // Directions
 #define DIR_CCW         0x0
 #define DIR_CW          0x1
 /* Moves */
-#define MOVE_PERSP      0x6		// This should go right after the last rotation direction (ROTATION_Z | DIR_CW)
 #define MOVE_NONE       0xFF
 
 
