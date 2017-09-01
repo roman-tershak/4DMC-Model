@@ -100,7 +100,10 @@ static const uint8_t LED_TO_STICKERS_MATRIX[STICKER_COUNT][2] =
     {SIDE_YL, 1}, {SIDE_ZL, 7}, {SIDE_CF, 3}, {SIDE_XR, 0}  // corner 16
 };
 
-volatile Side_State sides_states[SIDE_COUNT];
+/************************************************************************
+ * This is the main structure holding cube stickers colors
+ ***********************************************************************/
+Side_State sides_states[SIDE_COUNT];
 
 static uint8_t faster = FALSE;
 static uint8_t slower = FALSE;
@@ -349,17 +352,16 @@ void sides_colors_changed(void)
     static uint8_t color_buff[STICKER_COUNT];
 
     uint8_t sn, i, *buff_ptr, *led2st_ptr;
-    uint8_t pin_mask = _BV(get_side_led_pin(TODO0TODO)); // TODO
 
     buff_ptr = color_buff;
-    led2st_ptr = LED_TO_STICKERS_MATRIX[0];
+    led2st_ptr = (uint8_t*) LED_TO_STICKERS_MATRIX[0];
 
     for (i = 0; i < STICKER_COUNT; i++)
     {
         *buff_ptr++ = sides_states[*led2st_ptr++].colors[*led2st_ptr++];
     }
 
-    light_color_buff(pin_mask, color_buff, STICKER_COUNT);
+    light_color_buff(color_buff, STICKER_COUNT);
 }
 
 #ifdef USART_DEBUG

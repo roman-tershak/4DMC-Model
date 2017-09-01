@@ -23,16 +23,6 @@ void init_ports(void)
     dir_in(SRS);
 
     // Initializing side color control pins
-#ifndef USART_DEBUG
-    dir_out(SCA);  // RX
-    dir_out(SCB);  // TX
-#endif
-    dir_out(SCC);
-    dir_out(SCD);
-    dir_out(SCE);
-    dir_out(SCF);
-    dir_out(SCG);
-    dir_out(SCH);
 
 #ifdef USART_DEBUG
     // For debug purposes
@@ -40,17 +30,8 @@ void init_ports(void)
     dir_out(TX);
 #endif
 
-    // Reset all side color control pins to 0
-#ifndef USART_DEBUG
-    res_pin(SCA);  // RX
-    res_pin(SCB);  // TX
-#endif
-    res_pin(SCC);
-    res_pin(SCD);
-    res_pin(SCE);
-    res_pin(SCF);
-    res_pin(SCG);
-    res_pin(SCH);
+    // Reset LED color pin to 0
+    res_pin(LED_COLOR);
 
     // Reset all swicthes pins to 1
     set_pin(SPA);
@@ -61,7 +42,7 @@ void init_ports(void)
     set_pin(SPF);
     set_pin(SPG);
 
-    // Enable pull-ups for all SI pins as well as for SRS.
+    // Enable pull-ups for all SI pins and for SRS.
     // PUD bit in MCUCR register by default is 0, meaning that all pull-ups are enabled by default.
     // For activating pull-ups PORTxn are used. They need to be set to 1.
     set_pin(SI0);
@@ -72,6 +53,16 @@ void init_ports(void)
     set_pin(SI5);
 
     set_pin(SRS);
+
+    // Reset all D pins to 0
+#ifndef USART_DEBUG
+    res_pin(PD0);  // RX
+    res_pin(PD1);  // TX
+#endif
+    res_pin(PD3);
+    res_pin(PD4);
+    res_pin(PD5);
+    res_pin(PD6);
 }
 
 void init_timer1(void)
@@ -79,23 +70,6 @@ void init_timer1(void)
     TCCR1B = _BV(CS11) | _BV(CS10); // set prescaller to 64
     TIMSK1 = _BV(TOIE1); // enable timer1 over-flow interrupt
     ENABLE_GLOBAL_INTERRUPTS(); // enable global interrupts
-}
-
-port_pin_t get_side_led_pin(uint8_t side_num)
-{
-    return SCA_PIN;
-
-/*    switch (side_num)
-    {
-        case SIDE_XL: return SCA_PIN;
-        case SIDE_XR: return SCB_PIN;
-        case SIDE_YL: return SCC_PIN;
-        case SIDE_YR: return SCD_PIN;
-        case SIDE_ZL: return SCE_PIN;
-        case SIDE_ZR: return SCF_PIN;
-        case SIDE_CF: return SCG_PIN;
-        case SIDE_CB: return SCH_PIN;
-    }*/
 }
 
 

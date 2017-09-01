@@ -22,8 +22,8 @@ static const uint8_t rotation_phase_cycles[][2] =
     {0, 4}    // The fastest set
 };
 
-static uint8_t rotation_phase_1_cycles = rotation_phase_cycles[0][0];
-static uint8_t rotation_phase_f_cycles = rotation_phase_cycles[0][1];
+static uint8_t rotation_phase_1_cycles = 0;
+static uint8_t rotation_phase_f_cycles = 16;
 
 
 /* Functions for retrieving adjacent sides */
@@ -91,7 +91,7 @@ static const uint8_t ADJACENT_SIDES_MATRIX[][6] =
 
 static uint8_t* get_adjacent_matrix_indexex(uint8_t side_num, uint8_t orientation)
 {
-    return ADJACENT_SIDES_MATRIX[ side_num * 3 + orientation ];
+    return (uint8_t*) ADJACENT_SIDES_MATRIX[ side_num * 3 + orientation ];
 }
 
 static uint8_t* get_adjacent_up_side(uint8_t side_num, uint8_t orientation)

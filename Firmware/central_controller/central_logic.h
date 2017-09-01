@@ -17,9 +17,9 @@
 
 typedef struct 
 {
-    uint8_t status;
-    uint8_t cycle_ct;
-    void *rotation_func_ptr;
+    volatile uint8_t status;
+    volatile uint8_t cycle_ct;
+    volatile void *rotation_func_ptr;
     uint8_t colors[SIDE_CUBES_COUNT];
 } Side_State;
 

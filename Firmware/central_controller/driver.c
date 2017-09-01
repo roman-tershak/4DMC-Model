@@ -15,14 +15,14 @@ static uint8_t read_switches();
 static uint8_t read_srs_debounced();
 static uint8_t read_srs_pin();
 
-static void set_switch_pin(uint8_t pin);
-static void reset_switches_pins(void);
+static void set_switch_pin_to_zero(uint8_t pin);
+static void reset_switches_pins_to_one(void);
 
 static void get_rotation_side_and_dir(uint8_t swn, Switches_Side_State *sw_side_state_ptr, 
         uint8_t *swn_out_ptr, uint8_t *dir_out);
 
 
-static volatile Switches_Side_State switches_side_states[SW_SIDE_NUM] = {0};
+static Switches_Side_State switches_side_states[SW_SIDE_NUM] = {0};
 static volatile uint8_t srs_waiting_for_release = FALSE;
 
 
@@ -391,7 +391,7 @@ static uint8_t read_switches_debounced(uint8_t switch_row)
 {
     uint8_t state;
 
-    set_switch_pin(switch_row);
+    set_switch_pin_to_zero(switch_row);
 
     state = read_switches();
     _delay_ms(DEBOUNCE_DELAY_1);
@@ -402,16 +402,16 @@ static uint8_t read_switches_debounced(uint8_t switch_row)
         _delay_ms(DEBOUNCE_DELAY_2);
         // If during debounce delay switches (one or more) 
         // where pressed, then consider this as really pressed (debounced) switch(es)
-        state & read_switches();
+        state &= read_switches();
     }
-    reset_switches_pins();
+    reset_switches_pins_to_one();
 
     return state;
 }
 
 static uint8_t read_switches()
 {
-    // This depends on port pins layout - may need to change
+    // Read inverted values
     return ~read_pins(SI) & SI_MASK;
 }
 
@@ -427,10 +427,11 @@ static uint8_t read_srs_debounced()
 
 static uint8_t read_srs_pin()
 {
+    // Read inverted SRS bit
     return ~read_pin(SRS) & SRS_MASK;
 }
 
-static void set_switch_pin(uint8_t pin)
+static void set_switch_pin_to_zero(uint8_t pin)
 {
     // Set one pin to 0 (the one that will be scanned)
     switch (pin) {
@@ -444,7 +445,7 @@ static void set_switch_pin(uint8_t pin)
     }
 }
 
-static void reset_switches_pins(void)
+static void reset_switches_pins_to_one(void)
 {
     // Reset all pins to 1
     set_pin(SPA);

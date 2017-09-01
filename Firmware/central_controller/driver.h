@@ -24,7 +24,7 @@
 #define SW_ZL  0x10
 #define SW_ZR  0x20
 
-#define SW_XLR_YLR  (SW_XL | SW_XR | SW_YL |SW_YR)
+#define SW_XLR_YLR  (SW_XL | SW_XR | SW_YL | SW_YR)
 
 #define SW_SIDE_XL  0
 #define SW_SIDE_XR  1
@@ -43,11 +43,10 @@
 
 typedef struct 
 {
-    uint8_t flags;
-    uint8_t switches;
-    uint8_t cycle_ct;
-}
-Switches_Side_State;
+    volatile uint8_t flags;
+    volatile uint8_t switches;
+    volatile uint8_t cycle_ct;
+} Switches_Side_State;
 
 
 void init_driver(void);

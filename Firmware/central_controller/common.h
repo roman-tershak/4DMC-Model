@@ -4,7 +4,9 @@
 #define FALSE 0x0
 #define TRUE 0x1
 
+#ifndef NULL
 #define NULL 0x0
+#endif
 
 /* Cube geometry */
 #define SIDE_XL  0

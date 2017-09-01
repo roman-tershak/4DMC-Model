@@ -85,6 +85,65 @@ static const uint8_t COLOR_MATRIX[16][3] =
 };
 
 
+// Actually send a bit to the string. We turn off optimizations to make sure the compile does
+// not reorder things and make it so the delay happens in the wrong place.
+static void send_byte(uint8_t byte_val) __attribute__ ((optimize(0)));
+
+static void send_byte(uint8_t byte_val)
+{
+    uint8_t i;
+
+    // Neopixel wants bit in highest-to-lowest order
+    for (i = 0x80; i > 0; i >>= 1)
+    {
+        if (byte_val & i)
+        {
+            set_pin(LED_COLOR);
+            DELAY_CYCLES(NS_TO_CYCLES(T1H) - 4);       // 1-bit width less overhead for the actual bit setting
+            // Note that this delay could be longer and everything would still work
+            res_pin(LED_COLOR);
+            DELAY_CYCLES(NS_TO_CYCLES(T1L) - 6);       // 1-bit gap less the overhead
+        }
+        else
+        {
+            set_pin(LED_COLOR);
+            DELAY_CYCLES(NS_TO_CYCLES(T0H) - 4);       // 0-bit width less overhead 
+            // **************************************************************************
+            // This line is really the only tight goldilocks timing in the whole program!
+            // **************************************************************************
+            res_pin(LED_COLOR);
+            DELAY_CYCLES(NS_TO_CYCLES(T0L) - 6);       // 0-bit gap less overhead
+        }
+    }
+}
+
+// Unset pin (just in case) and wait long enough without sending any bits 
+// to cause the pixels to latch and display the last sent frame
+static void show()
+{
+    res_pin(LED_COLOR);
+    DELAY_CYCLES(NS_TO_CYCLES(RES));
+}
+
+void light_color_buff(uint8_t* color_buff_ptr, uint8_t color_buff_len)
+{
+    uint8_t *rgb_color_matrix_ptr, *color_buff_end;
+
+    color_buff_end = color_buff_ptr + color_buff_len;
+
+    while (color_buff_ptr < color_buff_end)
+    {
+        rgb_color_matrix_ptr = (uint8_t *) COLOR_MATRIX[*color_buff_ptr++];
+
+        // Note: Follow the order of GRB to sent data and the high bit sent at first. 
+        send_byte(rgb_color_matrix_ptr[1]);
+        send_byte(rgb_color_matrix_ptr[0]);
+        send_byte(rgb_color_matrix_ptr[2]);
+    }
+    show();
+
+}
+
 /*** THE BEGINNING OF COLOR ADJUSTMENT DEBUG LOGIC ***/
 #ifdef DEBUG_COLOR_ADJUST
 
@@ -176,132 +235,3 @@ void debug_color_adjust(uint8_t side_num, uint8_t indicators)
 #endif
 /*** THE END OF COLOR ADJUSTMENT DEBUG LOGIC ***/
 
-
-// Actually send a bit to the string. We turn off optimizations to make sure the compile does
-// not reorder things and make it so the delay happens in the wrong place.
-static void send_byte(uint8_t pin_mask, uint8_t byte_val) __attribute__ ((optimize(0)));
-
-static void send_byte(uint8_t pin_mask, uint8_t byte_val)
-{
-    uint8_t i;
-
-    // Neopixel wants bit in highest-to-lowest order
-    for (i = 0x80; i > 0; i >>= 1)
-    {
-        if (byte_val & i)
-        {
-            set_bit_mask(SC_PORT, pin_mask);
-            DELAY_CYCLES(NS_TO_CYCLES(T1H) - 4);       // 1-bit width less overhead for the actual bit setting
-            // Note that this delay could be longer and everything would still work
-            unset_bit_mask(SC_PORT, pin_mask);
-            DELAY_CYCLES(NS_TO_CYCLES(T1L) - 6);       // 1-bit gap less the overhead
-        }
-        else
-        {
-            set_bit_mask(SC_PORT, pin_mask);
-            DELAY_CYCLES(NS_TO_CYCLES(T0H) - 4);       // 0-bit width less overhead 
-            // **************************************************************************
-            // This line is really the only tight goldilocks timing in the whole program!
-            // **************************************************************************
-            unset_bit_mask(SC_PORT, pin_mask);
-            DELAY_CYCLES(NS_TO_CYCLES(T0L) - 6);       // 0-bit gap less overhead
-        }
-    }
-}
-
-// Unset pin (just in case) and wait long enough without sending any bits 
-// to cause the pixels to latch and display the last sent frame
-static void show(uint8_t pin_mask)
-{
-    unset_bit_mask(SC_PORT, pin_mask);
-    DELAY_CYCLES(NS_TO_CYCLES(RES));               
-}
-
-void light_color_buff(uint8_t pin_mask, uint8_t* color_buff_ptr, uint8_t color_buff_len)
-{
-    uint8_t *rgb_color_matrix_ptr, *color_buff_end;
-
-    color_buff_end = color_buff_ptr + color_buff_len;
-    
-    while (color_buff_ptr < color_buff_end)
-    {
-        rgb_color_matrix_ptr = COLOR_MATRIX[*color_buff_ptr++];
-
-        // Note: Follow the order of GRB to sent data and the high bit sent at first. 
-        send_byte(pin_mask, rgb_color_matrix_ptr[1]);
-        send_byte(pin_mask, rgb_color_matrix_ptr[0]);
-        send_byte(pin_mask, rgb_color_matrix_ptr[2]);
-
-    }
-    show(pin_mask);
-
-}
-
-void light_side_color(uint8_t side_num, uint8_t* colors)
-{
-    uint8_t i, j;
-    uint8_t *rgb_color;
-    uint8_t pin_mask = _BV(get_side_led_pin(side_num));
-
-    for (i = 0; i < SIDE_CUBES_COUNT; i++)
-    {
-#ifdef ABSENT_CUBIE
-#if LIGHT_SIDE_COUNT == SIDE_COUNT
-        if (side_num == SIDE_CB && i == CB_ABSENT_CUBIE_NUM)
-        {
-            continue;
-        }
-#endif
-#endif
-
-#ifdef DOUBLE_LEDS
-        for (j = 0; j < 2; j++)
-        {
-#endif
-
-#ifdef DEBUG_COLOR_ADJUST
-/* DEBUG COLOR ADJUSTMENT CODE - START */
-            if (i < 8)
-                rgb_color = color_matrix_adjust[i];
-            else if (i < 16)
-                rgb_color = COLOR_MATRIX[i];
-            else
-                rgb_color = color_matrix_adjust[8];
-/* DEBUG COLOR ADJUSTMENT CODE - END */
-#else
-            rgb_color = COLOR_MATRIX[colors[i]];
-#endif
-            // Note: Follow the order of GRB to sent data and the high bit sent at first. 
-            send_byte(pin_mask, rgb_color[1]);
-            send_byte(pin_mask, rgb_color[0]);
-            send_byte(pin_mask, rgb_color[2]);
-
-#ifdef DOUBLE_LEDS
-        }
-#endif
-
-    }
-    show(pin_mask);
-
-#ifdef DEBUG_COLOR_ADJUST
-#ifdef USART_DEBUG
-/* DEBUG COLOR ADJUSTMENT CODE - START */
-    if (side_num == 0)
-    {
-        USART_transmit(0xff);
-        for (i = 0; i < 8; i++)
-        {
-            if (i < 8)
-                rgb_color = color_matrix_adjust[i];
-            else
-                rgb_color = color_matrix_adjust[8];
-            USART_transmit(rgb_color[0]);
-            USART_transmit(rgb_color[1]);
-            USART_transmit(rgb_color[2]);
-        }
-        USART_transmit(0xff);
-    }
-/* DEBUG COLOR ADJUSTMENT CODE - END */
-#endif
-#endif
-}
