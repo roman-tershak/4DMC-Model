@@ -6,7 +6,7 @@
 void read_side_states(uint8_t *side_state_dst, uint8_t bank_num)
 {
     // Calculate the address of the side state data being read
-    uint8_t *bank_state_address = STATE_STORAGE_START_ADDRESS + (bank_num * STATE_BANK_LEN);
+    uint8_t *bank_state_address = (uint8_t*) STATE_STORAGE_START_ADDRESS + (bank_num * STATE_BANK_LEN);
 
     eeprom_read_block((void*) side_state_dst, (const void*) bank_state_address, STATE_BANK_LEN);
 }
@@ -14,7 +14,7 @@ void read_side_states(uint8_t *side_state_dst, uint8_t bank_num)
 void store_side_states(uint8_t *side_state_src, uint8_t bank_num)
 {
     // Calculate the address of the side state data being written
-    uint8_t *bank_state_address = STATE_STORAGE_START_ADDRESS + (bank_num * STATE_BANK_LEN);
+    uint8_t *bank_state_address = (uint8_t*) STATE_STORAGE_START_ADDRESS + (bank_num * STATE_BANK_LEN);
 
     eeprom_write_block((const void*) side_state_src, (void*) bank_state_address, STATE_BANK_LEN);
 }
