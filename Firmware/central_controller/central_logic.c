@@ -24,91 +24,15 @@ static uint8_t get_initial_color_for_side(uint8_t side_num);
 static void handle_idle_cycle(uint8_t idle_cycle, uint8_t rotating);
 
 
-static const uint8_t DEPENDENCY_MATRIX[] = 
-{
-    (_BV(SIDE_YL) | _BV(SIDE_YR) | _BV(SIDE_ZL) | _BV(SIDE_ZR) | _BV(SIDE_CF) | _BV(SIDE_CB)), // For SIDE_XL
-    (_BV(SIDE_YL) | _BV(SIDE_YR) | _BV(SIDE_ZL) | _BV(SIDE_ZR) | _BV(SIDE_CF) | _BV(SIDE_CB)), // For SIDE_XR
-    (_BV(SIDE_XL) | _BV(SIDE_XR) | _BV(SIDE_ZL) | _BV(SIDE_ZR) | _BV(SIDE_CF) | _BV(SIDE_CB)), // For SIDE_YL
-    (_BV(SIDE_XL) | _BV(SIDE_XR) | _BV(SIDE_ZL) | _BV(SIDE_ZR) | _BV(SIDE_CF) | _BV(SIDE_CB)), // For SIDE_YR
-    (_BV(SIDE_XL) | _BV(SIDE_XR) | _BV(SIDE_YL) | _BV(SIDE_YR) | _BV(SIDE_CF) | _BV(SIDE_CB)), // For SIDE_ZL
-    (_BV(SIDE_XL) | _BV(SIDE_XR) | _BV(SIDE_YL) | _BV(SIDE_YR) | _BV(SIDE_CF) | _BV(SIDE_CB)), // For SIDE_ZR
-    (_BV(SIDE_XL) | _BV(SIDE_XR) | _BV(SIDE_YL) | _BV(SIDE_YR) | _BV(SIDE_ZL) | _BV(SIDE_ZR)), // For SIDE_CF
-    (_BV(SIDE_XL) | _BV(SIDE_XR) | _BV(SIDE_YL) | _BV(SIDE_YR) | _BV(SIDE_ZL) | _BV(SIDE_ZR))  // For SIDE_CB
-};
-
-
-/*
- *   This is one side cubies local orientation. Each side has its own orientation of XYZ axes
- *
- *                                                                      v
- *                                                                      |
- *                                                                      |
- *                                                                     .*
- *                                                                   . * .
- *            ^Y                                                   .  * .
- *            |                                                  .   *     .
- *            |  2          3                                  .    *   .
- *            |                                              .   1 *    4 _ -*
- *            |                                            .      @  _-@-   *
- *            |6          7                              .      _*--    .  @ 3  .
- *            |  0          1                          .   _ -- *  .       .*
- *              -------------->X                     . _--   . *             *.   .
- *           /                                     ._-  .          *      *      .
- *          /  4          5                    <--*                    @ 2          .
- *         Z
- *                                                                                                  (side_zr)
- *                                                                                             y   x
- *                                                 _ 13                                         \ |
- *                                 ____    ----     **                                           \| 
- *                  6__  ------                    *                       (side_yr)        z<----
- *                 *                              *                                  x___
- *                *                              *    *                                  |\
- *               *                       _12    14                                       | \z
- *              *              7 _ ----   *   --*                                        y                     z  X   (side_xr)      x  (side_cb, inverted)
- *             5__  -----      *         * |           *                 (side_xl)              |Z              \ |                   \
- *             *              * |     __15                                        ___Y          |____Y           \|___Y           Y~___\
- *                           4_ -----     _11    *                               |\              \ (side_cf)                            |
- *                              8_  ---  | *            *                        | \Z             \X                                    |
- *              *            |  *         *                                      vX                                                     vZ
- *                             *      ___16       *  ___ 10                                             ^Y
- *                            3_ ---____    -----       *                                               |
- *               *      9__  -----                     *                                                |
- *                     *                           *  *                                        X         ---->X
- *                    *                              *                                         |         \  (side_yl)
- *                *  *                          ___ 1                                          |___Z      Z
- *                  *         _____    -----                                         (side_zl)  \
- *                 2_ -----                                                                      \Y
- *
- */
-static const uint8_t LED_TO_STICKERS_MATRIX[STICKER_COUNT][2] = 
-{
-    {SIDE_ZL, 6}, {SIDE_CB, 4}, {SIDE_XR, 2}, {SIDE_YL, 5}, // corner 1
-    {SIDE_ZL, 2}, {SIDE_XL, 5}, {SIDE_CB, 6}, {SIDE_YL, 4}, // corner 2
-    {SIDE_YL, 0}, {SIDE_CF, 1}, {SIDE_ZL, 3}, {SIDE_XL, 7}, // corner 3
-    {SIDE_YL, 2}, {SIDE_ZR, 4}, {SIDE_CF, 5}, {SIDE_XL, 6}, // corner 4
-    {SIDE_XL, 4}, {SIDE_CB, 2}, {SIDE_YL, 6}, {SIDE_ZR, 5}, // corner 5
-    {SIDE_XL, 0}, {SIDE_YR, 1}, {SIDE_CB, 3}, {SIDE_ZR, 7}, // corner 6
-    {SIDE_YR, 5}, {SIDE_CF, 4}, {SIDE_ZR, 6}, {SIDE_XL, 2}, // corner 7
-    {SIDE_YR, 7}, {SIDE_ZL, 1}, {SIDE_CF, 0}, {SIDE_XL, 3}, // corner 8
-    {SIDE_ZL, 0}, {SIDE_CB, 7}, {SIDE_XL, 1}, {SIDE_YR, 3}, // corner 9
-    {SIDE_ZL, 4}, {SIDE_XR, 6}, {SIDE_CB, 5}, {SIDE_YR, 2}, // corner 10
-    {SIDE_YR, 6}, {SIDE_CF, 2}, {SIDE_ZL, 5}, {SIDE_XR, 4}, // corner 11
-    {SIDE_YR, 4}, {SIDE_ZR, 2}, {SIDE_CF, 6}, {SIDE_XR, 5}, // corner 12
-    {SIDE_XR, 7}, {SIDE_CB, 1}, {SIDE_YR, 0}, {SIDE_ZR, 3}, // corner 13
-    {SIDE_XR, 3}, {SIDE_YL, 7}, {SIDE_CB, 0}, {SIDE_ZR, 1}, // corner 14
-    {SIDE_YL, 3}, {SIDE_CF, 7}, {SIDE_ZR, 0}, {SIDE_XR, 1}, // corner 15
-    {SIDE_YL, 1}, {SIDE_ZL, 7}, {SIDE_CF, 3}, {SIDE_XR, 0}  // corner 16
-};
-
 /************************************************************************
  * This is the main structure holding cube stickers colors
  ***********************************************************************/
 Side_State sides_states[SIDE_COUNT];
 
-static uint8_t faster = FALSE;
-static uint8_t slower = FALSE;
-static uint16_t slower_cycle_counter = SLOWER_IDLE_CYCLE_SPAN;
-static uint16_t save_cycle_counter = SAVE_IDLE_CYCLE_SPAN;
+static volatile uint8_t faster = FALSE;
+static volatile uint8_t slower = FALSE;
+static volatile uint16_t slower_cycle_counter = SLOWER_IDLE_CYCLE_SPAN;
+static volatile uint16_t save_cycle_counter = SAVE_IDLE_CYCLE_SPAN;
 
 static volatile uint8_t waiting_for_saving = FALSE;
 
@@ -271,9 +195,24 @@ void rotation_done(uint8_t side_num)
     sides_states[side_num].status = SIDE_IDLE;
 }
 
+
+static const uint8_t DEPENDENCY_MATRIX[] = 
+{
+    (_BV(SIDE_YL) | _BV(SIDE_YR) | _BV(SIDE_ZL) | _BV(SIDE_ZR) | _BV(SIDE_CF) | _BV(SIDE_CB)), // For SIDE_XL
+    (_BV(SIDE_YL) | _BV(SIDE_YR) | _BV(SIDE_ZL) | _BV(SIDE_ZR) | _BV(SIDE_CF) | _BV(SIDE_CB)), // For SIDE_XR
+    (_BV(SIDE_XL) | _BV(SIDE_XR) | _BV(SIDE_ZL) | _BV(SIDE_ZR) | _BV(SIDE_CF) | _BV(SIDE_CB)), // For SIDE_YL
+    (_BV(SIDE_XL) | _BV(SIDE_XR) | _BV(SIDE_ZL) | _BV(SIDE_ZR) | _BV(SIDE_CF) | _BV(SIDE_CB)), // For SIDE_YR
+    (_BV(SIDE_XL) | _BV(SIDE_XR) | _BV(SIDE_YL) | _BV(SIDE_YR) | _BV(SIDE_CF) | _BV(SIDE_CB)), // For SIDE_ZL
+    (_BV(SIDE_XL) | _BV(SIDE_XR) | _BV(SIDE_YL) | _BV(SIDE_YR) | _BV(SIDE_CF) | _BV(SIDE_CB)), // For SIDE_ZR
+    (_BV(SIDE_XL) | _BV(SIDE_XR) | _BV(SIDE_YL) | _BV(SIDE_YR) | _BV(SIDE_ZL) | _BV(SIDE_ZR)), // For SIDE_CF
+    (_BV(SIDE_XL) | _BV(SIDE_XR) | _BV(SIDE_YL) | _BV(SIDE_YR) | _BV(SIDE_ZL) | _BV(SIDE_ZR))  // For SIDE_CB
+};
+
 static uint8_t can_start_rotation(uint8_t side_num, Side_State *state_ptr)
 {
-    uint8_t sn, dependencies, status;
+    uint8_t sn, dependencies;
+    volatile uint8_t status;
+    Side_State *state_ptr_other;
 
     // Check neighboring sides if they are not rotating
     dependencies = DEPENDENCY_MATRIX[side_num];
@@ -283,14 +222,16 @@ static uint8_t can_start_rotation(uint8_t side_num, Side_State *state_ptr)
         // Is 'sn'th side rotating?
         if (dependencies | _BV(sn))  // if sn == side_num it will be false
         {
-            status = sides_states[sn].status;
+            state_ptr_other = &(sides_states[sn]);
+            status = state_ptr_other->status;
+
             // Cannot rotate this side (side_num'th) if there is...
             if (status == ROTATING)
 
                 return FALSE; // ...at least one neighboring side rotating
 
             else if (status == WAITING_FOR_ROTATION && 
-                state_ptr->cycle_ct < sides_states[sn].cycle_ct)
+                state_ptr->cycle_ct < state_ptr_other->cycle_ct)
 
                 return FALSE; // ...at least one other side waiting for rotation and has higher cycle_ct
         }
@@ -345,6 +286,69 @@ static uint8_t can_save(void)
     }
     return TRUE;
 }
+
+/*
+ *   This is one side cubies local orientation. Each side has its own orientation of XYZ axes
+ *
+ *                                                                      v
+ *                                                                      |
+ *                                                                      |
+ *                                                                     .*
+ *                                                                   . * .
+ *            ^Y                                                   .  * .
+ *            |                                                  .   *     .
+ *            |  2          3                                  .    *   .
+ *            |                                              .   1 *    4 _ -*
+ *            |                                            .      @  _-@-   *
+ *            |6          7                              .      _*--    .  @ 3  .
+ *            |  0          1                          .   _ -- *  .       .*
+ *              -------------->X                     . _--   . *             *.   .
+ *           /                                     ._-  .          *      *      .
+ *          /  4          5                    <--*                    @ 2          .
+ *         Z
+ *                                                                                                  (side_zr)
+ *                                                                                             y   x
+ *                                                 _ 13                                         \ |
+ *                                 ____    ----     **                                           \| 
+ *                  6__  ------                    *                       (side_yr)        z<----
+ *                 *                              *                                  x___
+ *                *                              *    *                                  |\
+ *               *                       _12    14                                       | \z
+ *              *              7 _ ----   *   --*                                        y                     z  X   (side_xr)      x  (side_cb, inverted)
+ *             5__  -----      *         * |           *                 (side_xl)              |Z              \ |                   \
+ *             *              * |     __15                                        ___Y          |____Y           \|___Y           Y~___\
+ *                           4_ -----     _11    *                               |\              \ (side_cf)                            |
+ *                              8_  ---  | *            *                        | \Z             \X                                    |
+ *              *            |  *         *                                      vX                                                     vZ
+ *                             *      ___16       *  ___ 10                                             ^Y
+ *                            3_ ---____    -----       *                                               |
+ *               *      9__  -----                     *                                                |
+ *                     *                           *  *                                        X         ---->X
+ *                    *                              *                                         |         \  (side_yl)
+ *                *  *                          ___ 1                                          |___Z      Z
+ *                  *         _____    -----                                         (side_zl)  \
+ *                 2_ -----                                                                      \Y
+ *
+ */
+static const uint8_t LED_TO_STICKERS_MATRIX[STICKER_COUNT][2] = 
+{
+    {SIDE_ZL, 6}, {SIDE_CB, 4}, {SIDE_XR, 2}, {SIDE_YL, 5}, // corner 1
+    {SIDE_ZL, 2}, {SIDE_XL, 5}, {SIDE_CB, 6}, {SIDE_YL, 4}, // corner 2
+    {SIDE_YL, 0}, {SIDE_CF, 1}, {SIDE_ZL, 3}, {SIDE_XL, 7}, // corner 3
+    {SIDE_YL, 2}, {SIDE_ZR, 4}, {SIDE_CF, 5}, {SIDE_XL, 6}, // corner 4
+    {SIDE_XL, 4}, {SIDE_CB, 2}, {SIDE_YL, 6}, {SIDE_ZR, 5}, // corner 5
+    {SIDE_XL, 0}, {SIDE_YR, 1}, {SIDE_CB, 3}, {SIDE_ZR, 7}, // corner 6
+    {SIDE_YR, 5}, {SIDE_CF, 4}, {SIDE_ZR, 6}, {SIDE_XL, 2}, // corner 7
+    {SIDE_YR, 7}, {SIDE_ZL, 1}, {SIDE_CF, 0}, {SIDE_XL, 3}, // corner 8
+    {SIDE_ZL, 0}, {SIDE_CB, 7}, {SIDE_XL, 1}, {SIDE_YR, 3}, // corner 9
+    {SIDE_ZL, 4}, {SIDE_XR, 6}, {SIDE_CB, 5}, {SIDE_YR, 2}, // corner 10
+    {SIDE_YR, 6}, {SIDE_CF, 2}, {SIDE_ZL, 5}, {SIDE_XR, 4}, // corner 11
+    {SIDE_YR, 4}, {SIDE_ZR, 2}, {SIDE_CF, 6}, {SIDE_XR, 5}, // corner 12
+    {SIDE_XR, 7}, {SIDE_CB, 1}, {SIDE_YR, 0}, {SIDE_ZR, 3}, // corner 13
+    {SIDE_XR, 3}, {SIDE_YL, 7}, {SIDE_CB, 0}, {SIDE_ZR, 1}, // corner 14
+    {SIDE_YL, 3}, {SIDE_CF, 7}, {SIDE_ZR, 0}, {SIDE_XR, 1}, // corner 15
+    {SIDE_YL, 1}, {SIDE_ZL, 7}, {SIDE_CF, 3}, {SIDE_XR, 0}  // corner 16
+};
 
 void sides_colors_changed(void)
 {

@@ -11,7 +11,7 @@ typedef enum
 } Dim_Action;
 
 
-extern volatile Side_State sides_states[SIDE_COUNT];
+extern Side_State sides_states[SIDE_COUNT];
 
 
 static const uint8_t rotation_phase_cycles[][2] = 
@@ -174,7 +174,7 @@ static const uint8_t ROTATION_Z_CW_INDEXES[] =
     4, 6, 7, 5     // ZR
 };
 
-static void rotate_1_side_level(uint8_t *cl, uint8_t *indexes, Dim_Action dim_action)
+static void rotate_1_side_level(uint8_t *cl, uint8_t const *indexes, Dim_Action dim_action)
 {
     uint8_t tc, i;
 
@@ -200,7 +200,7 @@ static void rotate_1_side_level(uint8_t *cl, uint8_t *indexes, Dim_Action dim_ac
     }
 }
 
-static void rotate_1_side(uint8_t *colors, uint8_t *indexes, Dim_Action dim_action)
+static void rotate_1_side(uint8_t *colors, uint8_t const *indexes, Dim_Action dim_action)
 {
     rotate_1_side_level(colors, indexes, dim_action);
     rotate_1_side_level(colors, (indexes + 4), dim_action);
@@ -494,7 +494,7 @@ static Dim_Action get_dim_action(uint8_t cycle_ct)
         return Undim;
 }
 
-static void rotate(uint8_t side_num, uint8_t *indexes_m, uint8_t *indexes_bf, uint8_t rotation_axis, void (*rotate_adjacent_layer_ptr)(uint8_t side_num))
+static void rotate(uint8_t side_num, uint8_t const *indexes_m, uint8_t const *indexes_bf, uint8_t rotation_axis, void (*rotate_adjacent_layer_ptr)(uint8_t side_num))
 {
     Side_State *state_ptr;
     uint8_t *bc, *fc;
@@ -663,41 +663,38 @@ rotation_func_ptr_type get_rotation_func_ptr(uint8_t side_num, uint8_t direction
 }
 
 /* The main rotation function and its counterparts */
-static uint8_t can_do_rotation_cycle(uint8_t cycle_ct)
-{
-    return (cycle_ct == rotation_phase_1_cycles || cycle_ct == rotation_phase_f_cycles) ? TRUE : FALSE;
-}
-
 void rotation_cycle(uint8_t side_num)
 {
     Side_State *state_ptr = &(sides_states[side_num]);
+    volatile uint8_t *cycle_ct_ptr = &state_ptr->cycle_ct;
 
-    if (can_do_rotation_cycle(state_ptr->cycle_ct))
+    if (*cycle_ct_ptr == rotation_phase_1_cycles || 
+        *cycle_ct_ptr == rotation_phase_f_cycles)
     {
         ((rotation_func_ptr_type) state_ptr->rotation_func_ptr)(side_num);
         sides_colors_changed();
     }
-    state_ptr->cycle_ct++;
+    (*cycle_ct_ptr)++;
 
-    if (state_ptr->cycle_ct > rotation_phase_f_cycles)
+    if (*cycle_ct_ptr > rotation_phase_f_cycles)
         rotation_done(side_num);
 }
 
 void change_phase_cycle_counters(uint8_t faster, uint8_t slower)
 {
     static uint8_t index = 0;
-    int8_t *rotation_phase_cycles_ptr;
+    const int8_t *rotation_phase_cycles_ptr;
 
-    // Faster takes the priority over slower
+    // Faster takes precedence over the slower
     if (faster && index < 3)
     {
-        rotation_phase_cycles_ptr = &(rotation_phase_cycles[++index]);
+        rotation_phase_cycles_ptr = rotation_phase_cycles[++index];
         rotation_phase_1_cycles = *rotation_phase_cycles_ptr++;
         rotation_phase_f_cycles = *rotation_phase_cycles_ptr;
     }
-    else if (slower && index)
+    else if (slower && index > 0)
     {
-        rotation_phase_cycles_ptr = &(rotation_phase_cycles[--index]);
+        rotation_phase_cycles_ptr = rotation_phase_cycles[--index];
         rotation_phase_1_cycles = *rotation_phase_cycles_ptr++;
         rotation_phase_f_cycles = *rotation_phase_cycles_ptr;
     }
