@@ -183,6 +183,8 @@ void USART_transmit(uint8_t data);
 void USART_transmit_16(uint16_t data);
 uint8_t USART_receive(void);
 
+void USART_transmit_buff(uint8_t *buff, uint8_t len);
+
 #else
 
 #define USART_TRANSMIT_BYTE(data)

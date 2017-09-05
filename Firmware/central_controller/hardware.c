@@ -22,7 +22,8 @@ void init_ports(void)
     // Software RESET pin
     dir_in(SRS);
 
-    // Initializing side color control pins
+    // Initializing color control pin
+    dir_out(LED_COLOR);
 
 #ifdef USART_DEBUG
     // For debug purposes
@@ -116,6 +117,28 @@ uint8_t USART_receive()
     while (!(UCSR0A & _BV(RXC0)));
     /* Get and return received data from buffer */
     return UDR0;
+}
+
+void USART_transmit_buff(uint8_t *buff, uint8_t len)
+{
+    uint8_t *buff_ptr = buff;
+    uint8_t *buff_end = buff_ptr + len;
+
+    USART_transmit(0xBF);
+    USART_transmit(0xBF);
+    USART_transmit(0xBF);
+    USART_transmit(0xBF);
+
+    while (buff_ptr < buff_end)
+    {
+        USART_transmit(*buff_ptr);
+        buff_ptr++;
+    }
+
+    USART_transmit(0xEE);
+    USART_transmit(0xEE);
+    USART_transmit(0xEE);
+    USART_transmit(0xBF);
 }
 
 #endif

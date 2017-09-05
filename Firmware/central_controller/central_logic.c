@@ -66,7 +66,7 @@ static void reset_sides_colors(void)
         color = get_initial_color_for_side(sn);
 
         colors = sides_states[sn].colors;
-        for (c = 0; c < SIDE_CUBES_COUNT; c++)
+        for (c = 0; c < SIDE_STICKER_COUNT; c++)
         {
             colors[c] = color;
         }
@@ -358,31 +358,23 @@ void sides_colors_changed(void)
     uint8_t sn, i, *buff_ptr, *led2st_ptr;
 
     buff_ptr = color_buff;
-    led2st_ptr = (uint8_t*) LED_TO_STICKERS_MATRIX[0];
 
     for (i = 0; i < STICKER_COUNT; i++)
     {
-        *buff_ptr++ = sides_states[*led2st_ptr++].colors[*led2st_ptr++];
+        led2st_ptr = (uint8_t*) LED_TO_STICKERS_MATRIX[i];
+        *buff_ptr++ = sides_states[ led2st_ptr[0] ].colors[ led2st_ptr[1] ];
     }
 
     light_color_buff(color_buff, STICKER_COUNT);
-}
 
 #ifdef USART_DEBUG
-static uint8_t send_colors_to_usart(uint8_t sn, uint8_t *colors)
-{
-    uint8_t c, ok;
-
-    ok = TRUE;
-    USART_transmit(0xff);
-
-    for (c = 0; c < SIDE_CUBES_COUNT; c++)
+    for (i = 0; i < SIDE_COUNT; i++)
     {
-        USART_transmit(colors[c]);
-        if (colors[c] != sn)
-            ok = FALSE;
+        // Send colors to USART from the logical cube data structure
+        USART_transmit_buff(sides_states[i].colors, SIDE_STICKER_COUNT);
     }
-    return ok;
-}
+    // Send colors to USART from the physical LED data structure
+    USART_transmit_buff(color_buff, STICKER_COUNT);
 #endif
+}
 

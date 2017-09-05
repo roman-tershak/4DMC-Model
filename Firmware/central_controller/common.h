@@ -18,11 +18,11 @@
 #define SIDE_CF  6
 #define SIDE_CB  7
 
-#define SIDE_COUNT        8
-#define SIDE_CUBES_COUNT  8
-#define STICKER_COUNT     (SIDE_COUNT * SIDE_CUBES_COUNT)
+#define SIDE_COUNT          8
+#define SIDE_STICKER_COUNT  8
+#define STICKER_COUNT       (SIDE_COUNT * SIDE_STICKER_COUNT)
 
-#define LIGHT_SIDE_COUNT  (SIDE_COUNT)
+#define LIGHT_SIDE_COUNT    (SIDE_COUNT)
 
 /* Colors */
 #define MAIN_COLOR_COUNT        8
@@ -30,7 +30,7 @@
 
 /* Debug directives */
 //#define DEBUG_COLOR_ADJUST
-//#define USART_DEBUG
+#define USART_DEBUG
 //#define DEBUG_DONT_STORE
 
 #endif
