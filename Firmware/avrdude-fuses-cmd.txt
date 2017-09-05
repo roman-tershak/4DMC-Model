@@ -2,6 +2,7 @@
 
 To read fuses
 ..\bin\avrdude -p atmega48 -c usbasp -P com5 -U lfuse:r:-:h -U hfuse:r:-:h
+avrdude.exe -p atmega328p -c usbasp -P com5 -U lfuse:r:-:h -U hfuse:r:-:h
 
 -----------------------
 Ext. Crystal Osc.; Frequency 8.0-    MHz; Start-up time PWRDWN/RESET: 16K CK/14 CK + 4.1 ms; [CKSEL=1111 SUT=10]   
