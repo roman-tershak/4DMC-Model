@@ -20,7 +20,7 @@ typedef struct
     volatile uint8_t status;
     volatile uint8_t cycle_ct;
     volatile void *rotation_func_ptr;
-    uint8_t colors[SIDE_CUBES_COUNT];
+    uint8_t colors[SIDE_STICKER_COUNT];
 } Side_State;
 
 void load_sides_states(void);

@@ -108,9 +108,9 @@ static void pack_unpack_colors(uint8_t what)
     for (i = 0; i < SIDE_COUNT; i++)
     {
         colors = sides_states[i].colors;
-        buff_bit_index = (uint16_t) i * SIDE_CUBES_COUNT * 3;
+        buff_bit_index = (uint16_t) i * SIDE_STICKER_COUNT * 3;
 
-        for (j = 0; j < SIDE_CUBES_COUNT; j++)
+        for (j = 0; j < SIDE_STICKER_COUNT; j++)
         {
             //   0          1           2          3           4           5
             // |xxx,xxx,xx|x,xxx,xxx,x|xx,xxx,xxx,|xxx,xxx,xx|x,xxx,xxx,x|xx,...
@@ -153,7 +153,7 @@ static uint8_t check_side_states(void)
 
     for (i = 0; i < SIDE_COUNT; i++)
     {
-        for (j = 0; j < SIDE_CUBES_COUNT; j++)
+        for (j = 0; j < SIDE_STICKER_COUNT; j++)
         {
             color_counts[sides_states[i].colors[j]]++;
         }
@@ -161,7 +161,7 @@ static uint8_t check_side_states(void)
     for (i = 0; i < MAIN_COLOR_COUNT; i++)
     {
         // There should be exactly SIDE_CUBES_COUNT stickers of each color
-        if (color_counts[i] != SIDE_CUBES_COUNT)
+        if (color_counts[i] != SIDE_STICKER_COUNT)
             return FALSE;
     }
     return TRUE;
