@@ -358,11 +358,11 @@ void sides_colors_changed(void)
     uint8_t sn, i, *buff_ptr, *led2st_ptr;
 
     buff_ptr = color_buff;
-    led2st_ptr = (uint8_t*) LED_TO_STICKERS_MATRIX[0];
 
     for (i = 0; i < STICKER_COUNT; i++)
     {
-        *buff_ptr++ = sides_states[*led2st_ptr++].colors[*led2st_ptr++];
+        led2st_ptr = (uint8_t*) LED_TO_STICKERS_MATRIX[i];
+        *buff_ptr++ = sides_states[ led2st_ptr[0] ].colors[ led2st_ptr[1] ];
     }
 
     light_color_buff(color_buff, STICKER_COUNT);

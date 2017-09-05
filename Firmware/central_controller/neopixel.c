@@ -28,7 +28,7 @@ void __builtin_avr_delay_cycles(uint32_t __n) {
 }
 #endif*/
 
-static const uint8_t COLOR_MATRIX[16][3] = 
+static const uint8_t COLOR_MATRIX[ALL_COLOR_COUNT][3] = 
 {
     /* Main colors */
 /*    { 0,  0, 175},   // blue
@@ -133,7 +133,7 @@ void light_color_buff(uint8_t* color_buff_ptr, uint8_t color_buff_len)
 
     while (color_buff_ptr < color_buff_end)
     {
-        rgb_color_matrix_ptr = (uint8_t *) COLOR_MATRIX[*color_buff_ptr++];
+        rgb_color_matrix_ptr = (uint8_t*) COLOR_MATRIX[*color_buff_ptr++];
 
         // Note: Follow the order of GRB to sent data and the high bit sent at first. 
         send_byte(rgb_color_matrix_ptr[1]);

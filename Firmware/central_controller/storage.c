@@ -13,7 +13,7 @@
 static void pack_unpack_colors(uint8_t what);
 static uint8_t check_side_states(void);
 
-extern volatile Side_State sides_states[SIDE_COUNT];
+extern Side_State sides_states[SIDE_COUNT];
 
 static volatile uint8_t is_saving_states = FALSE;
 static uint8_t colors_packed_buff[STATE_DATA_STORAGE_LEN + 1];

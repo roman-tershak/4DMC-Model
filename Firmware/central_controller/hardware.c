@@ -22,7 +22,8 @@ void init_ports(void)
     // Software RESET pin
     dir_in(SRS);
 
-    // Initializing side color control pins
+    // Initializing color control pin
+    dir_out(LED_COLOR);
 
 #ifdef USART_DEBUG
     // For debug purposes
