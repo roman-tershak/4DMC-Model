@@ -1,0 +1,19 @@
+SW side out
+SW_SIDE_XL  B0 - 12 - 5
+SW_SIDE_XR  B1 - 13 - 3
+SW_SIDE_YL  B2 - 14 - 1
+SW_SIDE_YR  B3 - 15 - 7
+SW_SIDE_ZL  B4 - 16 - 9
+SW_SIDE_ZR  B5 - 17 - 11
+SW_SIDE_CF  D7 - 11 - 13
+
+SW in
+C0, XL - 23 - 2
+C1, XR - 24 - 4
+C2, YL - 25 - 6
+C3, YR - 26 - 8
+C4, ZL - 27 - 10
+C5, ZR - 28 - 12
+
+LED
+D2 - 32 - 18
