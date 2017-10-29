@@ -371,11 +371,12 @@ static void get_rotation_side_and_dir(uint8_t swn, Switches_Side_State *sw_side_
     uint8_t switches_i = sw_side_state_ptr->switches;
 
     if (sw_side_state_ptr->flags & DOUBLE_CLICK &&
-            swn < SW_SIDE_CF &&    // All switch sides but CF
+            swn < SW_SIDE_CF &&    // All switch sides but CF and CB
             switches_i < SW_ZL)      // Only XL, XR and YL, YR switches
     {
         switches_i &= SW_XLR_YLR;  // Clear ZL, ZR bits
-        switches_i |= swn << 4;    // Put swicthes side num into higher bits
+        switches_i |= swn << 4;    // Put swicthes side num into higher bits, this is needed for lookup in 
+                                   // SWITCH_TO_ROTATION_MATRIX_CB matrix
         
         *swn_out_ptr = SW_SIDE_CB;  // in case of double click, assume CB side is rotating
         *dir_out = SWITCH_TO_ROTATION_MATRIX_CB[switches_i];  // get rotation direction from this matrix

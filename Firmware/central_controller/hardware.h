@@ -114,7 +114,7 @@
 // Color control output pin. It sends control sequences of bytes to side LED's
 #define LED_COLOR_PORT PORTD
 #define LED_COLOR_DDR DDRD
-#define LED_COLOR_MASK _BV(PORTD2)  // Choose one of D2(32), D3(1), D4(2), D5(9), D6(10)
+#define LED_COLOR_MASK _BV(PORTD2)
 #define LED_COLOR_PIN PORTD2
 
 // PORT D pins.
