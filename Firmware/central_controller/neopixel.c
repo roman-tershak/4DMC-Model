@@ -87,7 +87,7 @@ static const uint8_t COLOR_MATRIX[ALL_COLOR_COUNT][3] =
 
 // Actually send a bit to the string. We turn off optimizations to make sure the compile does
 // not reorder things and make it so the delay happens in the wrong place.
-static void send_byte(uint8_t byte_val) __attribute__ ((optimize(0)));
+static void send_byte(uint8_t byte_val) __attribute__ ((optimize(O0)));
 
 static void send_byte(uint8_t byte_val)
 {
@@ -96,23 +96,35 @@ static void send_byte(uint8_t byte_val)
     // Neopixel wants bit in highest-to-lowest order
     for (i = 0x80; i > 0; i >>= 1)
     {
+        // T1H  800    // Width of a 1 bit in ns
+        // T1L  450    // Width of a 1 bit in ns
+        // T0H  400    // Width of a 0 bit in ns
+        // T0L  850    // Width of a 0 bit in ns
         if (byte_val & i)
         {
-            set_pin(LED_COLOR);
-            DELAY_CYCLES(NS_TO_CYCLES(T1H) - 4);       // 1-bit width less overhead for the actual bit setting
+            set_bit_mask(LED_COLOR_PORT, LED_COLOR_MASK);
+//            __builtin_avr_delay_cycles(4);
+//            __builtin_avr_delay_cycles(8);
+            DELAY_CYCLES(NS_TO_CYCLES(T1H) - 2);       // 1-bit width less overhead for the actual bit setting
             // Note that this delay could be longer and everything would still work
-            res_pin(LED_COLOR);
-            DELAY_CYCLES(NS_TO_CYCLES(T1L) - 6);       // 1-bit gap less the overhead
+            unset_bit_mask(LED_COLOR_PORT, LED_COLOR_MASK);
+//            __builtin_avr_delay_cycles(10);
+//            __builtin_avr_delay_cycles(50);
+            DELAY_CYCLES(NS_TO_CYCLES(T1L) - 2);       // 1-bit gap less the overhead
         }
         else
         {
-            set_pin(LED_COLOR);
-            DELAY_CYCLES(NS_TO_CYCLES(T0H) - 4);       // 0-bit width less overhead 
+            set_bit_mask(LED_COLOR_PORT, LED_COLOR_MASK);
+//            __builtin_avr_delay_cycles(0);
+//            __builtin_avr_delay_cycles(2);
+            DELAY_CYCLES(NS_TO_CYCLES(T0H) - 2);       // 0-bit width less overhead 
             // **************************************************************************
             // This line is really the only tight goldilocks timing in the whole program!
             // **************************************************************************
-            res_pin(LED_COLOR);
-            DELAY_CYCLES(NS_TO_CYCLES(T0L) - 6);       // 0-bit gap less overhead
+            unset_bit_mask(LED_COLOR_PORT, LED_COLOR_MASK);
+//            __builtin_avr_delay_cycles(10);
+//            __builtin_avr_delay_cycles(50);
+            DELAY_CYCLES(NS_TO_CYCLES(T0L) - 2);       // 0-bit gap less overhead
         }
     }
 }

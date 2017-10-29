@@ -66,64 +66,56 @@ ISR (TIMER1_OVF_vect)
 
     // Handling Rotation side swicthes
     sw_side_state_ptr = &(switches_side_states[ct]);
-    next_side = TRUE;
 
-    if (!(sw_side_state_ptr->flags & WAITING_FOR_RELEASE))
-    {
-        if (sw_side_state_ptr->cycle_ct < READ_COMPLETE_SITE_STATE_CYCLES)
-        {
-            // Read switches state for the entire side
-            if (switches = read_switches_debounced(ct))  // pressed?
-            {
-                // If pressed, then increase the counter. Until it reaches max, i.e.
-                // READ_COMPLETE_SITE_STATE_CYCLES, gather all pressed side switches.
-
-                if (sw_side_state_ptr->switches & switches)  // double click?, 
-                // i.e. are there any of the bits that match?
-                {
-                    // Set DOUBLE_CLICK flag and start waiting for release
-                    sw_side_state_ptr->flags |= (DOUBLE_CLICK | WAITING_FOR_RELEASE);
-                    sw_side_state_ptr->cycle_ct = READ_COMPLETE_SITE_STATE_CYCLES;
-                }
-                else
-                {
-                    sw_side_state_ptr->cycle_ct++;
-
-                    if (sw_side_state_ptr->cycle_ct >= READ_COMPLETE_SITE_STATE_CYCLES)
-                    {
-                        sw_side_state_ptr->flags |= WAITING_FOR_RELEASE;
-                    }
-                    else
-                    {
-                        next_side = FALSE;  // Stick to this switches set (one side)
-                    }
-                }
-                // Some of the swicthes may have been pressed previously, 
-                // so to preserve these bits bitwise '|' operation is used.
-                sw_side_state_ptr->switches |= switches;
-
-            }
-            else if (sw_side_state_ptr->switches)
-            {
-                // Some of the switches had been pressed and released before
-                // READ_COMPLETE_SITE_STATE_CYCLES expired
-                sw_side_state_ptr->cycle_ct++;
-            }
-            // else
-                // Nothing, just continue waiting
-        }
-    }
-    else
+    if (sw_side_state_ptr->flags & SW_PRESSED)
     {
         // Here we are waiting for the previously pressed switches to be released
         // Read switches state for the entire side and check if they are released
         if (read_switches_debounced(ct) == 0)
         {
-            sw_side_state_ptr->flags &= ~WAITING_FOR_RELEASE;
+            sw_side_state_ptr->flags &= ~SW_PRESSED;
         }
     }
+    else if (sw_side_state_ptr->cycle_ct < READ_COMPLETE_SITE_STATE_CYCLES)
+    {
+        // Read switches state for the entire side
+        if (switches = read_switches_debounced(ct))  // pressed?
+        {
+            sw_side_state_ptr->flags |= SW_PRESSED;
 
-    if (sw_side_state_ptr->cycle_ct >= READ_COMPLETE_SITE_STATE_CYCLES)
+            if (sw_side_state_ptr->switches & switches)  // double click?, 
+            // i.e. are there any of the bits that match?
+            {
+                // Set DOUBLE_CLICK flag and start waiting for release
+                sw_side_state_ptr->flags |= DOUBLE_CLICK;
+                sw_side_state_ptr->cycle_ct = READ_COMPLETE_SITE_STATE_CYCLES;
+
+                USART_TRANSMIT_BYTE(0xDC);
+            }
+            else
+            {
+                sw_side_state_ptr->cycle_ct++;
+            }
+            // Some of the swicthes may have been pressed previously, 
+            // so to preserve these bits bitwise '|' operation is used.
+            sw_side_state_ptr->switches |= switches;
+
+        }
+        else if (sw_side_state_ptr->switches)
+        {
+            // Some of the switches had been pressed and released before
+            // READ_COMPLETE_SITE_STATE_CYCLES expired
+            sw_side_state_ptr->cycle_ct++;
+        }
+        // else
+            // Nothing, just continue waiting
+    }
+
+    if (sw_side_state_ptr->cycle_ct == 0)
+    {
+        next_side = TRUE;
+    }
+    else if (sw_side_state_ptr->cycle_ct >= READ_COMPLETE_SITE_STATE_CYCLES)
     {
         // The wait period for switches has finished, now start rotation
         get_rotation_side_and_dir(ct, sw_side_state_ptr, &rotating_side, &rotation_dir);
@@ -137,6 +129,12 @@ ISR (TIMER1_OVF_vect)
             sw_side_state_ptr->switches = 0;
             sw_side_state_ptr->flags &= ~DOUBLE_CLICK;
         }
+        
+        next_side = TRUE;
+    }
+    else
+    {
+        next_side = FALSE;  // Stick to this switches set (one side)
     }
 
     if (next_side)

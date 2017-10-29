@@ -30,7 +30,8 @@
 
 /* Debug directives */
 //#define DEBUG_COLOR_ADJUST
-#define USART_DEBUG
+//#define USART_DEBUG
+//#define DEBUG_COLOR
 //#define DEBUG_DONT_STORE
 
 #endif

@@ -12,10 +12,10 @@
 #define DEBOUNCE_DELAY_1  2
 #define DEBOUNCE_DELAY_2  10
 
-#define WAITING_FOR_RELEASE  1
-#define DOUBLE_CLICK         2
+#define SW_PRESSED        1
+#define DOUBLE_CLICK      2
 
-#define READ_COMPLETE_SITE_STATE_CYCLES 16 // TODO
+#define READ_COMPLETE_SITE_STATE_CYCLES  4 // TODO
 
 #define SW_XL  0x1
 #define SW_XR  0x2

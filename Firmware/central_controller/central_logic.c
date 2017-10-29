@@ -368,6 +368,7 @@ void sides_colors_changed(void)
     light_color_buff(color_buff, STICKER_COUNT);
 
 #ifdef USART_DEBUG
+#ifdef DEBUG_COLOR
     for (i = 0; i < SIDE_COUNT; i++)
     {
         // Send colors to USART from the logical cube data structure
@@ -375,6 +376,7 @@ void sides_colors_changed(void)
     }
     // Send colors to USART from the physical LED data structure
     USART_transmit_buff(color_buff, STICKER_COUNT);
+#endif
 #endif
 }
 
