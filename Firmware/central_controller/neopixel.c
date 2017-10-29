@@ -96,34 +96,22 @@ static void send_byte(uint8_t byte_val)
     // Neopixel wants bit in highest-to-lowest order
     for (i = 0x80; i > 0; i >>= 1)
     {
-        // T1H  800    // Width of a 1 bit in ns
-        // T1L  450    // Width of a 1 bit in ns
-        // T0H  400    // Width of a 0 bit in ns
-        // T0L  850    // Width of a 0 bit in ns
         if (byte_val & i)
         {
-            set_bit_mask(LED_COLOR_PORT, LED_COLOR_MASK);
-//            __builtin_avr_delay_cycles(4);
-//            __builtin_avr_delay_cycles(8);
+            set_pin(LED_COLOR);
             DELAY_CYCLES(NS_TO_CYCLES(T1H) - 2);       // 1-bit width less overhead for the actual bit setting
             // Note that this delay could be longer and everything would still work
-            unset_bit_mask(LED_COLOR_PORT, LED_COLOR_MASK);
-//            __builtin_avr_delay_cycles(10);
-//            __builtin_avr_delay_cycles(50);
+            res_pin(LED_COLOR);
             DELAY_CYCLES(NS_TO_CYCLES(T1L) - 2);       // 1-bit gap less the overhead
         }
         else
         {
-            set_bit_mask(LED_COLOR_PORT, LED_COLOR_MASK);
-//            __builtin_avr_delay_cycles(0);
-//            __builtin_avr_delay_cycles(2);
+            set_pin(LED_COLOR);
             DELAY_CYCLES(NS_TO_CYCLES(T0H) - 2);       // 0-bit width less overhead 
             // **************************************************************************
             // This line is really the only tight goldilocks timing in the whole program!
             // **************************************************************************
-            unset_bit_mask(LED_COLOR_PORT, LED_COLOR_MASK);
-//            __builtin_avr_delay_cycles(10);
-//            __builtin_avr_delay_cycles(50);
+            res_pin(LED_COLOR);
             DELAY_CYCLES(NS_TO_CYCLES(T0L) - 2);       // 0-bit gap less overhead
         }
     }
