@@ -74,14 +74,22 @@ static const uint8_t COLOR_MATRIX[ALL_COLOR_COUNT][3] =
     {30,  0, 15},   // pink
     {30, 10, 40},   // purple*/
     /* Transitioning colors */
-    { 0,  0, 14},   // dim blue
+    { 0,  0, 70},   // blue
+    { 0, 58, 32},   // light blue
+    { 0, 68,  0},   // green
+    {70, 70,  0},   // yellow
+    {86, 32,  0},   // orange
+    {60,  0,  0},   // red
+    {60,  0, 30},   // pink
+    {60, 20, 80},   // purple
+/*    { 0,  0, 14},   // dim blue
     { 0, 11,  7},   // dim light blue
     { 0, 13,  0},   // dim green
     {14, 14,  0},   // dim yellow
     {17,  7,  0},   // dim orange
     {12,  0,  0},   // dim red
     {12,  0,  6},   // dim pink
-    {12,  4, 16}    // dim purple
+    {12,  4, 16}    // dim purple*/
 };
 
 

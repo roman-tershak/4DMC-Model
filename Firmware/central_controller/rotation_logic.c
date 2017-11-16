@@ -16,14 +16,14 @@ extern Side_State sides_states[SIDE_COUNT];
 
 static const uint8_t rotation_phase_cycles[][2] = 
 {
-    {0, 16},  // The slowest set
-    {0, 11},  // Middle
-    {0, 7},   // Fast
-    {0, 4}    // The fastest set
+    {0, 8},  // The slowest set
+    {0, 4},  // Middle
+    {0, 2},   // Fast
+    {0, 1}    // The fastest set
 };
 
 static uint8_t rotation_phase_1_cycles = 0;
-static uint8_t rotation_phase_f_cycles = 16;
+static uint8_t rotation_phase_f_cycles = 8;
 
 
 /* Functions for retrieving adjacent sides */
