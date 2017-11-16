@@ -239,11 +239,11 @@ static const uint8_t SWITCH_TO_ROTATION_MATRIX[64] =
  *                      \|
  *                   x<-- 
  * (side_xl)                               ^X (side_xr)       |Z
- *      Z ___             Y\ |Z (side_cf)  |                  |
- *           |\             \|             |___Z        ~X<---
- *           | Y              --->X         \                  \
- *           vX                              Y        (side_cb) \Y
- *                                |Y
+ *      Z ___                |Z (side_cf)  |                  |
+ *           |\              |             |___Z        ~X<---
+ *           | Y              --->Y         \                  \
+ *           vX               \              Y        (side_cb) \Y
+ *                             X  |Y
  *                                |
  *                                 ---->X
  *                       x^        \   (side_yl)
