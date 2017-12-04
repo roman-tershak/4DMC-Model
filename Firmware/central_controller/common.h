@@ -26,7 +26,6 @@
 
 /* Colors */
 #define MAIN_COLOR_COUNT        8
-#define ALL_COLOR_COUNT         16
 
 /* Debug directives */
 //#define DEBUG_COLOR_ADJUST

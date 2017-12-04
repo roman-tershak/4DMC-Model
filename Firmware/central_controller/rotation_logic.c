@@ -1,29 +1,6 @@
 #include "rotation_logic.h"
+#include "central_logic.h"
 #include "common.h"
-#include "hardware.h"
-
-#define DIM(color) (0x8 | (color))
-#define UNDIM(color) ((color) & 0x7)
-
-typedef enum
-{
-    MoveAndDim, Undim
-} Dim_Action;
-
-
-extern Side_State sides_states[SIDE_COUNT];
-
-
-static const uint8_t rotation_phase_cycles[][2] = 
-{
-    {0, 8},  // The slowest set
-    {0, 4},  // Middle
-    {0, 2},   // Fast
-    {0, 1}    // The fastest set
-};
-
-static uint8_t rotation_phase_1_cycles = 0;
-static uint8_t rotation_phase_f_cycles = 8;
 
 
 /* Functions for retrieving adjacent sides */
@@ -88,6 +65,10 @@ static const uint8_t ADJACENT_SIDES_MATRIX[][6] =
     /* SIDE_CB, AXIS_Y */ {SIDE_ZL, SIDE_YR, SIDE_ZR, SIDE_YL, SIDE_XR, SIDE_XL},
     /* SIDE_CB, AXIS_Z */ {SIDE_YR, SIDE_XL, SIDE_YL, SIDE_XR, SIDE_ZR, SIDE_ZL}
 };
+
+
+extern Side_State sides_states[SIDE_COUNT];
+
 
 static uint8_t* get_adjacent_matrix_indexex(uint8_t side_num, uint8_t orientation)
 {
@@ -174,36 +155,22 @@ static const uint8_t ROTATION_Z_CW_INDEXES[] =
     4, 6, 7, 5     // ZR
 };
 
-static void rotate_1_side_level(uint8_t *cl, uint8_t const *indexes, Dim_Action dim_action)
+static void rotate_1_side_level(uint8_t *cl, uint8_t const *indexes)
 {
     uint8_t tc, i;
 
-    switch (dim_action)
+    tc = cl[indexes[0]];
+    for (i = 0; i < 3; i++)
     {
-    case MoveAndDim:
-
-        tc = cl[indexes[0]];
-        for (i = 0; i < 3; i++)
-        {
-            cl[indexes[i]] = DIM(cl[indexes[i + 1]]);
-        }
-        cl[indexes[3]] = DIM(tc);
-        break;
-
-    case Undim:
-
-        for (i = 0; i <= 3; i++)
-        {
-            cl[indexes[i]] = UNDIM(cl[indexes[i]]);
-        }
-        break;
+        cl[indexes[i]] = cl[indexes[i + 1]];
     }
+    cl[indexes[3]] = tc;
 }
 
-static void rotate_1_side(uint8_t *colors, uint8_t const *indexes, Dim_Action dim_action)
+static void rotate_1_side(uint8_t *colors, uint8_t const *indexes)
 {
-    rotate_1_side_level(colors, indexes, dim_action);
-    rotate_1_side_level(colors, (indexes + 4), dim_action);
+    rotate_1_side_level(colors, indexes);
+    rotate_1_side_level(colors, (indexes + 4));
 }
 
 
@@ -214,21 +181,21 @@ static void rotate_1_side(uint8_t *colors, uint8_t const *indexes, Dim_Action di
  *                                                                   \ |                    
  *                                                                    \|                    
  *                                                               z<----                     
- *             ^Y                                         x___                              
+ *             ^Y                                         x___       2(rc)                  
  *             |    ~3<------                                 |\                            
  *             | 2             3                              | \z                          
  *             |                                              y                     z  X    
  *             |                                                     |Z              \ |    
- *             |                  ^4~                  ___Y          |____Y           \|___Y
- *           6 |           7     /                    |\              \                     
- *         2^  |                /                     | \Z             \X                   
- *         /   | 0             1                      vX                                    
+ *             |                  ^4~             3(dc)___Y          |____Y           \|___Y
+ *           6 |           7     /                    |\            ^ \              1(uc)  
+ *         2^  |                /                     | \Z          |  \X                   
+ *         /   | 0             1                      vX             \____-                 
  *        /     ---------------->X                                           ^Y             
  *           /                                                               |              
  *          /                                                                |              
  *         / 4             5                                        X         ---->X        
  *        Z     1<------                                            |         \             
- *                                                                  |___Z      Z            
+ *                                                             4(lc)|___Z      Z            
  *                                                                   \                      
  *                                                                    \Y                    
  */
@@ -242,17 +209,8 @@ static void rotate_adjacent_layer_x_ccw(uint8_t side_num)
     dc = get_adjacent_down_side(side_num, AXIS_X);
     lc = get_adjacent_left_side(side_num, AXIS_X);
 
-    t1=uc[0]; uc[0]=uc[1]; 
-    t2=uc[4]; uc[4]=uc[5];
-
-    uc[1]=rc[0]; rc[0]=rc[4]; 
-    uc[5]=rc[2]; rc[2]=rc[6];
-
-    rc[6]=dc[2]; dc[2]=dc[3];
-    rc[4]=dc[6]; dc[6]=dc[7];
-
-    dc[3]=lc[1]; lc[1]=lc[5]; lc[5]=t2;
-    dc[7]=lc[3]; lc[3]=lc[7]; lc[7]=t1;
+    t1=uc[0]; uc[0]=rc[0]; rc[0]=dc[6]; dc[6]=lc[3]; lc[3]=t1;
+    t2=uc[4]; uc[4]=rc[2]; rc[2]=dc[2]; dc[2]=lc[1]; lc[1]=t2;
 }
 /* 
  *                                                                         y   x                   
@@ -287,38 +245,29 @@ static void rotate_adjacent_layer_x_cw(uint8_t side_num)
     dc = get_adjacent_down_side(side_num, AXIS_X);
     lc = get_adjacent_left_side(side_num, AXIS_X);
 
-    t1=uc[1]; uc[1]=uc[0];
-    t2=uc[5]; uc[5]=uc[4];
-
-    uc[4]=lc[5]; lc[5]=lc[1];
-    uc[0]=lc[7]; lc[7]=lc[3];
-    
-    lc[1]=dc[3]; dc[3]=dc[2];
-    lc[3]=dc[7]; dc[7]=dc[6];
-    
-    dc[6]=rc[4]; rc[4]=rc[0]; rc[0]=t1;
-    dc[2]=rc[6]; rc[6]=rc[2]; rc[2]=t2;
+    t1=uc[1]; uc[1]=lc[7]; lc[7]=dc[7]; dc[7]=rc[4]; rc[4]=t1;
+    t2=uc[5]; uc[5]=lc[5]; lc[5]=dc[3]; dc[3]=rc[6]; rc[6]=t2;
 }
 /* 
  *                                                                          y   x                   
  *                                                                           \ |                    
  *                                                                            \|                    
  *                                                                       z<----                     
- *                                                                x___                              
+ *                                                                x___         1(uc)                
  *             ^Y                                                     |\                            
- *             |                                                      | \z                          
+ *             |                                                 4(lc)| \z                          
  *             | 2 ^~2         3                                      y                     z  X    
- *        1^   |   |                                                         |Z              \ |    
- *         |   |   |                ^3                         ___Y          |____Y           \|___Y
- *         |   |   |                |                         |\              \                     
+ *        1^   |   |                                                         |Z     /        \ |    
+ *         |   |   |                ^3                         ___Y          |____Y|   ^      \|___Y
+ *         |   |   |                |                         |\              \     \_/             
  *         | 6 |           7        |                         | \Z             \X                   
  *             |                    |                         vX                                    
  *             | 0             1                                                     ^Y             
- *              ---------------->X                                                   |              
+ *              ---------------->X                                                   |  2(rc)       
  *           /   ^~4                                                                 |              
  *          /    |                                                          X         ---->X        
  *         / 4   |         5                                                |         \             
- *        Z      |                                                          |___Z      Z            
+ *        Z      |                                                    3(dc) |___Z      Z            
  *                                                                           \                      
  *                                                                            \Y                    
  */
@@ -332,17 +281,8 @@ static void rotate_adjacent_layer_y_ccw(uint8_t side_num)
     dc = get_adjacent_down_side(side_num, AXIS_Y);
     lc = get_adjacent_left_side(side_num, AXIS_Y);
 
-    t1=uc[2]; uc[2]=uc[0];
-    t2=uc[6]; uc[6]=uc[4];
-
-    uc[4]=rc[2]; rc[2]=rc[0];
-    uc[0]=rc[3]; rc[3]=rc[1];
-
-    rc[0]=dc[3]; dc[3]=dc[1];
-    rc[1]=dc[7]; dc[7]=dc[5];
-
-    dc[5]=lc[6]; lc[6]=lc[4]; lc[4]=t1;
-    dc[1]=lc[7]; lc[7]=lc[5]; lc[5]=t2;
+    t1=uc[2]; uc[2]=rc[3]; rc[3]=dc[7]; dc[7]=lc[6]; lc[6]=t1;
+    t2=uc[6]; uc[6]=rc[2]; rc[2]=dc[3]; dc[3]=lc[7]; lc[7]=t2;
 }
 /* 
  *                                                                      y   x                   
@@ -377,17 +317,8 @@ static void rotate_adjacent_layer_y_cw(uint8_t side_num)
     dc = get_adjacent_down_side(side_num, AXIS_Y);
     lc = get_adjacent_left_side(side_num, AXIS_Y);
 
-    t1=uc[0]; uc[0]=uc[2];
-    t2=uc[4]; uc[4]=uc[6];
-
-    uc[2]=lc[4]; lc[4]=lc[6];
-    uc[6]=lc[5]; lc[5]=lc[7];
-
-    lc[7]=dc[1]; dc[1]=dc[3];
-    lc[6]=dc[5]; dc[5]=dc[7];
-
-    dc[3]=rc[0]; rc[0]=rc[2]; rc[2]=t2;
-    dc[7]=rc[1]; rc[1]=rc[3]; rc[3]=t1;
+    t1=uc[0]; uc[0]=lc[4]; lc[4]=dc[5]; dc[5]=rc[1]; rc[1]=t1;
+    t2=uc[4]; uc[4]=lc[5]; lc[5]=dc[1]; dc[1]=rc[0]; rc[0]=t2;
 }
 /* 
  *                                                                     y   x                   
@@ -395,17 +326,17 @@ static void rotate_adjacent_layer_y_cw(uint8_t side_num)
  *                                                                       \|                    
  *                   ^4~                                            z<----                     
  *                  /                                        x___                              
- *             ^Y  /                                             |\                            
- *             |  /                                              | \z                          
- *             | 2             3                                 y                     z  X    
- *             |   1<-------                                            |Z              \ |    
+ *             ^Y  /                                     3(dc)   |\                            
+ *             |  /                                              | \z   >~_                    
+ *             | 2             3                                 y         \           z  X    
+ *             |   1<-------                                            |Z /            \ |    
  *             |                                          ___Y          |____Y           \|___Y
- *             |                                         |\              \                     
+ *             |                                         |\              \              2(rc)  
  *           6 |           7                             | \Z             \X                   
  *             |                                         vX                                    
- *             | 0             1                                                ^Y             
+ *             | 0             1                           4(lc)                ^Y             
  *              ---------------->X                                              |              
- *           /                                                                  |              
+ *           /                                                             1(uc)|              
  *          /    ^2                                                    X         ---->X        
  *         / 4  /          5                                           |         \             
  *        Z    /                                                       |___Z      Z            
@@ -423,17 +354,8 @@ static void rotate_adjacent_layer_z_ccw(uint8_t side_num)
     dc = get_adjacent_down_side(side_num, AXIS_Z);
     lc = get_adjacent_left_side(side_num, AXIS_Z);
 
-    t1=uc[0]; uc[0]=uc[1]; 
-    t2=uc[2]; uc[2]=uc[3];
-
-    uc[1]=rc[0]; rc[0]=rc[4]; 
-    uc[3]=rc[1]; rc[1]=rc[5];
-
-    rc[5]=dc[4]; dc[4]=dc[5];
-    rc[4]=dc[6]; dc[6]=dc[7];
-
-    dc[5]=lc[2]; lc[2]=lc[6]; lc[6]=t2;
-    dc[7]=lc[3]; lc[3]=lc[7]; lc[7]=t1;
+    t1=uc[0]; uc[0]=rc[0]; rc[0]=dc[6]; dc[6]=lc[3]; lc[3]=t1;
+    t2=uc[2]; uc[2]=rc[1]; rc[1]=dc[4]; dc[4]=lc[2]; lc[2]=t2;
 }
 /* 
  *                                                                      y   x                   
@@ -470,47 +392,28 @@ static void rotate_adjacent_layer_z_cw(uint8_t side_num)
     dc = get_adjacent_down_side(side_num, AXIS_Z);
     lc = get_adjacent_left_side(side_num, AXIS_Z);
 
-    t1=uc[1]; uc[1]=uc[0]; 
-    t2=uc[3]; uc[3]=uc[2];
-
-    uc[2]=lc[6]; lc[6]=lc[2]; 
-    uc[0]=lc[7]; lc[7]=lc[3];
-
-    lc[2]=dc[5]; dc[5]=dc[4];
-    lc[3]=dc[7]; dc[7]=dc[6];
-
-    dc[6]=rc[4]; rc[4]=rc[0]; rc[0]=t1;
-    dc[4]=rc[5]; rc[5]=rc[1]; rc[1]=t2;
+    t1=uc[1]; uc[1]=lc[7]; lc[7]=dc[7]; dc[7]=rc[4]; rc[4]=t1;
+    t2=uc[3]; uc[3]=lc[6]; lc[6]=dc[5]; dc[5]=rc[5]; rc[5]=t2;
 }
 
 
 /* Some auxiliary functions */
 
-static Dim_Action get_dim_action(uint8_t cycle_ct)
-{
-    if (cycle_ct == rotation_phase_1_cycles) 
-        return MoveAndDim;
-    else 
-        return Undim;
-}
-
 static void rotate(uint8_t side_num, uint8_t const *indexes_m, uint8_t const *indexes_bf, uint8_t rotation_axis, void (*rotate_adjacent_layer_ptr)(uint8_t side_num))
 {
     Side_State *state_ptr;
     uint8_t *bc, *fc;
-    Dim_Action dim_action;
 
     state_ptr = &(sides_states[side_num]);
-    dim_action = get_dim_action(state_ptr->cycle_ct);
 
-    rotate_1_side(state_ptr->colors, indexes_m, dim_action);
+    rotate_1_side(state_ptr->colors, indexes_m);
 
     rotate_adjacent_layer_ptr(side_num);
 
     bc = get_adjacent_back_side(side_num, rotation_axis);
     fc = get_adjacent_front_side(side_num, rotation_axis);
-    rotate_1_side_level(bc, (indexes_bf + 4), dim_action);
-    rotate_1_side_level(fc, indexes_bf, dim_action);
+    rotate_1_side_level(bc, (indexes_bf + 4));
+    rotate_1_side_level(fc, indexes_bf);
 }
 
 
@@ -663,40 +566,8 @@ rotation_func_ptr_type get_rotation_func_ptr(uint8_t side_num, uint8_t direction
 }
 
 /* The main rotation function and its counterparts */
-void rotation_cycle(uint8_t side_num)
+void do_rotation(uint8_t side_num)
 {
-    Side_State *state_ptr = &(sides_states[side_num]);
-    volatile uint8_t *cycle_ct_ptr = &state_ptr->cycle_ct;
-
-    if (*cycle_ct_ptr == rotation_phase_1_cycles || 
-        *cycle_ct_ptr == rotation_phase_f_cycles)
-    {
-        ((rotation_func_ptr_type) state_ptr->rotation_func_ptr)(side_num);
-        sides_colors_changed();
-    }
-    (*cycle_ct_ptr)++;
-
-    if (*cycle_ct_ptr > rotation_phase_f_cycles)
-        rotation_done(side_num);
-}
-
-void change_phase_cycle_counters(uint8_t faster, uint8_t slower)
-{
-    static uint8_t index = 0;
-    const int8_t *rotation_phase_cycles_ptr;
-
-    // Faster takes precedence over the slower
-    if (faster && index < 3)
-    {
-        rotation_phase_cycles_ptr = rotation_phase_cycles[++index];
-        rotation_phase_1_cycles = *rotation_phase_cycles_ptr++;
-        rotation_phase_f_cycles = *rotation_phase_cycles_ptr;
-    }
-    else if (slower && index > 0)
-    {
-        rotation_phase_cycles_ptr = rotation_phase_cycles[--index];
-        rotation_phase_1_cycles = *rotation_phase_cycles_ptr++;
-        rotation_phase_f_cycles = *rotation_phase_cycles_ptr;
-    }
+    ((rotation_func_ptr_type) (sides_states[side_num].rotation_func_ptr))(side_num);
 }
 

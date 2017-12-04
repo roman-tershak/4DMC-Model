@@ -120,15 +120,14 @@ ISR (TIMER1_OVF_vect)
         // The wait period for switches has finished, now start rotation
         get_rotation_side_and_dir(ct, sw_side_state_ptr, &rotating_side, &rotation_dir);
 
-        if (rotation_notify(rotating_side, rotation_dir))
-        {
+        rotate_side(rotating_side, rotation_dir);
+
 #ifdef DEBUG_COLOR_ADJUST
-            debug_color_adjust(ct, sw_side_state_ptr->switches);
+        debug_color_adjust(ct, sw_side_state_ptr->switches);
 #endif
-            sw_side_state_ptr->cycle_ct = 0;
-            sw_side_state_ptr->switches = 0;
-            sw_side_state_ptr->flags &= ~DOUBLE_CLICK;
-        }
+        sw_side_state_ptr->cycle_ct = 0;
+        sw_side_state_ptr->switches = 0;
+        sw_side_state_ptr->flags &= ~DOUBLE_CLICK;
         
         next_side = TRUE;
     }

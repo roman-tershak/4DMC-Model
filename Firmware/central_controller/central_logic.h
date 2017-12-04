@@ -17,8 +17,6 @@
 
 typedef struct 
 {
-    volatile uint8_t status;
-    volatile uint8_t cycle_ct;
     volatile void *rotation_func_ptr;
     uint8_t colors[SIDE_STICKER_COUNT];
 } Side_State;
@@ -26,8 +24,7 @@ typedef struct
 void load_sides_states(void);
 void reset_cube(void);
 
-uint8_t rotation_notify(uint8_t sw_side_num, uint8_t direction);
-void rotation_done(uint8_t side_num);
+void rotate_side(uint8_t sw_side_num, uint8_t direction);
 void handle_cycle(void);
 
 void sides_colors_changed(void);

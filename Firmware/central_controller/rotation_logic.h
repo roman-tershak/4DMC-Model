@@ -27,9 +27,7 @@ typedef void (*rotation_func_ptr_type)(uint8_t);
 
 rotation_func_ptr_type get_rotation_func_ptr(uint8_t side_num, uint8_t direction);
 
-void rotation_cycle(uint8_t side_num);
-
-void change_phase_cycle_counters(uint8_t faster, uint8_t slower);
+void do_rotation(uint8_t side_num);
 
 #ifdef __cplusplus
 }
