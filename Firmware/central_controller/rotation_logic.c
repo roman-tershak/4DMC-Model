@@ -3,6 +3,9 @@
 #include "common.h"
 
 
+typedef void (*rotation_func_ptr_type)(uint8_t);
+
+
 /* Functions for retrieving adjacent sides */
 
 /*
@@ -558,16 +561,15 @@ static const rotation_func_ptr_type ROTATION_FUNC_MATRIX[] =
     /* SIDE_CB , (ROTATION_Z | DIR_CW)   */ rotate_z_dir_ccw
 };
 
-
-/* Public functions */
-rotation_func_ptr_type get_rotation_func_ptr(uint8_t side_num, uint8_t direction)
+static rotation_func_ptr_type get_rotation_func_ptr(uint8_t side_num, uint8_t direction)
 {
     return ROTATION_FUNC_MATRIX[side_num * 6 + direction];
 }
 
+
 /* The main rotation function and its counterparts */
-void do_rotation(uint8_t side_num)
+void do_rotation(uint8_t side_num, uint8_t direction)
 {
-    ((rotation_func_ptr_type) (sides_states[side_num].rotation_func_ptr))(side_num);
+    get_rotation_func_ptr(side_num, direction)(side_num);
 }
 

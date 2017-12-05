@@ -86,8 +86,7 @@ void rotate_side(uint8_t sw_side_num, uint8_t direction)
         return;
 
     // rotation_logic.c
-    sides_states[sw_side_num].rotation_func_ptr = get_rotation_func_ptr(sw_side_num, direction);
-    do_rotation(sw_side_num);
+    do_rotation(sw_side_num, direction);
 
     sides_colors_changed();
 

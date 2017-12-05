@@ -23,11 +23,7 @@
  extern "C" {
 #endif 
 
-typedef void (*rotation_func_ptr_type)(uint8_t);
-
-rotation_func_ptr_type get_rotation_func_ptr(uint8_t side_num, uint8_t direction);
-
-void do_rotation(uint8_t side_num);
+void do_rotation(uint8_t side_num, uint8_t direction);
 
 #ifdef __cplusplus
 }

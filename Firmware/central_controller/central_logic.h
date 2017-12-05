@@ -17,7 +17,6 @@
 
 typedef struct 
 {
-    volatile void *rotation_func_ptr;
     uint8_t colors[SIDE_STICKER_COUNT];
 } Side_State;
 
