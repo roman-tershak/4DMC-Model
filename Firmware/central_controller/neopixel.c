@@ -93,7 +93,7 @@ static void send_byte(uint8_t byte_val)
             DELAY_CYCLES(NS_TO_CYCLES(T1H) - 2);       // 1-bit width less overhead for the actual bit setting
             // Note that this delay could be longer and everything would still work
             res_pin(LED_COLOR);
-            DELAY_CYCLES(NS_TO_CYCLES(T1L) - 2);       // 1-bit gap less the overhead
+            DELAY_CYCLES(NS_TO_CYCLES(T1L) - 3);       // 1-bit gap less the overhead
         }
         else
         {
@@ -103,7 +103,7 @@ static void send_byte(uint8_t byte_val)
             // This line is really the only tight goldilocks timing in the whole program!
             // **************************************************************************
             res_pin(LED_COLOR);
-            DELAY_CYCLES(NS_TO_CYCLES(T0L) - 2);       // 0-bit gap less overhead
+            DELAY_CYCLES(NS_TO_CYCLES(T0L) - 3);       // 0-bit gap less overhead
         }
     }
 }
@@ -121,6 +121,7 @@ void light_color_buff(uint8_t* color_buff_ptr, uint8_t color_buff_len)
     uint8_t *rgb_color_matrix_ptr, *color_buff_end;
 
     color_buff_end = color_buff_ptr + color_buff_len;
+DISABLE_GLOBAL_INTERRUPTS();
 
     while (color_buff_ptr < color_buff_end)
     {
@@ -132,6 +133,7 @@ void light_color_buff(uint8_t* color_buff_ptr, uint8_t color_buff_len)
         send_byte(rgb_color_matrix_ptr[2]);
     }
     show();
+ENABLE_GLOBAL_INTERRUPTS();
 
 }
 

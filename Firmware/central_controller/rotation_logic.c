@@ -205,15 +205,17 @@ static void rotate_1_side(uint8_t *colors, uint8_t const *indexes)
 static void rotate_adjacent_layer_x_ccw(uint8_t side_num)
 {
     uint8_t *uc, *rc, *dc, *lc;
-    uint8_t t1, t2;
+    uint8_t t;
 
     uc = get_adjacent_up_side(side_num, AXIS_X);
     rc = get_adjacent_right_side(side_num, AXIS_X);
     dc = get_adjacent_down_side(side_num, AXIS_X);
     lc = get_adjacent_left_side(side_num, AXIS_X);
 
-    t1=uc[0]; uc[0]=rc[0]; rc[0]=dc[6]; dc[6]=lc[3]; lc[3]=t1;
-    t2=uc[4]; uc[4]=rc[2]; rc[2]=dc[2]; dc[2]=lc[1]; lc[1]=t2;
+    t=uc[0]; uc[0]=rc[0]; rc[0]=dc[6]; dc[6]=lc[3]; lc[3]=t;
+    t=uc[1]; uc[1]=rc[4]; rc[4]=dc[7]; dc[7]=lc[7]; lc[7]=t;
+    t=uc[4]; uc[4]=rc[2]; rc[2]=dc[2]; dc[2]=lc[1]; lc[1]=t;
+    t=uc[5]; uc[5]=rc[6]; rc[6]=dc[3]; dc[3]=lc[5]; lc[5]=t;
 }
 /* 
  *                                                                         y   x                   
@@ -241,15 +243,17 @@ static void rotate_adjacent_layer_x_ccw(uint8_t side_num)
 static void rotate_adjacent_layer_x_cw(uint8_t side_num)
 {
     uint8_t *uc, *rc, *dc, *lc;
-    uint8_t t1, t2;
+    uint8_t t;
 
     uc = get_adjacent_up_side(side_num, AXIS_X);
     rc = get_adjacent_right_side(side_num, AXIS_X);
     dc = get_adjacent_down_side(side_num, AXIS_X);
     lc = get_adjacent_left_side(side_num, AXIS_X);
 
-    t1=uc[1]; uc[1]=lc[7]; lc[7]=dc[7]; dc[7]=rc[4]; rc[4]=t1;
-    t2=uc[5]; uc[5]=lc[5]; lc[5]=dc[3]; dc[3]=rc[6]; rc[6]=t2;
+    t=uc[1]; uc[1]=lc[7]; lc[7]=dc[7]; dc[7]=rc[4]; rc[4]=t;
+    t=uc[0]; uc[0]=lc[3]; lc[3]=dc[6]; dc[6]=rc[0]; rc[0]=t;
+    t=uc[5]; uc[5]=lc[5]; lc[5]=dc[3]; dc[3]=rc[6]; rc[6]=t;
+    t=uc[4]; uc[4]=lc[1]; lc[1]=dc[2]; dc[2]=rc[2]; rc[2]=t;
 }
 /* 
  *                                                                          y   x                   
@@ -277,15 +281,17 @@ static void rotate_adjacent_layer_x_cw(uint8_t side_num)
 static void rotate_adjacent_layer_y_ccw(uint8_t side_num)
 {
     uint8_t *uc, *rc, *dc, *lc;
-    uint8_t t1, t2;
+    uint8_t t;
 
     uc = get_adjacent_up_side(side_num, AXIS_Y);
     rc = get_adjacent_right_side(side_num, AXIS_Y);
     dc = get_adjacent_down_side(side_num, AXIS_Y);
     lc = get_adjacent_left_side(side_num, AXIS_Y);
 
-    t1=uc[2]; uc[2]=rc[3]; rc[3]=dc[7]; dc[7]=lc[6]; lc[6]=t1;
-    t2=uc[6]; uc[6]=rc[2]; rc[2]=dc[3]; dc[3]=lc[7]; lc[7]=t2;
+    t=uc[2]; uc[2]=rc[3]; rc[3]=dc[7]; dc[7]=lc[6]; lc[6]=t;
+    t=uc[0]; uc[0]=rc[1]; rc[1]=dc[5]; dc[5]=lc[4]; lc[4]=t;
+    t=uc[6]; uc[6]=rc[2]; rc[2]=dc[3]; dc[3]=lc[7]; lc[7]=t;
+    t=uc[4]; uc[4]=rc[0]; rc[0]=dc[1]; dc[1]=lc[5]; lc[5]=t;
 }
 /* 
  *                                                                      y   x                   
@@ -313,15 +319,17 @@ static void rotate_adjacent_layer_y_ccw(uint8_t side_num)
 static void rotate_adjacent_layer_y_cw(uint8_t side_num)
 {
     uint8_t *uc, *rc, *dc, *lc;
-    uint8_t t1, t2;
+    uint8_t t;
 
     uc = get_adjacent_up_side(side_num, AXIS_Y);
     rc = get_adjacent_right_side(side_num, AXIS_Y);
     dc = get_adjacent_down_side(side_num, AXIS_Y);
     lc = get_adjacent_left_side(side_num, AXIS_Y);
 
-    t1=uc[0]; uc[0]=lc[4]; lc[4]=dc[5]; dc[5]=rc[1]; rc[1]=t1;
-    t2=uc[4]; uc[4]=lc[5]; lc[5]=dc[1]; dc[1]=rc[0]; rc[0]=t2;
+    t=uc[0]; uc[0]=lc[4]; lc[4]=dc[5]; dc[5]=rc[1]; rc[1]=t;
+    t=uc[2]; uc[2]=lc[6]; lc[6]=dc[7]; dc[7]=rc[3]; rc[3]=t;
+    t=uc[4]; uc[4]=lc[5]; lc[5]=dc[1]; dc[1]=rc[0]; rc[0]=t;
+    t=uc[6]; uc[6]=lc[7]; lc[7]=dc[3]; dc[3]=rc[2]; rc[2]=t;
 }
 /* 
  *                                                                     y   x                   
@@ -350,15 +358,17 @@ static void rotate_adjacent_layer_y_cw(uint8_t side_num)
 static void rotate_adjacent_layer_z_ccw(uint8_t side_num)
 {
     uint8_t *uc, *rc, *dc, *lc;
-    uint8_t t1, t2;
+    uint8_t t;
 
     uc = get_adjacent_up_side(side_num, AXIS_Z);
     rc = get_adjacent_right_side(side_num, AXIS_Z);
     dc = get_adjacent_down_side(side_num, AXIS_Z);
     lc = get_adjacent_left_side(side_num, AXIS_Z);
 
-    t1=uc[0]; uc[0]=rc[0]; rc[0]=dc[6]; dc[6]=lc[3]; lc[3]=t1;
-    t2=uc[2]; uc[2]=rc[1]; rc[1]=dc[4]; dc[4]=lc[2]; lc[2]=t2;
+    t=uc[0]; uc[0]=rc[0]; rc[0]=dc[6]; dc[6]=lc[3]; lc[3]=t;
+    t=uc[1]; uc[1]=rc[4]; rc[4]=dc[7]; dc[7]=lc[7]; lc[7]=t;
+    t=uc[2]; uc[2]=rc[1]; rc[1]=dc[4]; dc[4]=lc[2]; lc[2]=t;
+    t=uc[3]; uc[3]=rc[5]; rc[5]=dc[5]; dc[5]=lc[6]; lc[6]=t;
 }
 /* 
  *                                                                      y   x                   
@@ -388,15 +398,17 @@ static void rotate_adjacent_layer_z_ccw(uint8_t side_num)
 static void rotate_adjacent_layer_z_cw(uint8_t side_num)
 {
     uint8_t *uc, *rc, *dc, *lc;
-    uint8_t t1, t2;
+    uint8_t t;
 
     uc = get_adjacent_up_side(side_num, AXIS_Z);
     rc = get_adjacent_right_side(side_num, AXIS_Z);
     dc = get_adjacent_down_side(side_num, AXIS_Z);
     lc = get_adjacent_left_side(side_num, AXIS_Z);
 
-    t1=uc[1]; uc[1]=lc[7]; lc[7]=dc[7]; dc[7]=rc[4]; rc[4]=t1;
-    t2=uc[3]; uc[3]=lc[6]; lc[6]=dc[5]; dc[5]=rc[5]; rc[5]=t2;
+    t=uc[1]; uc[1]=lc[7]; lc[7]=dc[7]; dc[7]=rc[4]; rc[4]=t;
+    t=uc[0]; uc[0]=lc[3]; lc[3]=dc[6]; dc[6]=rc[0]; rc[0]=t;
+    t=uc[3]; uc[3]=lc[6]; lc[6]=dc[5]; dc[5]=rc[5]; rc[5]=t;
+    t=uc[2]; uc[2]=lc[2]; lc[2]=dc[4]; dc[4]=rc[1]; rc[1]=t;
 }
 
 
