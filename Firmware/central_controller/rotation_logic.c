@@ -485,11 +485,11 @@ static void rotate_z_dir_cw(uint8_t side_num)
  *           (side_yr) z y                                                                 x___                                      
  *                      \|                                                                     |\                                    
  *                   x<--                                                                      | \z                                  
- * (side_xl)                               ^X (side_xr)     |Z                                 y                     z  X  (side_xr)
- *      Z ___                |Z (side_cf)  |                |                  (side_xl)              |Z              \ |               X\
- *           |\              |             |___Z      ~X<---                            ___Y          |____Y           \|___Y        ~Y___\
- *           | Y              --->Y         \                \                         |\              \ (side_cf)                        | (side_cb)
- *           vX               \              Y      (side_cb) \Y                       | \Z             \X                                |Z
+ * (side_xl)                               ^X (side_xr)     |Z                                 y                     z  X  (side_xr)      Z  
+ *      Z ___                |Z (side_cf)  |                |                  (side_xl)              |Z              \ |                 |
+ *           |\              |             |___Z       X<---                            ___Y          |____Y           \|___Y        Y____|
+ *           | Y              --->Y         \                \                         |\              \ (side_cf)                         \(side_cb)
+ *           vX               \              Y      (side_cb) \Y                       | \Z             \X                                  \X 
  *                             X  |Y                                                   vX                                            
  *                                |                                                                           ^Y                     
  *                                 ---->X                                                                     |                      
@@ -555,10 +555,10 @@ static const rotation_func_ptr_type ROTATION_FUNC_MATRIX[] =
 
     /* SIDE_CB , (ROTATION_X | DIR_CCW)  */ rotate_y_dir_ccw,
     /* SIDE_CB , (ROTATION_X | DIR_CW)   */ rotate_y_dir_cw,
-    /* SIDE_CB , (ROTATION_Y | DIR_CCW)  */ rotate_x_dir_cw,
-    /* SIDE_CB , (ROTATION_Y | DIR_CW)   */ rotate_x_dir_ccw,
-    /* SIDE_CB , (ROTATION_Z | DIR_CCW)  */ rotate_z_dir_cw,
-    /* SIDE_CB , (ROTATION_Z | DIR_CW)   */ rotate_z_dir_ccw
+    /* SIDE_CB , (ROTATION_Y | DIR_CCW)  */ rotate_x_dir_ccw,
+    /* SIDE_CB , (ROTATION_Y | DIR_CW)   */ rotate_x_dir_cw,
+    /* SIDE_CB , (ROTATION_Z | DIR_CCW)  */ rotate_z_dir_ccw,
+    /* SIDE_CB , (ROTATION_Z | DIR_CW)   */ rotate_z_dir_cw
 };
 
 static rotation_func_ptr_type get_rotation_func_ptr(uint8_t side_num, uint8_t direction)
