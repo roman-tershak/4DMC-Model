@@ -31,6 +31,7 @@ void init_driver(void)
 
 ISR (TIMER1_OVF_vect)
 {
+    static volatile uint8_t sn = 0;
     static volatile uint8_t cycle_ct = 0;
     static volatile uint8_t switches_initial = 0;
 
@@ -55,7 +56,7 @@ ISR (TIMER1_OVF_vect)
 
     rotate = FALSE;
 
-    if (switches = read_switches_debounced(cycle_ct))  // switch(es) are pressed
+    if (switches = read_switches_debounced(sn))  // switch(es) are pressed
     {
         if (cycle_ct < READ_SITE_SWITCH_STATE_MAX_CYCLES)  // and not waiting for them just to be released
         {
@@ -67,7 +68,7 @@ ISR (TIMER1_OVF_vect)
         else if (switches_initial)
         {
             // The wait period for switches has finished, now start rotation
-            get_rotation_side_and_dir(cycle_ct, switches_initial, TRUE, &rotating_side, &rotation_dir);
+            get_rotation_side_and_dir(sn, switches_initial, TRUE, &rotating_side, &rotation_dir);
             rotate = TRUE;
             switches_initial = 0;
         }
@@ -79,7 +80,7 @@ ISR (TIMER1_OVF_vect)
         if (switches_initial)
         {
             // The pressed switch(es) was released, now start rotation
-            get_rotation_side_and_dir(cycle_ct, switches_initial, FALSE, &rotating_side, &rotation_dir);
+            get_rotation_side_and_dir(sn, switches_initial, FALSE, &rotating_side, &rotation_dir);
             rotate = TRUE;
             switches_initial = 0;
         }
@@ -98,14 +99,14 @@ DISABLE_GLOBAL_INTERRUPTS();
 ENABLE_GLOBAL_INTERRUPTS();
 
 #ifdef DEBUG_COLOR_ADJUST
-        debug_color_adjust(cycle_ct, switches);
+        debug_color_adjust(sn, switches);
 #endif
     }
 
     if (next_side)
     {
-        cycle_ct++; // next sensor set/side
-        if (cycle_ct >= SW_SIDE_NUM) cycle_ct = 0; // going in round cycle
+        sn++; // next sensor set/side
+        if (sn >= SW_SIDE_NUM) sn = 0; // going in round cycle
     }
 
     // Pass the cycle tick further down the logic

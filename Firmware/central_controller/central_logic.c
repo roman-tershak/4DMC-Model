@@ -74,8 +74,8 @@ static uint8_t get_initial_color_for_side(uint8_t side_num)
         case SIDE_YR: return YELLOW;
         case SIDE_ZL: return ORANGE;
         case SIDE_ZR: return RED;
-        case SIDE_CF: return PINK;
-        case SIDE_CB: return PURPLE;
+        case SIDE_CF: return PURPLE;
+        case SIDE_CB: return PINK;
         default: return 0;
     }
 }
