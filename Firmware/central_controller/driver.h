@@ -15,7 +15,7 @@
 #define SW_PRESSED        1
 #define DOUBLE_CLICK      2
 
-#define READ_COMPLETE_SITE_STATE_CYCLES  20 // TODO
+#define READ_SITE_SWITCH_STATE_MAX_CYCLES  100 // TODO
 
 #define SW_XL  0x1
 #define SW_XR  0x2
