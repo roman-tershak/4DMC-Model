@@ -53,12 +53,9 @@ ISR (TIMER1_OVF_vect)
             srs_waiting_for_release = FALSE;
     }
 
-    switches = read_switches_debounced(cycle_ct);
-
-    next_side = FALSE;
     rotate = FALSE;
 
-    if (switches)  // switch(es) are pressed
+    if (switches = read_switches_debounced(cycle_ct))  // switch(es) are pressed
     {
         if (cycle_ct < READ_SITE_SWITCH_STATE_MAX_CYCLES)  // and not waiting for them just to be released
         {
@@ -74,6 +71,8 @@ ISR (TIMER1_OVF_vect)
             rotate = TRUE;
             switches_initial = 0;
         }
+
+        next_side = FALSE;
     }
     else  // switches are not pressed
     {
