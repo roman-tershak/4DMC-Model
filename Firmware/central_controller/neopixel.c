@@ -44,7 +44,7 @@ static const uint8_t COLOR_MATRIX[MAIN_COLOR_COUNT][3] =
     { 0, 116, 64},   // light blue
     { 0, 136,  0},   // green
     {140, 140,  0},   // yellow
-    {172, 40,  0},   // orange
+    {172, 48,  0},   // orange
     {120,  0,  0},   // red
     {120,  0, 60},   // pink
     {120, 40, 160},   // purple

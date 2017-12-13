@@ -21,6 +21,7 @@ static void reset_switches_pins_to_one(void);
 static void get_rotation_side_and_dir(uint8_t swn, uint8_t switches_i, uint8_t back_side_ind, 
         uint8_t *swn_out_ptr, uint8_t *dir_out);
 
+static void reset_cube_switch_handler(void);
 
 void init_driver(void)
 {
@@ -28,8 +29,6 @@ void init_driver(void)
 
 ISR (TIMER1_OVF_vect)
 {
-    static volatile uint8_t srs_waiting_for_release = FALSE;
-
     static volatile uint8_t sn = 0;
     static volatile uint8_t cycle_ct = 0;
     static volatile uint8_t switches_initial = 0;
@@ -39,19 +38,7 @@ ISR (TIMER1_OVF_vect)
     TCNT1 = (0xFFFF - ISR_TIMEOUT); // set the timeout
 
     // Handling Software Reset switch
-    if (!srs_waiting_for_release)
-    {
-        if (read_srs_debounced())
-        {
-            srs_waiting_for_release = TRUE;
-            reset_cube();
-        }
-    }
-    else
-    {
-        if (read_srs_debounced() == 0)
-            srs_waiting_for_release = FALSE;
-    }
+    reset_cube_switch_handler();
 
     rotate = FALSE;
 
@@ -110,6 +97,25 @@ ENABLE_GLOBAL_INTERRUPTS();
 
     // Pass the cycle tick further down the logic
     handle_cycle();
+}
+
+static void reset_cube_switch_handler(void)
+{
+    static volatile uint8_t srs_waiting_for_release = FALSE;
+
+    if (read_srs_debounced())
+    {
+        if (!srs_waiting_for_release)
+        {
+            srs_waiting_for_release = TRUE;
+            reset_cube();
+        }
+    }
+    else
+    {
+        if (srs_waiting_for_release)
+            srs_waiting_for_release = FALSE;
+    }
 }
 
 /*                     (SW_YR)
