@@ -41,14 +41,6 @@
  extern "C" {
 #endif 
 
-typedef struct 
-{
-    volatile uint8_t flags;
-    volatile uint8_t switches;
-    volatile uint8_t cycle_ct;
-} Switches_Side_State;
-
-
 void init_driver(void);
 
 ISR (TIMER1_OVF_vect);

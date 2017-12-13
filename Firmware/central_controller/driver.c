@@ -22,15 +22,14 @@ static void get_rotation_side_and_dir(uint8_t swn, uint8_t switches_i, uint8_t b
         uint8_t *swn_out_ptr, uint8_t *dir_out);
 
 
-static volatile uint8_t srs_waiting_for_release = FALSE;
-
-
 void init_driver(void)
 {
 }
 
 ISR (TIMER1_OVF_vect)
 {
+    static volatile uint8_t srs_waiting_for_release = FALSE;
+
     static volatile uint8_t sn = 0;
     static volatile uint8_t cycle_ct = 0;
     static volatile uint8_t switches_initial = 0;
